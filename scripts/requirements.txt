@@ -1,0 +1,3 @@
+yahoo-oauth
+requests
+python-dotenv

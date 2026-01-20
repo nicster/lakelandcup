@@ -27,6 +27,12 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+
+# Yahoo API credentials
+scripts/yahoo_credentials.json
+scripts/yahoo_token.json
+scripts/league_data.json
 
 # vercel
 .vercel
