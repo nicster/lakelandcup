@@ -2,7 +2,10 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="min-h-screen ice-texture flex flex-col items-center justify-center px-4">
+    <main className="min-h-screen ice-texture flex flex-col items-center px-4">
+      {/* Spacer to push content to center */}
+      <div className="flex-1" />
+
       {/* Main content container */}
       <div className="max-w-2xl w-full text-center space-y-8">
         {/* Logo */}
@@ -63,8 +66,11 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Spacer to balance centering */}
+      <div className="flex-1" />
+
       {/* Footer */}
-      <footer className="mt-auto pt-12 pb-6 text-lake-ice/30 text-xs">
+      <footer className="pb-6 text-lake-ice/30 text-xs">
         Est. 2013
       </footer>
     </main>
