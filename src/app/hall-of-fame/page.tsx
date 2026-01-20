@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { db, seasons, members } from '@/lib/db';
 import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
@@ -102,7 +103,10 @@ export default async function HallOfFamePage() {
               <div className="flex items-center justify-center gap-4">
                 {/* Champion */}
                 {season.champion && (
-                  <div className="flex-1 flex items-center gap-3 p-3 rounded-lg bg-lake-gold/10 border border-lake-gold/30">
+                  <Link
+                    href={`/teams/${season.champion.id}`}
+                    className="flex-1 flex items-center gap-3 p-3 rounded-lg bg-lake-gold/10 border border-lake-gold/30 hover:bg-lake-gold/20 transition-colors"
+                  >
                     {season.champion.logo && (
                       <Image
                         src={`/images/teams/${season.champion.logo}`}
@@ -112,18 +116,13 @@ export default async function HallOfFamePage() {
                         className="rounded-full border-2 border-lake-gold/50 flex-shrink-0"
                       />
                     )}
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <TrophyIcon className="w-4 h-4 text-lake-gold flex-shrink-0" />
-                        <p className="text-lake-ice font-semibold truncate">
-                          {season.champion.name}
-                        </p>
-                      </div>
-                      <p className="text-lake-ice/50 text-sm">
-                        {season.champion.owner}
+                    <div className="min-w-0 flex items-center gap-2">
+                      <TrophyIcon className="w-4 h-4 text-lake-gold flex-shrink-0" />
+                      <p className="text-lake-ice font-semibold truncate">
+                        {season.champion.name}
                       </p>
                     </div>
-                  </div>
+                  </Link>
                 )}
 
                 {/* Result */}
@@ -139,7 +138,10 @@ export default async function HallOfFamePage() {
 
                 {/* Runner Up */}
                 {season.runnerUp && (
-                  <div className="flex-1 flex items-center gap-3 p-3 rounded-lg bg-lake-blue-light/10 border border-lake-blue-light/20">
+                  <Link
+                    href={`/teams/${season.runnerUp.id}`}
+                    className="flex-1 flex items-center gap-3 p-3 rounded-lg bg-lake-blue-light/10 border border-lake-blue-light/20 hover:bg-lake-blue-light/20 transition-colors"
+                  >
                     {season.runnerUp.logo && (
                       <Image
                         src={`/images/teams/${season.runnerUp.logo}`}
@@ -149,15 +151,10 @@ export default async function HallOfFamePage() {
                         className="rounded-full border-2 border-lake-blue-light/30 flex-shrink-0"
                       />
                     )}
-                    <div className="min-w-0">
-                      <p className="text-lake-ice/70 font-medium truncate">
-                        {season.runnerUp.name}
-                      </p>
-                      <p className="text-lake-ice/40 text-sm">
-                        {season.runnerUp.owner}
-                      </p>
-                    </div>
-                  </div>
+                    <p className="text-lake-ice/70 font-medium truncate min-w-0">
+                      {season.runnerUp.name}
+                    </p>
+                  </Link>
                 )}
               </div>
             </div>

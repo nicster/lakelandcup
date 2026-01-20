@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { db, seasons, members } from '@/lib/db';
 import { desc, eq } from 'drizzle-orm';
 
@@ -8,6 +9,7 @@ async function getLatestChampion() {
       .select({
         year: seasons.year,
         champion: {
+          id: members.id,
           name: members.name,
           owner: members.owner,
           logo: members.logo,
@@ -33,35 +35,38 @@ export default async function Home() {
         <Image
           src="/images/lakelandcup_2.png"
           alt="Lakeland Cup"
-          width={200}
-          height={200}
-          className="mx-auto drop-shadow-2xl mb-4"
+          width={280}
+          height={280}
+          className="mx-auto drop-shadow-2xl mb-6"
           priority
         />
-        <p className="text-lake-ice/40 text-sm tracking-widest uppercase mb-8">
+        <p className="text-lake-ice/40 text-base tracking-widest uppercase mb-10">
           Est. 2013
         </p>
 
         {/* Defending Champion */}
         {latestChampion?.champion && (
-          <div className="pt-8 border-t border-lake-blue-light/20">
-            <p className="text-sm text-lake-gold uppercase tracking-wider mb-3">
+          <div className="pt-10 border-t border-lake-blue-light/20">
+            <p className="text-base text-lake-gold uppercase tracking-wider mb-4">
               {latestChampion.year} Champion
             </p>
-            <div className="flex items-center justify-center gap-3">
+            <Link
+              href={`/teams/${latestChampion.champion.id}`}
+              className="flex items-center justify-center gap-4 hover:opacity-80 transition-opacity"
+            >
               {latestChampion.champion.logo && (
                 <Image
                   src={`/images/teams/${latestChampion.champion.logo}`}
                   alt={`${latestChampion.champion.name} logo`}
-                  width={48}
-                  height={48}
+                  width={64}
+                  height={64}
                   className="rounded-full border-2 border-lake-gold/50"
                 />
               )}
-              <h2 className="text-2xl font-bold text-lake-ice">
+              <h2 className="text-3xl font-bold text-lake-ice hover:text-lake-gold transition-colors">
                 {latestChampion.champion.name}
               </h2>
-            </div>
+            </Link>
           </div>
         )}
       </div>

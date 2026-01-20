@@ -1,0 +1,167 @@
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { db, members, seasons } from '@/lib/db';
+import { eq, or } from 'drizzle-orm';
+
+// Trophy icons
+function TrophyIcon({ place, className = '' }: { place: 1 | 2 | 3; className?: string }) {
+  const colors = {
+    1: 'text-yellow-400', // Gold
+    2: 'text-gray-300',   // Silver
+    3: 'text-amber-600',  // Bronze
+  };
+
+  return (
+    <svg className={`${colors[place]} ${className}`} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2C9.5 2 7.5 4 7.5 6.5V7H5C3.9 7 3 7.9 3 9V10C3 12.2 4.8 14 7 14C7.2 14.9 7.6 15.7 8.2 16.3L7 17V19H17V17L15.8 16.3C16.4 15.7 16.8 14.9 17 14C19.2 14 21 12.2 21 10V9C21 7.9 20.1 7 19 7H16.5V6.5C16.5 4 14.5 2 12 2M5 9H7.5V11.8C6.1 11.4 5 10.3 5 9M16.5 11.8V9H19C19 10.3 17.9 11.4 16.5 11.8M9 20V21C9 21.6 9.4 22 10 22H14C14.6 22 15 21.6 15 21V20H9Z" />
+    </svg>
+  );
+}
+
+async function getTeam(id: number) {
+  try {
+    const team = await db
+      .select()
+      .from(members)
+      .where(eq(members.id, id))
+      .limit(1);
+
+    return team[0] || null;
+  } catch {
+    return null;
+  }
+}
+
+async function getTeamAchievements(teamId: number) {
+  try {
+    const results = await db
+      .select({
+        year: seasons.year,
+        championId: seasons.championId,
+        runnerUpId: seasons.runnerUpId,
+        finalResult: seasons.finalResult,
+      })
+      .from(seasons)
+      .where(
+        or(
+          eq(seasons.championId, teamId),
+          eq(seasons.runnerUpId, teamId)
+        )
+      );
+
+    const championships = results.filter(s => s.championId === teamId);
+    const runnerUps = results.filter(s => s.runnerUpId === teamId);
+
+    return { championships, runnerUps };
+  } catch {
+    return { championships: [], runnerUps: [] };
+  }
+}
+
+export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const teamId = parseInt(id, 10);
+
+  if (isNaN(teamId)) {
+    notFound();
+  }
+
+  const team = await getTeam(teamId);
+
+  if (!team) {
+    notFound();
+  }
+
+  const { championships, runnerUps } = await getTeamAchievements(teamId);
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      {/* Team Header */}
+      <div className="flex items-center gap-6 mb-12">
+        {team.logo ? (
+          <Image
+            src={`/images/teams/${team.logo}`}
+            alt={`${team.name} logo`}
+            width={120}
+            height={120}
+            className="rounded-full border-4 border-lake-gold/50"
+          />
+        ) : (
+          <div className="w-[120px] h-[120px] rounded-full bg-lake-blue-light/20 flex items-center justify-center">
+            <span className="text-4xl text-lake-ice/30">?</span>
+          </div>
+        )}
+        <div>
+          <h1 className="text-4xl font-bold text-lake-ice mb-2">{team.name}</h1>
+          <p className="text-xl text-lake-ice/60">GM: {team.owner}</p>
+          {team.formerName && (
+            <p className="text-sm text-lake-ice/40 mt-1">
+              Formerly known as {team.formerName}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Trophy Case */}
+      <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-8 mb-8">
+        <h2 className="text-2xl font-bold text-lake-ice mb-6">Trophy Case</h2>
+
+        {championships.length === 0 && runnerUps.length === 0 ? (
+          <p className="text-lake-ice/50 text-center py-8">No trophies yet. The hunt continues!</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Championships (Gold) */}
+            {championships.length > 0 && (
+              <div className="bg-yellow-400/10 rounded-lg border border-yellow-400/30 p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <TrophyIcon place={1} className="w-8 h-8" />
+                  <h3 className="text-xl font-semibold text-yellow-400">
+                    Championships ({championships.length})
+                  </h3>
+                </div>
+                <div className="space-y-2">
+                  {championships.map((season) => (
+                    <div key={season.year} className="flex items-center justify-between">
+                      <span className="text-lake-ice font-medium">{season.year}</span>
+                      {season.finalResult && (
+                        <span className="text-lake-ice/50 text-sm">{season.finalResult}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Runner-ups (Silver) */}
+            {runnerUps.length > 0 && (
+              <div className="bg-gray-300/10 rounded-lg border border-gray-300/30 p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <TrophyIcon place={2} className="w-8 h-8" />
+                  <h3 className="text-xl font-semibold text-gray-300">
+                    Runner-ups ({runnerUps.length})
+                  </h3>
+                </div>
+                <div className="space-y-2">
+                  {runnerUps.map((season) => (
+                    <div key={season.year} className="flex items-center justify-between">
+                      <span className="text-lake-ice/70">{season.year}</span>
+                      {season.finalResult && (
+                        <span className="text-lake-ice/40 text-sm">{season.finalResult}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Prospects Section (placeholder for later) */}
+      <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-8">
+        <h2 className="text-2xl font-bold text-lake-ice mb-6">Prospects</h2>
+        <p className="text-lake-ice/50 text-center py-8">Coming soon...</p>
+      </div>
+    </div>
+  );
+}
