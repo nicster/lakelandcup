@@ -13,9 +13,11 @@ Usage:
 
 import json
 import os
+import re
 import webbrowser
 from urllib.parse import urlparse, parse_qs
 import requests
+from pathlib import Path
 
 # Lakeland Cup league keys by season (game_key, league_id)
 # League ID changes every year!
@@ -38,6 +40,45 @@ LAKELAND_CUP_SEASONS = {
 CREDENTIALS_FILE = "yahoo_credentials.json"
 TOKEN_FILE = "yahoo_token.json"
 REDIRECT_URI = "oob"  # Out-of-band - user will manually copy the code
+LOGOS_DIR = Path(__file__).parent.parent / "public" / "images" / "teams"
+
+
+def slugify(text):
+    """Convert text to a safe filename"""
+    text = text.lower()
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = re.sub(r'[-\s]+', '-', text)
+    return text.strip('-')
+
+
+def download_logo(url, team_name):
+    """Download a team logo and save it locally"""
+    if not url:
+        return None
+
+    LOGOS_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Create filename from team name
+    filename = f"{slugify(team_name)}.png"
+    filepath = LOGOS_DIR / filename
+
+    # Skip if already downloaded
+    if filepath.exists():
+        print(f"      Logo exists: {filename}")
+        return filename
+
+    try:
+        response = requests.get(url, timeout=10)
+        if response.status_code == 200:
+            filepath.write_bytes(response.content)
+            print(f"      Downloaded: {filename}")
+            return filename
+        else:
+            print(f"      Failed to download logo: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"      Error downloading logo: {e}")
+        return None
 
 
 class YahooFantasyAPI:
@@ -424,6 +465,7 @@ class YahooFantasyAPI:
 
                     name = None
                     manager = None
+                    logo_url = None
                     for item in team_info:
                         if isinstance(item, dict):
                             if 'name' in item:
@@ -434,6 +476,12 @@ class YahooFantasyAPI:
                                     manager = managers[0].get('manager', {}).get('nickname')
                                 elif isinstance(managers, dict):
                                     manager = managers.get('manager', {}).get('nickname')
+                            if 'team_logos' in item:
+                                logos = item['team_logos']
+                                if isinstance(logos, list) and logos:
+                                    logo_url = logos[0].get('team_logo', {}).get('url')
+                                elif isinstance(logos, dict):
+                                    logo_url = logos.get('team_logo', {}).get('url')
 
                     rank = None
                     if isinstance(standings_info, dict) and 'team_standings' in standings_info:
@@ -442,7 +490,8 @@ class YahooFantasyAPI:
                     results.append({
                         'rank': int(rank) if rank else i + 1,
                         'name': name,
-                        'manager': manager
+                        'manager': manager,
+                        'logo_url': logo_url
                     })
 
             # Sort by rank
@@ -519,7 +568,7 @@ def main():
     print("-"*60)
 
     champions = []
-    all_teams = set()
+    all_teams = {}  # name -> {owner, logo_url, logo_file}
     all_playoffs = {}
 
     for season, (game_key, league_id) in sorted(LAKELAND_CUP_SEASONS.items()):
@@ -558,11 +607,26 @@ def main():
                 'playoffs': playoffs,
             })
 
-            # Collect all teams
+            # Collect all teams with their logos (use latest logo for each team name)
             for team in standings:
-                all_teams.add((team['name'], team['manager']))
+                name = team['name']
+                if name not in all_teams or team['logo_url']:
+                    all_teams[name] = {
+                        'owner': team['manager'],
+                        'logo_url': team['logo_url']
+                    }
         else:
             print(f"  Could not fetch data (league may not exist for this season)")
+
+    # Download all logos
+    print("\n" + "="*60)
+    print("DOWNLOADING LOGOS")
+    print("="*60)
+
+    for name, data in all_teams.items():
+        print(f"\n  {name}...")
+        logo_file = download_logo(data['logo_url'], name)
+        data['logo_file'] = logo_file
 
     # Output results
     print("\n" + "="*60)
@@ -570,8 +634,10 @@ def main():
     print("="*60)
 
     print("\n--- Teams ---")
-    for name, owner in sorted(all_teams):
-        print(f"  {name} ({owner})")
+    for name in sorted(all_teams.keys()):
+        data = all_teams[name]
+        logo_status = f"✓ {data['logo_file']}" if data.get('logo_file') else "✗ no logo"
+        print(f"  {name} ({data['owner']}) [{logo_status}]")
 
     print("\n--- Champions by Season ---")
     for c in champions:
@@ -585,7 +651,14 @@ def main():
 
     # Save to JSON for easy import
     output = {
-        'teams': [{'name': name, 'owner': owner} for name, owner in sorted(all_teams)],
+        'teams': [
+            {
+                'name': name,
+                'owner': data['owner'],
+                'logo': data.get('logo_file')
+            }
+            for name, data in sorted(all_teams.items())
+        ],
         'seasons': champions
     }
 
@@ -593,6 +666,7 @@ def main():
         json.dump(output, f, indent=2)
 
     print(f"\n✓ Data saved to league_data.json")
+    print(f"✓ Logos saved to {LOGOS_DIR}")
     print("\nYou can use this data to seed the database.")
 
 

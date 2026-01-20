@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import { db, seasons, members } from '@/lib/db';
 import { desc, eq } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 
 // Trophy icon component
 function TrophyIcon({ className = '' }: { className?: string }) {
@@ -12,20 +14,32 @@ function TrophyIcon({ className = '' }: { className?: string }) {
 
 async function getSeasons() {
   try {
+    const champion = alias(members, 'champion');
+    const runnerUp = alias(members, 'runner_up');
+
     const results = await db
       .select({
         id: seasons.id,
         year: seasons.year,
         notes: seasons.notes,
+        finalResult: seasons.finalResult,
         champion: {
-          id: members.id,
-          name: members.name,
-          owner: members.owner,
-          formerName: members.formerName,
+          id: champion.id,
+          name: champion.name,
+          owner: champion.owner,
+          formerName: champion.formerName,
+          logo: champion.logo,
+        },
+        runnerUp: {
+          id: runnerUp.id,
+          name: runnerUp.name,
+          owner: runnerUp.owner,
+          logo: runnerUp.logo,
         },
       })
       .from(seasons)
-      .leftJoin(members, eq(seasons.championId, members.id))
+      .leftJoin(champion, eq(seasons.championId, champion.id))
+      .leftJoin(runnerUp, eq(seasons.runnerUpId, runnerUp.id))
       .orderBy(desc(seasons.year));
 
     return results;
@@ -67,69 +81,85 @@ export default async function HallOfFamePage() {
               key={season.id}
               className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-6 hover:bg-lake-blue/40 transition-colors"
             >
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
-                  {/* Rank/Trophy */}
-                  <div className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
-                    index === 0
-                      ? 'bg-lake-gold/30 text-lake-gold'
-                      : 'bg-lake-blue-light/30 text-lake-ice/50'
-                  }`}>
-                    {index === 0 ? (
-                      <TrophyIcon className="w-6 h-6" />
-                    ) : (
-                      <span className="font-bold text-lg">{index + 1}</span>
-                    )}
-                  </div>
-
-                  {/* Season & Champion Info */}
-                  <div>
-                    <div className="flex items-center gap-3 mb-1">
-                      <span className="text-lake-gold font-semibold text-lg">
-                        {season.year}
-                      </span>
-                      {index === 0 && (
-                        <span className="px-2 py-0.5 text-xs font-medium bg-lake-gold/20 text-lake-gold rounded-full">
-                          Defending Champion
-                        </span>
-                      )}
-                    </div>
-                    {season.champion ? (
-                      <div>
-                        <p className="text-lake-ice font-medium">
-                          {season.champion.name}
-                          {season.champion.formerName && (
-                            <span className="text-lake-ice/40 font-normal text-sm ml-2">
-                              (formerly {season.champion.formerName})
-                            </span>
-                          )}
-                        </p>
-                        <p className="text-lake-ice/50 text-sm">
-                          {season.champion.owner}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-lake-ice/50">Champion TBD</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Notes (if any) */}
+              {/* Season Header */}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-lake-gold font-semibold text-lg">
+                  {season.year}
+                </span>
+                {index === 0 && (
+                  <span className="px-2 py-0.5 text-xs font-medium bg-lake-gold/20 text-lake-gold rounded-full">
+                    Defending Champion
+                  </span>
+                )}
                 {season.notes && (
-                  <div className="hidden md:block text-right">
-                    <p className="text-lake-ice/40 text-sm max-w-xs">
-                      {season.notes}
-                    </p>
-                  </div>
+                  <span className="text-lake-ice/40 text-sm ml-auto">
+                    {season.notes}
+                  </span>
                 )}
               </div>
 
-              {/* Mobile notes */}
-              {season.notes && (
-                <p className="md:hidden text-lake-ice/40 text-sm mt-4 pt-4 border-t border-lake-blue-light/20">
-                  {season.notes}
-                </p>
-              )}
+              {/* Matchup */}
+              <div className="flex items-center justify-center gap-4">
+                {/* Champion */}
+                {season.champion && (
+                  <div className="flex-1 flex items-center gap-3 p-3 rounded-lg bg-lake-gold/10 border border-lake-gold/30">
+                    {season.champion.logo && (
+                      <Image
+                        src={`/images/teams/${season.champion.logo}`}
+                        alt={`${season.champion.name} logo`}
+                        width={48}
+                        height={48}
+                        className="rounded-full border-2 border-lake-gold/50 flex-shrink-0"
+                      />
+                    )}
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <TrophyIcon className="w-4 h-4 text-lake-gold flex-shrink-0" />
+                        <p className="text-lake-ice font-semibold truncate">
+                          {season.champion.name}
+                        </p>
+                      </div>
+                      <p className="text-lake-ice/50 text-sm">
+                        {season.champion.owner}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Result */}
+                <div className="flex-shrink-0 text-center">
+                  {season.finalResult ? (
+                    <span className="text-lake-ice font-bold text-lg">
+                      {season.finalResult}
+                    </span>
+                  ) : (
+                    <span className="text-lake-ice/30 font-medium text-sm">vs</span>
+                  )}
+                </div>
+
+                {/* Runner Up */}
+                {season.runnerUp && (
+                  <div className="flex-1 flex items-center gap-3 p-3 rounded-lg bg-lake-blue-light/10 border border-lake-blue-light/20">
+                    {season.runnerUp.logo && (
+                      <Image
+                        src={`/images/teams/${season.runnerUp.logo}`}
+                        alt={`${season.runnerUp.name} logo`}
+                        width={48}
+                        height={48}
+                        className="rounded-full border-2 border-lake-blue-light/30 flex-shrink-0"
+                      />
+                    )}
+                    <div className="min-w-0">
+                      <p className="text-lake-ice/70 font-medium truncate">
+                        {season.runnerUp.name}
+                      </p>
+                      <p className="text-lake-ice/40 text-sm">
+                        {season.runnerUp.owner}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>

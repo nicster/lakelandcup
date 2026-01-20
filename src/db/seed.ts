@@ -7,17 +7,51 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // League data interface
+interface PlayoffMatchup {
+  week: number;
+  round: number;
+  teams: string[];
+  scores: number[];
+  winner: string | null;
+}
+
 interface LeagueData {
-  teams: { name: string; owner: string }[];
+  teams: { name: string; owner: string; logo?: string }[];
   seasons: {
     season: string;
     champion_team: string;
     champion_owner: string;
     runner_up_team: string;
     runner_up_owner: string;
-    playoffs: unknown;
+    playoffs: PlayoffMatchup[] | null;
     notes?: string;
   }[];
+}
+
+// Extract the final result from playoff data
+function getFinalResult(playoffs: PlayoffMatchup[] | null, championTeam: string, runnerUpTeam: string): string | null {
+  if (!playoffs || playoffs.length === 0) return null;
+
+  // Find the highest round number (the final)
+  const maxRound = Math.max(...playoffs.map(p => p.round));
+
+  // Find the championship game (the matchup with champion and runner-up in the final round)
+  const finalGame = playoffs.find(p =>
+    p.round === maxRound &&
+    p.teams.includes(championTeam) &&
+    p.teams.includes(runnerUpTeam)
+  );
+
+  if (!finalGame) return null;
+
+  // Get scores in order: champion score - runner-up score
+  const champIndex = finalGame.teams.indexOf(championTeam);
+  const runnerUpIndex = finalGame.teams.indexOf(runnerUpTeam);
+
+  const champScore = finalGame.scores[champIndex];
+  const runnerUpScore = finalGame.scores[runnerUpIndex];
+
+  return `${champScore}-${runnerUpScore}`;
 }
 
 // Normalize team names - map old names to current names
@@ -51,18 +85,39 @@ async function seed() {
 
   console.log(`Found ${leagueData.teams.length} teams and ${leagueData.seasons.length} seasons`);
 
+  // Build a map from team name to logo filename
+  const logoMap = new Map<string, string>();
+  for (const team of leagueData.teams) {
+    if (team.logo) {
+      logoMap.set(team.name, team.logo);
+      // Also map normalized name to logo
+      const normalizedName = normalizeTeamName(team.name);
+      if (normalizedName !== team.name) {
+        logoMap.set(normalizedName, team.logo);
+      }
+    }
+  }
+
   // Build unique members map (using normalized team names)
-  const memberMap = new Map<string, { name: string; owner: string }>();
+  const memberMap = new Map<string, { name: string; owner: string; logo?: string }>();
 
   for (const season of leagueData.seasons) {
     const champName = normalizeTeamName(season.champion_team);
     const runnerUpName = normalizeTeamName(season.runner_up_team);
 
     if (!memberMap.has(champName)) {
-      memberMap.set(champName, { name: champName, owner: season.champion_owner });
+      memberMap.set(champName, {
+        name: champName,
+        owner: season.champion_owner,
+        logo: logoMap.get(champName),
+      });
     }
     if (!memberMap.has(runnerUpName)) {
-      memberMap.set(runnerUpName, { name: runnerUpName, owner: season.runner_up_owner });
+      memberMap.set(runnerUpName, {
+        name: runnerUpName,
+        owner: season.runner_up_owner,
+        logo: logoMap.get(runnerUpName),
+      });
     }
   }
 
@@ -85,12 +140,14 @@ async function seed() {
         name: member.name,
         owner: member.owner !== '--hidden--' ? member.owner : 'Unknown',
         formerName,
+        logo: member.logo || null,
       })
       .returning({ id: members.id });
 
     memberIdMap.set(name, result[0].id);
     const formerNote = formerName ? ` (formerly ${formerName})` : '';
-    console.log(`  Added: ${member.name}${formerNote} (${member.owner}) -> ID ${result[0].id}`);
+    const logoNote = member.logo ? ` [${member.logo}]` : '';
+    console.log(`  Added: ${member.name}${formerNote} (${member.owner})${logoNote} -> ID ${result[0].id}`);
   }
 
   // Insert seasons
@@ -109,14 +166,19 @@ async function seed() {
       continue;
     }
 
+    // Extract final result from playoff data
+    const finalResult = getFinalResult(season.playoffs, season.champion_team, season.runner_up_team);
+
     await db.insert(seasons).values({
       year: season.season,
       championId,
       runnerUpId,
+      finalResult,
       notes: season.notes || null,
     });
 
-    console.log(`  Added season ${season.season}: ${champName} vs ${runnerUpName}`);
+    const resultNote = finalResult ? ` (${finalResult})` : '';
+    console.log(`  Added season ${season.season}: ${champName} vs ${runnerUpName}${resultNote}`);
   }
 
   console.log('Seed complete!');

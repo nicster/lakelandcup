@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Header, Footer } from "@/components/layout";
+import { Header } from "@/components/layout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,7 +31,6 @@ export default function RootLayout({
         <main className="flex-1 ice-texture">
           {children}
         </main>
-        <Footer />
       </body>
     </html>
   );

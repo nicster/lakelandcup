@@ -6,6 +6,7 @@ export const members = pgTable('members', {
   name: text('name').notNull(),           // Current team name: "Stonemere Flyers"
   owner: text('owner').notNull(),         // Owner name: "Nicolas"
   formerName: text('former_name'),        // Previous team name: "Schlieren Flyers"
+  logo: text('logo'),                     // Logo filename: "stonemere-flyers.png"
   email: text('email'),
   isCommissioner: boolean('is_commissioner').default(false),
   createdAt: timestamp('created_at').defaultNow(),
@@ -17,6 +18,7 @@ export const seasons = pgTable('seasons', {
   year: text('year').notNull().unique(),  // "2023-24"
   championId: integer('champion_id').references(() => members.id),
   runnerUpId: integer('runner_up_id').references(() => members.id),
+  finalResult: text('final_result'),      // "7-5" (champion score first)
   notes: text('notes'),
 });
 
