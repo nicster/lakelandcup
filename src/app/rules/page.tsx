@@ -217,14 +217,16 @@ export default async function RulesPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       {/* Page Header */}
-      <div className="text-center mb-12">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-lake-blue-light/30 mb-4">
-          <BookIcon className="w-8 h-8 text-lake-gold" />
+      <div className="flex items-center gap-4 mb-10">
+        <div className="flex-shrink-0 w-14 h-14 rounded-full bg-lake-blue-light/30 flex items-center justify-center">
+          <BookIcon className="w-7 h-7 text-lake-gold" />
         </div>
-        <h1 className="text-3xl font-bold text-lake-ice mb-2">League Manual</h1>
-        <p className="text-lake-ice/60">
-          Official rules and regulations of the Lakeland Cup
-        </p>
+        <div>
+          <h1 className="text-2xl font-bold text-lake-ice">League Manual</h1>
+          <p className="text-lake-ice/60 text-sm">
+            Official rules and regulations of the Lakeland Cup
+          </p>
+        </div>
       </div>
 
       {/* Table of Contents */}

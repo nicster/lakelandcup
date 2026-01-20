@@ -77,25 +77,25 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       {/* Team Header */}
-      <div className="flex items-center gap-6 mb-12">
+      <div className="flex items-center gap-4 mb-10">
         {team.logo ? (
           <Image
             src={`/images/teams/${team.logo}`}
             alt={`${team.name} logo`}
-            width={120}
-            height={120}
-            className="rounded-full border-4 border-lake-gold/50"
+            width={80}
+            height={80}
+            className="rounded-full border-2 border-lake-gold/50 flex-shrink-0"
           />
         ) : (
-          <div className="w-[120px] h-[120px] rounded-full bg-lake-blue-light/20 flex items-center justify-center">
-            <span className="text-4xl text-lake-ice/30">?</span>
+          <div className="w-[80px] h-[80px] rounded-full bg-lake-blue-light/20 flex items-center justify-center flex-shrink-0">
+            <span className="text-2xl text-lake-ice/30">?</span>
           </div>
         )}
         <div>
-          <h1 className="text-4xl font-bold text-lake-ice mb-2">{team.name}</h1>
-          <p className="text-xl text-lake-ice/60">GM: {team.owner}</p>
+          <h1 className="text-2xl font-bold text-lake-ice">{team.name}</h1>
+          <p className="text-lake-ice/60 text-sm">GM: {team.owner}</p>
           {team.formerName && (
-            <p className="text-sm text-lake-ice/40 mt-1">
+            <p className="text-lake-ice/40 text-xs mt-1">
               Formerly known as {team.formerName}
             </p>
           )}
