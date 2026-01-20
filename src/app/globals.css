@@ -3,25 +3,62 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0f1419;
+  --foreground: #e8f4f8;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* Subtle ice rink texture overlay */
+.ice-texture {
+  background-image:
+    radial-gradient(ellipse at center, rgba(30, 58, 95, 0.3) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(15, 20, 25, 1) 0%, rgba(21, 41, 66, 0.8) 100%);
+}
+
+/* Animated gradient for the coming soon badge */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
   }
 }
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 162, 39, 0.1) 0%,
+    rgba(201, 162, 39, 0.3) 50%,
+    rgba(201, 162, 39, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 6s infinite linear;
+}
+
+/* Puck drop animation */
+@keyframes puck-drop {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.puck-drop {
+  animation: puck-drop 0.8s ease-out forwards;
+}
+
+/* Staggered fade in */
+.fade-in-1 { animation-delay: 0.1s; }
+.fade-in-2 { animation-delay: 0.3s; }
+.fade-in-3 { animation-delay: 0.5s; }
+.fade-in-4 { animation-delay: 0.7s; }
