@@ -29,10 +29,15 @@ yarn-error.log*
 .env*.local
 .env
 
-# Yahoo API credentials
+# Yahoo API credentials and data
 scripts/yahoo_credentials.json
 scripts/yahoo_token.json
 scripts/league_data.json
+
+# Python
+scripts/venv/
+scripts/__pycache__/
+*.pyc
 
 # vercel
 .vercel
