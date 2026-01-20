@@ -64,7 +64,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="absolute bottom-6 text-lake-ice/30 text-xs">
+      <footer className="mt-auto pt-12 pb-6 text-lake-ice/30 text-xs">
         Est. 2013
       </footer>
     </main>
