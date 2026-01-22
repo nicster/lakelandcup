@@ -568,8 +568,9 @@ def main():
     print("-"*60)
 
     champions = []
-    all_teams = {}  # name -> {owner, logo_url, logo_file}
+    all_teams = {}  # name -> {owner, logo_url, logo_file, seasons: []}
     all_playoffs = {}
+    season_rosters = {}  # season -> [team_names]
 
     for season, (game_key, league_id) in sorted(LAKELAND_CUP_SEASONS.items()):
         print(f"\n{season} (game key: {game_key}, league: {league_id})...")
@@ -607,14 +608,23 @@ def main():
                 'playoffs': playoffs,
             })
 
-            # Collect all teams with their logos (use latest logo for each team name)
+            # Collect all teams with their logos and track seasons
+            season_rosters[season] = []
             for team in standings:
                 name = team['name']
-                if name not in all_teams or team['logo_url']:
+                season_rosters[season].append(name)
+
+                if name not in all_teams:
                     all_teams[name] = {
                         'owner': team['manager'],
-                        'logo_url': team['logo_url']
+                        'logo_url': team['logo_url'],
+                        'seasons': []
                     }
+                # Update logo_url if we have a newer one
+                if team['logo_url']:
+                    all_teams[name]['logo_url'] = team['logo_url']
+                # Track which seasons this team was active
+                all_teams[name]['seasons'].append(season)
         else:
             print(f"  Could not fetch data (league may not exist for this season)")
 
@@ -655,11 +665,13 @@ def main():
             {
                 'name': name,
                 'owner': data['owner'],
-                'logo': data.get('logo_file')
+                'logo': data.get('logo_file'),
+                'seasons': data.get('seasons', [])
             }
             for name, data in sorted(all_teams.items())
         ],
-        'seasons': champions
+        'seasons': champions,
+        'season_rosters': season_rosters
     }
 
     with open('league_data.json', 'w') as f:

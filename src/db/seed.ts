@@ -2,7 +2,6 @@ import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { members, seasons } from './schema';
-import { eq } from 'drizzle-orm';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -98,9 +97,22 @@ async function seed() {
     }
   }
 
-  // Build unique members map (using normalized team names)
+  // Build unique members map from ALL teams in the data
   const memberMap = new Map<string, { name: string; owner: string; logo?: string }>();
 
+  // First, add all teams from the teams array
+  for (const team of leagueData.teams) {
+    const teamName = normalizeTeamName(team.name);
+    if (!memberMap.has(teamName)) {
+      memberMap.set(teamName, {
+        name: teamName,
+        owner: team.owner,
+        logo: team.logo,
+      });
+    }
+  }
+
+  // Also ensure champions/runner-ups are included with their owners
   for (const season of leagueData.seasons) {
     const champName = normalizeTeamName(season.champion_team);
     const runnerUpName = normalizeTeamName(season.runner_up_team);
@@ -121,7 +133,7 @@ async function seed() {
     }
   }
 
-  console.log(`Identified ${memberMap.size} unique teams from season data`);
+  console.log(`Identified ${memberMap.size} unique teams`);
 
   // Clear existing data
   console.log('Clearing existing data...');
@@ -132,7 +144,9 @@ async function seed() {
   console.log('Inserting members...');
   const memberIdMap = new Map<string, number>();
 
-  for (const [name, member] of memberMap) {
+  const memberEntries = Array.from(memberMap.entries());
+  for (const entry of memberEntries) {
+    const [name, member] = entry;
     const formerName = TEAM_FORMER_NAMES[name] || null;
     const result = await db
       .insert(members)
