@@ -2,6 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { db, members } from '@/lib/db';
 
+// Force dynamic rendering to fetch fresh data on each request
+export const dynamic = 'force-dynamic';
+
 // History icon component
 function HistoryIcon({ className = '' }: { className?: string }) {
   return (

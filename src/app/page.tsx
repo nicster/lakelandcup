@@ -3,6 +3,9 @@ import Link from "next/link";
 import { db, seasons, members } from '@/lib/db';
 import { desc, eq } from 'drizzle-orm';
 
+// Force dynamic rendering to fetch fresh data on each request
+export const dynamic = 'force-dynamic';
+
 async function getLatestChampion() {
   try {
     const result = await db

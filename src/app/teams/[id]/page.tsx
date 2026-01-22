@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import { db, members, seasons } from '@/lib/db';
 import { eq, or } from 'drizzle-orm';
 
+// Force dynamic rendering to fetch fresh data on each request
+export const dynamic = 'force-dynamic';
+
 // Trophy icons
 function TrophyIcon({ place, className = '' }: { place: 1 | 2 | 3; className?: string }) {
   const colors = {

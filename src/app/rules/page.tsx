@@ -1,6 +1,9 @@
 import { db, rules } from '@/lib/db';
 import { asc } from 'drizzle-orm';
 
+// Force dynamic rendering to fetch fresh data on each request
+export const dynamic = 'force-dynamic';
+
 // Default rules content (from 2023 revised manual)
 const defaultRules = [
   {

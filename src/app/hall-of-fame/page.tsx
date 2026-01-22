@@ -4,6 +4,9 @@ import { db, seasons, members } from '@/lib/db';
 import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 
+// Force dynamic rendering to fetch fresh data on each request
+export const dynamic = 'force-dynamic';
+
 // Trophy icon component
 function TrophyIcon({ className = '' }: { className?: string }) {
   return (
