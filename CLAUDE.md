@@ -59,30 +59,79 @@ See `PLAN.md` for the full 4-phase implementation plan:
 
 Self-hosted on TrueNAS via Docker + Traefik reverse proxy. Domain: lakelandcup.com
 
-### Docker Setup
-- `Dockerfile` - Multi-stage build (deps → builder → runner)
-- `docker-compose.yml` - Production compose file
-- `docker-compose.dev.yml` - Development with hot reload
+### How It Works
 
-### Database Setup for Deployment
-The app requires a PostgreSQL database. On the NAS:
+1. **Push to main** → GitHub Actions builds and pushes image to `ghcr.io/nicster/lakelandcup:latest`
+2. **Deploy on NAS** → Use `nicster.py` CLI from the `nas` repo to deploy the stack
 
-1. Create a PostgreSQL container/service
-2. Create database: `lakelandcup`
-3. Set `DATABASE_URL` environment variable in the container:
+### Stack Configuration
+
+The stack is defined in `../nas/apps/lakelandcup.yml` and includes:
+- `lakelandcup` - Next.js app from GHCR
+- `lakelandcup-db` - PostgreSQL 16 database
+
+The `DATABASE_URL` is automatically configured via the stack. Database password is stored in `../nas/apps/.secrets.yml` as `LAKELANDCUP_DB_PASSWORD`.
+
+### Deploy Commands
+
+```bash
+# From the nas repo directory
+cd ../nas
+
+# Preview changes (dry run)
+python nicster.py update lakelandcup --dry-run
+
+# Deploy the stack
+python nicster.py update lakelandcup
+
+# Force redeploy (e.g., to pull new image)
+python nicster.py update lakelandcup --force
+
+# Check status
+python nicster.py status
+```
+
+### First-Time Setup
+
+1. Add `LAKELANDCUP_DB_PASSWORD` to `../nas/apps/.secrets.yml`:
+   ```yaml
+   LAKELANDCUP_DB_PASSWORD: "<generate with: openssl rand -base64 32>"
    ```
-   DATABASE_URL=postgresql://user:password@postgres-host:5432/lakelandcup
-   ```
-4. Run migrations and seed after first deploy:
+
+2. Deploy the stack:
    ```bash
-   # Inside container or with database access
-   npm run db:push      # Create tables from schema
-   npm run db:seed      # Populate members, seasons from league_data.json
+   python nicster.py update lakelandcup
    ```
 
-### Deployment Checklist
-- [ ] PostgreSQL database running and accessible
-- [ ] `DATABASE_URL` configured in container environment
-- [ ] Run `db:push` to create tables
-- [ ] Run `db:seed` to populate initial data
-- [ ] Traefik routing configured for lakelandcup.com
+3. Run database migrations and seed:
+   ```bash
+   ssh nas 'sudo docker exec lakelandcup npx drizzle-kit push'
+   ssh nas 'sudo docker exec lakelandcup npx tsx src/db/seed.ts'
+   ```
+
+### Updating the App
+
+```bash
+# 1. Push changes to main (triggers GitHub Actions build)
+git push origin main
+
+# 2. Wait for GitHub Actions to complete (~2-3 min)
+
+# 3. Force redeploy to pull new image
+cd ../nas
+python nicster.py update lakelandcup --force
+```
+
+### Troubleshooting
+
+```bash
+# View container logs
+ssh nas 'sudo docker logs lakelandcup'
+ssh nas 'sudo docker logs lakelandcup-db'
+
+# Check database connection
+ssh nas 'sudo docker exec lakelandcup-db psql -U lakelandcup -c "\dt"'
+
+# Restart containers
+ssh nas 'sudo docker restart lakelandcup'
+```
