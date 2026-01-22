@@ -18,6 +18,15 @@ function TrophyIcon({ place, className = '' }: { place: 1 | 2 | 3; className?: s
   );
 }
 
+// Star icon for achievements
+function StarIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+    </svg>
+  );
+}
+
 async function getTeam(id: number) {
   try {
     const team = await db
@@ -76,26 +85,49 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      {/* Team Header */}
-      <div className="flex items-center gap-4 mb-10">
-        {team.logo ? (
-          <Image
-            src={`/images/teams/${team.logo}`}
-            alt={`${team.name} logo`}
-            width={80}
-            height={80}
-            className="rounded-full border-2 border-lake-gold/50 flex-shrink-0"
-          />
-        ) : (
-          <div className="w-[80px] h-[80px] rounded-full bg-lake-blue-light/20 flex items-center justify-center flex-shrink-0">
-            <span className="text-2xl text-lake-ice/30">?</span>
+      {/* Team Header with Stars */}
+      <div className="relative mb-12">
+        {/* Achievement Stars - Top Right */}
+        {(championships.length > 0 || runnerUps.length > 0) && (
+          <div className="absolute top-0 right-0 flex flex-col items-center gap-1">
+            {/* Gold stars for championships */}
+            {championships.length > 0 && (
+              <div className="flex gap-0.5">
+                {championships.map((_, i) => (
+                  <StarIcon key={`champ-${i}`} className="w-8 h-8 text-yellow-400 drop-shadow-lg" />
+                ))}
+              </div>
+            )}
+            {/* Silver stars for runner-ups */}
+            {runnerUps.length > 0 && (
+              <div className="flex gap-0.5">
+                {runnerUps.map((_, i) => (
+                  <StarIcon key={`runner-${i}`} className="w-5 h-5 text-gray-300 drop-shadow" />
+                ))}
+              </div>
+            )}
           </div>
         )}
-        <div>
-          <h1 className="text-2xl font-bold text-lake-ice">{team.name}</h1>
-          <p className="text-lake-ice/60 text-sm">GM: {team.owner}</p>
+
+        {/* Team Info - Centered */}
+        <div className="flex flex-col items-center text-center">
+          {team.logo ? (
+            <Image
+              src={`/images/teams/${team.logo}`}
+              alt={`${team.name} logo`}
+              width={120}
+              height={120}
+              className="rounded-full border-3 border-lake-gold/50 mb-6"
+            />
+          ) : (
+            <div className="w-[120px] h-[120px] rounded-full bg-lake-blue-light/20 flex items-center justify-center mb-6">
+              <span className="text-3xl text-lake-ice/30">?</span>
+            </div>
+          )}
+          <h1 className="text-4xl font-bold text-lake-ice mb-2">{team.name}</h1>
+          <p className="text-lake-ice/60">GM: {team.owner}</p>
           {team.formerName && (
-            <p className="text-lake-ice/40 text-xs mt-1">
+            <p className="text-lake-ice/40 text-sm mt-1">
               Formerly known as {team.formerName}
             </p>
           )}
@@ -116,7 +148,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                 <div className="flex items-center gap-3 mb-4">
                   <TrophyIcon place={1} className="w-8 h-8" />
                   <h3 className="text-xl font-semibold text-yellow-400">
-                    Championships ({championships.length})
+                    Championships
                   </h3>
                 </div>
                 <div className="space-y-2">
@@ -138,7 +170,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                 <div className="flex items-center gap-3 mb-4">
                   <TrophyIcon place={2} className="w-8 h-8" />
                   <h3 className="text-xl font-semibold text-gray-300">
-                    Runner-ups ({runnerUps.length})
+                    Runner-ups
                   </h3>
                 </div>
                 <div className="space-y-2">
