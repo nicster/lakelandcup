@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { db, members, seasons } from '@/lib/db';
-import { eq, or } from 'drizzle-orm';
+import { db, members, seasons, franchisePlayers } from '@/lib/db';
+import { eq, or, desc } from 'drizzle-orm';
+import { Rafters } from '@/components/league/Rafters';
 
 // Force dynamic rendering to fetch fresh data on each request
 export const dynamic = 'force-dynamic';
@@ -70,6 +71,34 @@ async function getTeamAchievements(teamId: number) {
   }
 }
 
+async function getTeamFranchisePlayers(teamId: number, teamName: string) {
+  try {
+    const results = await db
+      .select()
+      .from(franchisePlayers)
+      .where(
+        or(
+          eq(franchisePlayers.teamId, teamId),
+          eq(franchisePlayers.teamName, teamName)
+        )
+      )
+      .orderBy(desc(franchisePlayers.years));
+
+    return results.map((fp) => ({
+      player: fp.playerName,
+      team: fp.teamName,
+      jerseyNumber: fp.jerseyNumber,
+      position: fp.position || 'F',
+      years: fp.years,
+      seasonStart: fp.seasonStart || '',
+      seasonEnd: fp.seasonEnd || null,
+      teamColors: fp.teamColors ? JSON.parse(fp.teamColors) : null,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const teamId = parseInt(id, 10);
@@ -84,7 +113,10 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
     notFound();
   }
 
-  const { championships, runnerUps } = await getTeamAchievements(teamId);
+  const [{ championships, runnerUps }, franchisePlayerData] = await Promise.all([
+    getTeamAchievements(teamId),
+    getTeamFranchisePlayers(teamId, team.name),
+  ]);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -191,6 +223,16 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
           </div>
         )}
       </div>
+
+      {/* Franchise Players */}
+      {franchisePlayerData.length > 0 && (
+        <div className="mb-8">
+          <Rafters
+            franchisePlayers={franchisePlayerData}
+            showTeamHeaders={false}
+          />
+        </div>
+      )}
 
       {/* Prospects Section (placeholder for later) */}
       <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-8">

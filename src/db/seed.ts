@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import { members, seasons } from './schema';
+import { members, seasons, franchisePlayers } from './schema';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -14,8 +14,19 @@ interface PlayoffMatchup {
   winner: string | null;
 }
 
+interface FranchisePlayerData {
+  player: string;
+  team: string;
+  jersey_number: string | null;
+  position: string;
+  years: number;
+  games: number;
+  seasons: string[];
+  team_colors: string[] | null;
+}
+
 interface LeagueData {
-  teams: { name: string; owner: string; logo?: string }[];
+  teams: { name: string; owner: string; logo?: string; colors?: string[] }[];
   seasons: {
     season: string;
     champion_team: string;
@@ -25,6 +36,7 @@ interface LeagueData {
     playoffs: PlayoffMatchup[] | null;
     notes?: string;
   }[];
+  franchise_players?: FranchisePlayerData[];
 }
 
 // Extract the final result from playoff data
@@ -84,8 +96,9 @@ async function seed() {
 
   console.log(`Found ${leagueData.teams.length} teams and ${leagueData.seasons.length} seasons`);
 
-  // Build a map from team name to logo filename
+  // Build a map from team name to logo filename and colors
   const logoMap = new Map<string, string>();
+  const colorsMap = new Map<string, string[]>();
   for (const team of leagueData.teams) {
     if (team.logo) {
       logoMap.set(team.name, team.logo);
@@ -95,10 +108,17 @@ async function seed() {
         logoMap.set(normalizedName, team.logo);
       }
     }
+    if (team.colors) {
+      colorsMap.set(team.name, team.colors);
+      const normalizedName = normalizeTeamName(team.name);
+      if (normalizedName !== team.name) {
+        colorsMap.set(normalizedName, team.colors);
+      }
+    }
   }
 
   // Build unique members map from ALL teams in the data
-  const memberMap = new Map<string, { name: string; owner: string; logo?: string }>();
+  const memberMap = new Map<string, { name: string; owner: string; logo?: string; colors?: string[] }>();
 
   // First, add all teams from the teams array
   for (const team of leagueData.teams) {
@@ -108,6 +128,7 @@ async function seed() {
         name: teamName,
         owner: team.owner,
         logo: team.logo,
+        colors: team.colors,
       });
     }
   }
@@ -122,6 +143,7 @@ async function seed() {
         name: champName,
         owner: season.champion_owner,
         logo: logoMap.get(champName),
+        colors: colorsMap.get(champName),
       });
     }
     if (!memberMap.has(runnerUpName)) {
@@ -129,6 +151,7 @@ async function seed() {
         name: runnerUpName,
         owner: season.runner_up_owner,
         logo: logoMap.get(runnerUpName),
+        colors: colorsMap.get(runnerUpName),
       });
     }
   }
@@ -137,6 +160,7 @@ async function seed() {
 
   // Clear existing data
   console.log('Clearing existing data...');
+  await db.delete(franchisePlayers);
   await db.delete(seasons);
   await db.delete(members);
 
@@ -155,6 +179,7 @@ async function seed() {
         owner: member.owner !== '--hidden--' ? member.owner : 'Unknown',
         formerName,
         logo: member.logo || null,
+        colors: member.colors ? JSON.stringify(member.colors) : null,
       })
       .returning({ id: members.id });
 
@@ -193,6 +218,32 @@ async function seed() {
 
     const resultNote = finalResult ? ` (${finalResult})` : '';
     console.log(`  Added season ${season.season}: ${champName} vs ${runnerUpName}${resultNote}`);
+  }
+
+  // Insert franchise players
+  if (leagueData.franchise_players && leagueData.franchise_players.length > 0) {
+    console.log('Inserting franchise players...');
+    for (const fp of leagueData.franchise_players) {
+      const teamName = normalizeTeamName(fp.team);
+      const teamId = memberIdMap.get(teamName) || null;
+
+      await db.insert(franchisePlayers).values({
+        playerName: fp.player,
+        jerseyNumber: fp.jersey_number,
+        position: fp.position,
+        teamId,
+        teamName: fp.team,
+        years: fp.years,
+        games: fp.games,
+        seasonStart: fp.seasons[0],
+        seasonEnd: fp.seasons[fp.seasons.length - 1],
+        teamColors: fp.team_colors ? JSON.stringify(fp.team_colors) : null,
+      });
+
+      const jersey = fp.jersey_number ? `#${fp.jersey_number}` : '';
+      console.log(`  Added: ${fp.player} ${jersey} (${fp.team}) - ${fp.years} years`);
+    }
+    console.log(`  Total franchise players: ${leagueData.franchise_players.length}`);
   }
 
   console.log('Seed complete!');

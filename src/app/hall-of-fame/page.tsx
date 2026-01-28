@@ -57,7 +57,7 @@ export default async function HallOfFamePage() {
   const seasonData = await getSeasons();
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-5xl mx-auto px-4 py-12">
       {/* Page Header */}
       <div className="flex items-center gap-4 mb-10">
         <div className="flex-shrink-0 w-14 h-14 rounded-full bg-lake-gold/20 flex items-center justify-center">
@@ -166,7 +166,6 @@ export default async function HallOfFamePage() {
           ))}
         </div>
       )}
-
     </div>
   );
 }

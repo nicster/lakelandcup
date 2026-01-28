@@ -1,3 +1,4 @@
 yahoo-oauth
 requests
 python-dotenv
+Pillow

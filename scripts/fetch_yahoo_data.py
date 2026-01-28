@@ -43,6 +43,102 @@ REDIRECT_URI = "oob"  # Out-of-band - user will manually copy the code
 LOGOS_DIR = Path(__file__).parent.parent / "public" / "images" / "teams"
 
 
+def extract_logo_colors(logo_path, num_colors=3):
+    """Extract dominant colors from a logo image with vibrant results"""
+    try:
+        from PIL import Image
+        from collections import Counter
+        import colorsys
+
+        img = Image.open(logo_path)
+        # Convert to RGB if necessary
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+
+        # Resize for faster processing
+        img = img.resize((150, 150))
+
+        # Get all pixels
+        pixels = list(img.getdata())
+
+        def get_saturation(rgb):
+            """Get HSV saturation of a color"""
+            r, g, b = [x / 255.0 for x in rgb]
+            h, s, v = colorsys.rgb_to_hsv(r, g, b)
+            return s
+
+        def get_brightness(rgb):
+            """Get perceived brightness"""
+            r, g, b = rgb
+            return (r * 299 + g * 587 + b * 114) / 1000
+
+        # Filter out backgrounds and boring colors
+        def is_valid_color(rgb):
+            r, g, b = rgb
+            brightness = get_brightness(rgb)
+            saturation = get_saturation(rgb)
+
+            # Skip very light colors (likely white background)
+            if brightness > 245:
+                return False
+            # Skip very dark colors (likely black)
+            if brightness < 15:
+                return False
+            # Skip low-saturation grays (but keep dark team colors)
+            if saturation < 0.15 and brightness > 60 and brightness < 200:
+                return False
+            return True
+
+        filtered_pixels = [p for p in pixels if is_valid_color(p)]
+
+        if not filtered_pixels:
+            # Fallback: just filter out pure white/black
+            filtered_pixels = [p for p in pixels if 20 < get_brightness(p) < 240]
+
+        if not filtered_pixels:
+            return None
+
+        # Quantize colors (round to nearest 8 for finer granularity)
+        def quantize(rgb):
+            return tuple((c // 8) * 8 for c in rgb)
+
+        quantized = [quantize(p) for p in filtered_pixels]
+        color_counts = Counter(quantized)
+
+        # Score colors by frequency AND saturation (prefer vibrant colors)
+        def color_score(color_count_tuple):
+            rgb, count = color_count_tuple
+            saturation = get_saturation(rgb)
+            # Boost score for saturated colors
+            return count * (1 + saturation * 2)
+
+        sorted_colors = sorted(color_counts.items(), key=color_score, reverse=True)
+
+        # Get top colors, but try to get diverse colors
+        colors = []
+        for rgb, count in sorted_colors:
+            # Check if this color is too similar to already selected colors
+            is_unique = True
+            for existing in colors:
+                existing_rgb = tuple(int(existing[i:i+2], 16) for i in (1, 3, 5))
+                diff = sum(abs(a - b) for a, b in zip(rgb, existing_rgb))
+                if diff < 80:  # Colors too similar
+                    is_unique = False
+                    break
+
+            if is_unique:
+                hex_color = '#{:02x}{:02x}{:02x}'.format(*rgb)
+                colors.append(hex_color)
+
+            if len(colors) >= num_colors:
+                break
+
+        return colors if colors else None
+    except Exception as e:
+        print(f"      Error extracting colors: {e}")
+        return None
+
+
 def slugify(text):
     """Convert text to a safe filename"""
     text = text.lower()
@@ -427,6 +523,135 @@ class YahooFantasyAPI:
 
         return playoff_matchups if playoff_matchups else None
 
+    def get_league_teams_with_keys(self, game_key, league_id):
+        """Get all teams in a league with their team keys"""
+        league_key = f"{game_key}.l.{league_id}"
+        endpoint = f"league/{league_key}/teams"
+
+        data = self.api_request(endpoint)
+        if not data:
+            return None
+
+        try:
+            league = data['fantasy_content']['league']
+            if isinstance(league, list):
+                teams_data = None
+                for item in league:
+                    if isinstance(item, dict) and 'teams' in item:
+                        teams_data = item['teams']
+                        break
+                if not teams_data:
+                    return None
+            else:
+                teams_data = league.get('teams')
+
+            results = []
+            count = teams_data.get('count', 0)
+            for i in range(count):
+                team_data = teams_data.get(str(i))
+                if team_data:
+                    team = team_data['team']
+                    team_info = team[0]
+
+                    team_key = None
+                    name = None
+                    manager = None
+                    for item in team_info:
+                        if isinstance(item, dict):
+                            if 'team_key' in item:
+                                team_key = item['team_key']
+                            if 'name' in item:
+                                name = item['name']
+                            if 'managers' in item:
+                                managers = item['managers']
+                                if isinstance(managers, list) and managers:
+                                    manager = managers[0].get('manager', {}).get('nickname')
+                                elif isinstance(managers, dict):
+                                    manager = managers.get('manager', {}).get('nickname')
+
+                    if team_key and name:
+                        results.append({
+                            'team_key': team_key,
+                            'name': name,
+                            'manager': manager
+                        })
+
+            return results
+        except (KeyError, IndexError, TypeError) as e:
+            print(f"Error parsing teams: {e}")
+            return None
+
+    def get_team_roster(self, team_key):
+        """Get the roster for a specific team"""
+        endpoint = f"team/{team_key}/roster"
+
+        data = self.api_request(endpoint)
+        if not data:
+            return None
+
+        try:
+            team = data['fantasy_content']['team']
+            roster_data = None
+
+            if isinstance(team, list):
+                for item in team:
+                    if isinstance(item, dict) and 'roster' in item:
+                        roster_data = item['roster']
+                        break
+            else:
+                roster_data = team.get('roster')
+
+            if not roster_data:
+                return None
+
+            # Get coverage type (usually "week" or "date")
+            coverage = roster_data.get('0', {}).get('players', {})
+            if not coverage:
+                coverage = roster_data.get('players', {})
+
+            players = []
+            count = coverage.get('count', 0)
+
+            for i in range(count):
+                player_data = coverage.get(str(i))
+                if player_data:
+                    player = player_data.get('player', [])
+                    if player:
+                        player_info = player[0] if isinstance(player[0], list) else player
+
+                        player_id = None
+                        name = None
+                        position = None
+                        jersey_number = None
+
+                        for item in player_info:
+                            if isinstance(item, dict):
+                                if 'player_id' in item:
+                                    player_id = item['player_id']
+                                if 'name' in item:
+                                    name = item['name'].get('full', item['name'].get('first', '') + ' ' + item['name'].get('last', ''))
+                                if 'primary_position' in item:
+                                    position = item['primary_position']
+                                if 'display_position' in item and not position:
+                                    position = item['display_position']
+                                if 'uniform_number' in item:
+                                    jersey_number = item['uniform_number']
+
+                        if name:
+                            players.append({
+                                'player_id': player_id,
+                                'name': name,
+                                'position': position,
+                                'jersey_number': jersey_number
+                            })
+
+            return players
+        except (KeyError, IndexError, TypeError) as e:
+            print(f"Error parsing roster: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+
     def get_league_standings(self, game_key, league_id):
         """Get standings for a specific league/season"""
         league_key = f"{game_key}.l.{league_id}"
@@ -571,6 +796,8 @@ def main():
     all_teams = {}  # name -> {owner, logo_url, logo_file, seasons: []}
     all_playoffs = {}
     season_rosters = {}  # season -> [team_names]
+    player_history = {}  # player_name -> {team_name -> [seasons]}
+    team_rosters = {}  # season -> team_name -> [players]
 
     for season, (game_key, league_id) in sorted(LAKELAND_CUP_SEASONS.items()):
         print(f"\n{season} (game key: {game_key}, league: {league_id})...")
@@ -625,18 +852,65 @@ def main():
                     all_teams[name]['logo_url'] = team['logo_url']
                 # Track which seasons this team was active
                 all_teams[name]['seasons'].append(season)
+
+            # Fetch rosters for all teams
+            print(f"  Fetching rosters...")
+            teams_with_keys = api.get_league_teams_with_keys(game_key, league_id)
+            if teams_with_keys:
+                team_rosters[season] = {}
+                for team_info in teams_with_keys:
+                    team_key = team_info['team_key']
+                    team_name = team_info['name']
+                    manager = team_info['manager']
+
+                    roster = api.get_team_roster(team_key)
+                    if roster:
+                        team_rosters[season][team_name] = roster
+                        print(f"    {team_name}: {len(roster)} players")
+
+                        # Track player history for franchise player analysis
+                        for player in roster:
+                            player_name = player['name']
+                            if player_name not in player_history:
+                                player_history[player_name] = {
+                                    'teams': {},  # team_name -> [seasons]
+                                    'position': player['position'],
+                                    'player_id': player['player_id'],
+                                    'jersey_number': player.get('jersey_number')
+                                }
+                            # Update jersey number if we have a newer one
+                            if player.get('jersey_number'):
+                                player_history[player_name]['jersey_number'] = player['jersey_number']
+                            if team_name not in player_history[player_name]['teams']:
+                                player_history[player_name]['teams'][team_name] = []
+                            player_history[player_name]['teams'][team_name].append(season)
+                    else:
+                        print(f"    {team_name}: failed to fetch roster")
         else:
             print(f"  Could not fetch data (league may not exist for this season)")
 
-    # Download all logos
+    # Download all logos and extract colors
     print("\n" + "="*60)
-    print("DOWNLOADING LOGOS")
+    print("DOWNLOADING LOGOS & EXTRACTING COLORS")
     print("="*60)
 
     for name, data in all_teams.items():
         print(f"\n  {name}...")
         logo_file = download_logo(data['logo_url'], name)
         data['logo_file'] = logo_file
+
+        # Extract colors from logo
+        if logo_file:
+            logo_path = LOGOS_DIR / logo_file
+            if logo_path.exists():
+                colors = extract_logo_colors(logo_path)
+                data['colors'] = colors
+                if colors:
+                    print(f"      Colors: {', '.join(colors)}")
+            else:
+                data['colors'] = None
+        else:
+            data['colors'] = None
 
     # Output results
     print("\n" + "="*60)
@@ -659,6 +933,81 @@ def main():
                 final = finals[0]
                 print(f"    Final: {final['teams'][0]} ({final['scores'][0]}) vs {final['teams'][1]} ({final['scores'][1]})")
 
+    # Analyze franchise players (10+ consecutive seasons with same team)
+    print("\n" + "="*60)
+    print("FRANCHISE PLAYERS (10+ consecutive seasons)")
+    print("="*60)
+
+    def get_consecutive_seasons(seasons_list):
+        """Find longest consecutive run of seasons"""
+        if not seasons_list:
+            return [], 0
+
+        # Sort seasons chronologically
+        sorted_seasons = sorted(seasons_list, key=lambda s: int(s.split('-')[0]))
+
+        best_run = []
+        current_run = [sorted_seasons[0]]
+
+        for i in range(1, len(sorted_seasons)):
+            prev_year = int(sorted_seasons[i-1].split('-')[0])
+            curr_year = int(sorted_seasons[i].split('-')[0])
+
+            if curr_year == prev_year + 1:
+                current_run.append(sorted_seasons[i])
+            else:
+                if len(current_run) > len(best_run):
+                    best_run = current_run
+                current_run = [sorted_seasons[i]]
+
+        if len(current_run) > len(best_run):
+            best_run = current_run
+
+        return best_run, len(best_run)
+
+    franchise_players = []
+
+    for player_name, data in player_history.items():
+        for team_name, seasons_list in data['teams'].items():
+            consecutive, count = get_consecutive_seasons(seasons_list)
+            if count >= 10:
+                games_estimate = count * 82
+                # Get team colors
+                team_colors = all_teams.get(team_name, {}).get('colors')
+                franchise_players.append({
+                    'player': player_name,
+                    'team': team_name,
+                    'seasons': consecutive,
+                    'years': count,
+                    'games': games_estimate,
+                    'position': data['position'],
+                    'player_id': data['player_id'],
+                    'jersey_number': data.get('jersey_number'),
+                    'team_colors': team_colors
+                })
+
+    # Sort by years (descending), then by player name
+    franchise_players.sort(key=lambda x: (-x['years'], x['player']))
+
+    # Group by team for display
+    teams_franchise = {}
+    for fp in franchise_players:
+        team = fp['team']
+        if team not in teams_franchise:
+            teams_franchise[team] = []
+        teams_franchise[team].append(fp)
+
+    for team_name in sorted(teams_franchise.keys()):
+        players = teams_franchise[team_name]
+        print(f"\n  {team_name}:")
+        for fp in players:
+            season_range = f"{fp['seasons'][0]} to {fp['seasons'][-1]}"
+            jersey = f"#{fp['jersey_number']}" if fp.get('jersey_number') else ""
+            print(f"    ★ {fp['player']} {jersey} ({fp['position']}) - {fp['years']} years ({fp['games']} games est.)")
+            print(f"      {season_range}")
+
+    print(f"\n  Total franchise players found: {len(franchise_players)}")
+
     # Save to JSON for easy import
     output = {
         'teams': [
@@ -666,12 +1015,24 @@ def main():
                 'name': name,
                 'owner': data['owner'],
                 'logo': data.get('logo_file'),
+                'colors': data.get('colors'),
                 'seasons': data.get('seasons', [])
             }
             for name, data in sorted(all_teams.items())
         ],
         'seasons': champions,
-        'season_rosters': season_rosters
+        'season_rosters': season_rosters,
+        'team_rosters': team_rosters,
+        'franchise_players': franchise_players,
+        'player_history': {
+            name: {
+                'teams': data['teams'],
+                'position': data['position'],
+                'player_id': data['player_id'],
+                'jersey_number': data.get('jersey_number')
+            }
+            for name, data in player_history.items()
+        }
     }
 
     with open('league_data.json', 'w') as f:

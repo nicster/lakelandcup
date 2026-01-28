@@ -7,6 +7,7 @@ export const members = pgTable('members', {
   owner: text('owner').notNull(),         // Owner name: "Nicolas"
   formerName: text('former_name'),        // Previous team name: "Schlieren Flyers"
   logo: text('logo'),                     // Logo filename: "stonemere-flyers.png"
+  colors: text('colors'),                 // JSON array of hex colors: ["#1e3a5f", "#ffffff", "#c4a962"]
   email: text('email'),
   isCommissioner: boolean('is_commissioner').default(false),
   createdAt: timestamp('created_at').defaultNow(),
@@ -32,6 +33,21 @@ export const rules = pgTable('rules', {
   updatedAt: timestamp('updated_at').defaultNow(),
 });
 
+// Franchise players (10+ consecutive years with same team)
+export const franchisePlayers = pgTable('franchise_players', {
+  id: serial('id').primaryKey(),
+  playerName: text('player_name').notNull(),
+  jerseyNumber: text('jersey_number'),
+  position: text('position'),
+  teamId: integer('team_id').references(() => members.id),
+  teamName: text('team_name').notNull(),    // Denormalized for historical accuracy
+  years: integer('years').notNull(),
+  games: integer('games'),                   // Estimated games (years * 82)
+  seasonStart: text('season_start'),         // "2013-14"
+  seasonEnd: text('season_end'),             // "2024-25"
+  teamColors: text('team_colors'),           // JSON array of hex colors
+});
+
 // Type exports for use in application
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
@@ -39,3 +55,5 @@ export type Season = typeof seasons.$inferSelect;
 export type NewSeason = typeof seasons.$inferInsert;
 export type Rule = typeof rules.$inferSelect;
 export type NewRule = typeof rules.$inferInsert;
+export type FranchisePlayer = typeof franchisePlayers.$inferSelect;
+export type NewFranchisePlayer = typeof franchisePlayers.$inferInsert;
