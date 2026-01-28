@@ -1,0 +1,1869 @@
+{
+  "drafts": {
+    "2017": {
+      "year": "2017",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 1,
+            "team": "Lyss Falcons",
+            "from_team": "Slithering Goons",
+            "player": "Nico Hischier",
+            "traded_to": null
+          },
+          {
+            "pick": 2,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Nolan Patrick",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Miro Heiskanen",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Cody Glass",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Casey Mittelstadt",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Owen Tippett",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Elfenau Gamblers",
+            "from_team": null,
+            "player": "Cale Makar",
+            "traded_to": null
+          },
+          {
+            "pick": 8,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Timothy Liljegren",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "Eastside Grizzlys",
+            "from_team": null,
+            "player": "Kailer Yamamoto",
+            "traded_to": null
+          },
+          {
+            "pick": 10,
+            "team": "Illinois Ice Cracker",
+            "from_team": null,
+            "player": "Eeli Tolvanen",
+            "traded_to": "to Elfenau Gamblers"
+          },
+          {
+            "pick": 11,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Michael Rasmussen",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "Eastside Grizzlys",
+            "from_team": "Drunken Monkeys",
+            "player": "Erik Brannstrom",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 1,
+            "team": "Slithering Goons",
+            "from_team": null,
+            "player": "Elias Pettersson",
+            "traded_to": null
+          },
+          {
+            "pick": 2,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Gabriel Vilardi",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Nick Suzuki",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Callan Foote",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Martin Necas",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "Pittsburgh Walruses",
+            "from_team": "D\u00f6rfli Snipers",
+            "player": "Filip Chytil",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Slithering Goons",
+            "from_team": "Bern City Rangers",
+            "player": "Juuso Valimaki",
+            "traded_to": null
+          },
+          {
+            "pick": 8,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Josh Norris",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "Winnipeg Bulldozers",
+            "from_team": "Drunken <- Eastside",
+            "player": "Klim Kostin",
+            "traded_to": null
+          },
+          {
+            "pick": 10,
+            "team": "Illinois Ice Cracker",
+            "from_team": null,
+            "player": "Jake Oettinger",
+            "traded_to": null
+          },
+          {
+            "pick": 11,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Kristian Vesalainen",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "Slithering Goons",
+            "from_team": "Drunken Monkeys",
+            "player": "Isaac Ratcliffe",
+            "traded_to": null
+          }
+        ]
+      }
+    },
+    "2018": {
+      "year": "2018",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 1,
+            "team": "Slithering Goons",
+            "from_team": "Lyss Falcons",
+            "player": "Rasmus Dahlin",
+            "traded_to": null
+          },
+          {
+            "pick": 2,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Andrej Svechnikov",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Slithering Goons",
+            "from_team": null,
+            "player": "Filip Zadina",
+            "traded_to": "Winnipeg Bulldozers"
+          },
+          {
+            "pick": 4,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Jesperi Kotkaniemi",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Slithering Goons",
+            "from_team": "Elfenau Gamblers",
+            "player": "Brady Tkachuk",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Oliver Wahlstrom",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": "Drunken Monkeys",
+            "player": "Quinton Hughes",
+            "traded_to": null
+          },
+          {
+            "pick": 8,
+            "team": "Illinois Ice Cracker",
+            "from_team": "Eastside Grizzly",
+            "player": "Evan Bouchard",
+            "traded_to": "X"
+          },
+          {
+            "pick": 9,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "K.A. Miller",
+            "traded_to": "X"
+          },
+          {
+            "pick": 10,
+            "team": "Lyss Falcons",
+            "from_team": "Pittsburgh Walruses",
+            "player": "Noah Dobson",
+            "traded_to": "X"
+          },
+          {
+            "pick": 11,
+            "team": "Drunken Monkeys",
+            "from_team": "Illinois Ice Cracker / T\u00e4uffelen Phantoms",
+            "player": "V. Kravtsov",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Ty Dellandrea",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 13,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Adam Boqvist",
+            "traded_to": "X"
+          },
+          {
+            "pick": 14,
+            "team": "Illinois Ice Cracker",
+            "from_team": "T\u00e4uffelen Phantoms",
+            "player": "Alexander Alexeyev",
+            "traded_to": null
+          },
+          {
+            "pick": 15,
+            "team": "Lyss Falcons",
+            "from_team": "Slithering Goons",
+            "player": "Ty Smith",
+            "traded_to": "X"
+          },
+          {
+            "pick": 16,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Barett Hayton",
+            "traded_to": "Oerlikon Gamblers"
+          },
+          {
+            "pick": 17,
+            "team": "Elfenau Gamblers",
+            "from_team": null,
+            "player": "Joel Farabee",
+            "traded_to": null
+          },
+          {
+            "pick": 18,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Ryan Merkley",
+            "traded_to": null
+          },
+          {
+            "pick": 19,
+            "team": "Eastside Grizzly",
+            "from_team": "Drunken Monkeys",
+            "player": "Joseph Veleno",
+            "traded_to": "X"
+          },
+          {
+            "pick": 20,
+            "team": "Stonemere Flyers",
+            "from_team": "Eastside Grizzly",
+            "player": "Grigori Denisenko",
+            "traded_to": null
+          },
+          {
+            "pick": 21,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Martin Kaut",
+            "traded_to": null
+          },
+          {
+            "pick": 22,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": "Pittsburgh Walruses",
+            "player": "Liam Foudy",
+            "traded_to": null
+          },
+          {
+            "pick": 23,
+            "team": "Eastside Grizzly",
+            "from_team": "Illinois Ice Cracker",
+            "player": "Jacob Bernard-Docker",
+            "traded_to": null
+          },
+          {
+            "pick": 24,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Linus Karlsson",
+            "traded_to": null
+          }
+        ]
+      }
+    },
+    "2019": {
+      "year": "2019",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 1,
+            "team": "Slithering Goons",
+            "from_team": "Elfenau Gamblers",
+            "player": "Kappo Kakko",
+            "traded_to": "Drunken Monkeys"
+          },
+          {
+            "pick": 2,
+            "team": "Lyss Falcons",
+            "from_team": "Winnipeg Bulldozers",
+            "player": "Jack Hughes",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Winnipeg Bulldozers",
+            "from_team": "Lyss Falcons",
+            "player": "Kirby Dach",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "Eastside Grizzly",
+            "from_team": "Stonemere Flyers",
+            "player": "Bowen Byram",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Elfenau Gambles",
+            "from_team": "Slithering Goons",
+            "player": "Alex Turcotte",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Moritz Seider",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Trevor Zegras",
+            "traded_to": null
+          },
+          {
+            "pick": 8,
+            "team": "Stonemere Flyers",
+            "from_team": "Illinois Ice Cracker -> Eastside Grizzly",
+            "player": "Cole Caufield",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Spencer Knight",
+            "traded_to": null
+          },
+          {
+            "pick": 10,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Vasili Podkolzin",
+            "traded_to": null
+          },
+          {
+            "pick": 11,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Dylan Cozens",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "Eastside Grizzly",
+            "from_team": null,
+            "player": "Peyton Krebs",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 13,
+            "team": "Elfenau Gamblers",
+            "from_team": null,
+            "player": "Matthew Boldy",
+            "traded_to": null
+          },
+          {
+            "pick": 14,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Philip Broberg",
+            "traded_to": "X"
+          },
+          {
+            "pick": 15,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Alex Newhook",
+            "traded_to": null
+          },
+          {
+            "pick": 16,
+            "team": "Eastside Grizzly",
+            "from_team": "Stonemere Flyers",
+            "player": "Pyotr Kochetkov",
+            "traded_to": null
+          },
+          {
+            "pick": 17,
+            "team": "Winnipeg Bulldozers",
+            "from_team": "Slithering Goons -> Lyss Falcons",
+            "player": "Philippe Tomasino",
+            "traded_to": "Oerlikon Gamblers"
+          },
+          {
+            "pick": 18,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": "T\u00e4uffelen Phantoms",
+            "player": "John Beecher",
+            "traded_to": null
+          },
+          {
+            "pick": 19,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Nicholas Robertson",
+            "traded_to": null
+          },
+          {
+            "pick": 20,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": "Illinois Ice Cracker",
+            "player": "Viktor S\u00f6derstr\u00f6m",
+            "traded_to": null
+          },
+          {
+            "pick": 21,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Thomas Harley",
+            "traded_to": null
+          },
+          {
+            "pick": 22,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Ville Heinola",
+            "traded_to": null
+          },
+          {
+            "pick": 23,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Arthur Kaliyev",
+            "traded_to": null
+          },
+          {
+            "pick": 24,
+            "team": "Illinois Ice Cracker",
+            "from_team": "Eastside Grizzly",
+            "player": "Rapahel Lavoie",
+            "traded_to": null
+          }
+        ]
+      }
+    },
+    "2020": {
+      "year": "2020",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 1,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Alexis Lafreniere",
+            "traded_to": null
+          },
+          {
+            "pick": 2,
+            "team": "Slithering Goons",
+            "from_team": "Winnipeg Bulldozers",
+            "player": "Quinton Byfield",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Elfenau Gambles",
+            "from_team": null,
+            "player": "Tim St\u00fctzle",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Yaroslav Askarov",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Eastside Grizzly",
+            "from_team": "D\u00f6rfli Snipers",
+            "player": "Lucas Raymond",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Jacob Perreault",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Winnipeg Bulldozers",
+            "from_team": "Slithering Goons",
+            "player": "Alexander Holtz",
+            "traded_to": "Pittsburgh Walruses"
+          },
+          {
+            "pick": 8,
+            "team": "Elfenau Gambles",
+            "from_team": "Illinois Icecrackers",
+            "player": "Marco Rossi",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Cole Perfetti",
+            "traded_to": null
+          },
+          {
+            "pick": 10,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Jack Quinn",
+            "traded_to": null
+          },
+          {
+            "pick": 11,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Anton Lundell",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "Eastside Grizzly",
+            "from_team": null,
+            "player": "Jamie Drysdale",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 13,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Jake Sanderson",
+            "traded_to": null
+          },
+          {
+            "pick": 14,
+            "team": "Lyss Falcons",
+            "from_team": "Winnipeg Bulldozers",
+            "player": "Rodion Amirov",
+            "traded_to": null
+          },
+          {
+            "pick": 15,
+            "team": "Elfenau Gambles",
+            "from_team": null,
+            "player": "Seth Jarvis",
+            "traded_to": null
+          },
+          {
+            "pick": 16,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "shakir mukhamadullin",
+            "traded_to": null
+          },
+          {
+            "pick": 17,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Tyson Foerster",
+            "traded_to": null
+          },
+          {
+            "pick": 18,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Jake Neighbours",
+            "traded_to": null
+          },
+          {
+            "pick": 19,
+            "team": "Lyss Falcons",
+            "from_team": "Slithering Goons",
+            "player": "Lukas Reichel",
+            "traded_to": null
+          },
+          {
+            "pick": 20,
+            "team": "Eastside Grizzly",
+            "from_team": "Illinois Ice Crackers",
+            "player": "Connor Zary",
+            "traded_to": null
+          },
+          {
+            "pick": 21,
+            "team": "Eastside Grizzly",
+            "from_team": "Stonemere Flyers",
+            "player": "Hendrix Lapierre",
+            "traded_to": null
+          },
+          {
+            "pick": 22,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Jan Mysak",
+            "traded_to": null
+          },
+          {
+            "pick": 23,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Kaiden Guhle",
+            "traded_to": null
+          },
+          {
+            "pick": 24,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": "Eastside Grizzlies",
+            "player": "Brayden Schneider",
+            "traded_to": null
+          }
+        ]
+      }
+    },
+    "2021": {
+      "year": "2021",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 2,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "William Eklund",
+            "traded_to": null
+          },
+          {
+            "pick": 1,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Owen Power",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "Oerlikon Gamblers",
+            "from_team": null,
+            "player": "Matty Beniers",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Kent Johnson",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Illinois Icecrackers",
+            "from_team": null,
+            "player": "Mason McTavish",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Luke Hughes",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Eastside Grizzly",
+            "from_team": null,
+            "player": "Jesper Wallstedt",
+            "traded_to": null
+          },
+          {
+            "pick": 8,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Dylan Guenther",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Brandt Clarke",
+            "traded_to": null
+          },
+          {
+            "pick": 10,
+            "team": "Slithering Goons",
+            "from_team": "<- Winnipeg Bulldozers <- Slithering Goons",
+            "player": "Cole Sillinger",
+            "traded_to": "Lyss Falcons"
+          },
+          {
+            "pick": 11,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Sebastian Cossa",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Xavier Bourgault",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 14,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Matthew Coronato",
+            "traded_to": null
+          },
+          {
+            "pick": 13,
+            "team": "Oerlikon Gamblers",
+            "from_team": "Winnipeg Bulldozers",
+            "player": "Simon Edvinsson",
+            "traded_to": null
+          },
+          {
+            "pick": 16,
+            "team": "Oerlikon Gamblers",
+            "from_team": null,
+            "player": "Chaz Lucius",
+            "traded_to": null
+          },
+          {
+            "pick": 15,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Fabian Lysell",
+            "traded_to": null
+          },
+          {
+            "pick": 17,
+            "team": "Illinois Icecrackers",
+            "from_team": null,
+            "player": "Tyler Boucher",
+            "traded_to": null
+          },
+          {
+            "pick": 18,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Zach Bolduc",
+            "traded_to": null
+          },
+          {
+            "pick": 19,
+            "team": "Illinois Crackheads",
+            "from_team": "Eastside Grizzlies",
+            "player": "Isak Rosen",
+            "traded_to": null
+          },
+          {
+            "pick": 20,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Fyodor Svechkov",
+            "traded_to": null
+          },
+          {
+            "pick": 21,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Aatu R\u00e4ty",
+            "traded_to": null
+          },
+          {
+            "pick": 22,
+            "team": "Slithering Goons",
+            "from_team": null,
+            "player": "Sasha Pastujov",
+            "traded_to": null
+          },
+          {
+            "pick": 23,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Zachary L'Heureux",
+            "traded_to": null
+          },
+          {
+            "pick": 24,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Mackie Samoskevich",
+            "traded_to": null
+          }
+        ]
+      }
+    },
+    "2022": {
+      "year": "2022",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 1,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Shane Wright",
+            "traded_to": null
+          },
+          {
+            "pick": 2,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": "Winnipeg Bulldozers - Slithering Goons",
+            "player": "Juraj Slafskovsky",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Simon Nemec",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Logan Cooley",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Gamblers",
+            "from_team": "Oerlikon Gamblers --> Goons",
+            "player": "Kevin Korchinski",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Joakim Kemell",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Illinois Ice Crackers",
+            "from_team": null,
+            "player": "Cutter Gauthier",
+            "traded_to": "Grizzlies"
+          },
+          {
+            "pick": 8,
+            "team": "Pittsburg Walruses",
+            "from_team": null,
+            "player": "David Jiricek",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "Drunken Monkeys",
+            "from_team": "Lyss Falcons -> Goons",
+            "player": "Frank Nazar",
+            "traded_to": null
+          },
+          {
+            "pick": 10,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Pavel Mintyukov",
+            "traded_to": null
+          },
+          {
+            "pick": 11,
+            "team": "Eastside Grizzlies",
+            "from_team": null,
+            "player": "Marco Kasper",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": "Slithering Goons",
+            "player": "Jonathan Lekkerim\u00e4kki",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 13,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Matthew Savoie",
+            "traded_to": null
+          },
+          {
+            "pick": 14,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Denton Mateychuck",
+            "traded_to": null
+          },
+          {
+            "pick": 15,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Ivan Miroshnichenko",
+            "traded_to": null
+          },
+          {
+            "pick": 16,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Tobias Lenonen",
+            "traded_to": null
+          },
+          {
+            "pick": 17,
+            "team": "Oerlikon Gamblers",
+            "from_team": null,
+            "player": "Rutger McGroarty",
+            "traded_to": null
+          },
+          {
+            "pick": 18,
+            "team": "Pittsburg Walruses",
+            "from_team": "Stonemery Flyers",
+            "player": "Isaac Howard",
+            "traded_to": null
+          },
+          {
+            "pick": 19,
+            "team": "Illiois Ice Crackers",
+            "from_team": null,
+            "player": "Jimmy Snuggerud",
+            "traded_to": "Drunken Monkeys"
+          },
+          {
+            "pick": 20,
+            "team": "Pittsburg Walruses",
+            "from_team": null,
+            "player": "Connor Geekie",
+            "traded_to": null
+          },
+          {
+            "pick": 21,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Noah \u00d6stlund",
+            "traded_to": null
+          },
+          {
+            "pick": 22,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Matthias H\u00e4velid",
+            "traded_to": null
+          },
+          {
+            "pick": 23,
+            "team": "Eastside Grizzlies",
+            "from_team": null,
+            "player": "Brad Lambert",
+            "traded_to": null
+          },
+          {
+            "pick": 24,
+            "team": "Lyss Falcons",
+            "from_team": "Slithering Goons",
+            "player": "Lian Bichsel",
+            "traded_to": null
+          }
+        ]
+      }
+    },
+    "2023": {
+      "year": "2023",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 1,
+            "team": "Walruses",
+            "from_team": null,
+            "player": "C. Bedard",
+            "traded_to": null
+          },
+          {
+            "pick": 2,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "A. Fantilli",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Goons",
+            "from_team": "Bulldozer",
+            "player": "M. Mitchkov",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "Monkeys",
+            "from_team": null,
+            "player": "L. Carlsson",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Z. Benson",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "Drunken Monkeys",
+            "from_team": "Gamblers -> Goons",
+            "player": "W. Smith",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Walruses",
+            "from_team": "Grizzlies",
+            "player": "R. Leonhard",
+            "traded_to": null
+          },
+          {
+            "pick": 8,
+            "team": "Goons",
+            "from_team": "Phantoms",
+            "player": "O. Moore",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "Ice-Crackers",
+            "from_team": null,
+            "player": "D. Reinbacher",
+            "traded_to": "Grizzlies"
+          },
+          {
+            "pick": 10,
+            "team": "Falcons",
+            "from_team": null,
+            "player": "M. Wood",
+            "traded_to": null
+          },
+          {
+            "pick": 11,
+            "team": "Goons",
+            "from_team": "Snipers",
+            "player": "A. Sandin-Pellika",
+            "traded_to": "Monkeys"
+          },
+          {
+            "pick": 12,
+            "team": "Goons",
+            "from_team": null,
+            "player": "D. Simashev",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 13,
+            "team": "Phantoms",
+            "from_team": "Walruses",
+            "player": "N. Danielson",
+            "traded_to": null
+          },
+          {
+            "pick": 14,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "C. Barlow",
+            "traded_to": null
+          },
+          {
+            "pick": 15,
+            "team": "Bulldozers",
+            "from_team": null,
+            "player": "E. Sale",
+            "traded_to": null
+          },
+          {
+            "pick": 16,
+            "team": "Monkeys",
+            "from_team": null,
+            "player": "B. Yager",
+            "traded_to": null
+          },
+          {
+            "pick": 17,
+            "team": "Walruses",
+            "from_team": "Flyers",
+            "player": "Q. Musty",
+            "traded_to": null
+          },
+          {
+            "pick": 18,
+            "team": "Gamblers",
+            "from_team": null,
+            "player": "D. Dvorsky",
+            "traded_to": null
+          },
+          {
+            "pick": 19,
+            "team": "Walruses",
+            "from_team": "Grizzlies",
+            "player": "G. Perreault",
+            "traded_to": null
+          },
+          {
+            "pick": 20,
+            "team": "Walruses",
+            "from_team": "Phantoms",
+            "player": "M. Hrabal",
+            "traded_to": null
+          },
+          {
+            "pick": 21,
+            "team": "Walruses",
+            "from_team": "Ice-Crackers",
+            "player": "A. Cristall",
+            "traded_to": null
+          },
+          {
+            "pick": 22,
+            "team": "Goons",
+            "from_team": "Falcons",
+            "player": "M. Guljajew",
+            "traded_to": null
+          },
+          {
+            "pick": 23,
+            "team": "Snipers",
+            "from_team": null,
+            "player": "A. Gajan",
+            "traded_to": null
+          },
+          {
+            "pick": 24,
+            "team": "Phantoms",
+            "from_team": "Goons",
+            "player": "T. Augustine",
+            "traded_to": null
+          }
+        ]
+      }
+    },
+    "2024": {
+      "year": "2024",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 1,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Macklin Celebrini",
+            "traded_to": null
+          },
+          {
+            "pick": 2,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Ivan Demidov",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Pittsburgh Walruses",
+            "from_team": null,
+            "player": "Artyom Levshunov",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "Eastside Grizzlies",
+            "from_team": null,
+            "player": "Cayden Lidstrom",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Carter Yakemchuk",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Tij Iginla",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Oerlikon Gamblers",
+            "from_team": null,
+            "player": "Zeev Buium",
+            "traded_to": null
+          },
+          {
+            "pick": 8,
+            "team": "Pittsburgh Walruses",
+            "from_team": "Lyss Falcons",
+            "player": "Zyane Parekh",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "Eastside Grizzlies",
+            "from_team": "Galaxy Squad",
+            "player": "Berkley Catton",
+            "traded_to": null
+          },
+          {
+            "pick": 10,
+            "team": "Slithering Goons",
+            "from_team": null,
+            "player": "Sam Dickinson",
+            "traded_to": null
+          },
+          {
+            "pick": 11,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Dean Letourneau",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "Eastside Grizzlies",
+            "from_team": "Illinois Ice Cracker",
+            "player": "Konsta Helenius",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 13,
+            "team": "Pittsburg Walruses",
+            "from_team": "Stonemere Flyers",
+            "player": "Cole Yzerman",
+            "traded_to": null
+          },
+          {
+            "pick": 14,
+            "team": "Illinois Ice Cracker",
+            "from_team": "Drunken Monkey",
+            "player": "Beckett Sennecke",
+            "traded_to": null
+          },
+          {
+            "pick": 16,
+            "team": "Eastside Grizzlies",
+            "from_team": "Pittsburgh Walruses",
+            "player": "Ilya Nabokov",
+            "traded_to": null
+          },
+          {
+            "pick": 15,
+            "team": "Eastside Grizzlies",
+            "from_team": null,
+            "player": "Aron Kiviharju",
+            "traded_to": null
+          },
+          {
+            "pick": 17,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Jett Luchanko",
+            "traded_to": null
+          },
+          {
+            "pick": 18,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Evan Gardner",
+            "traded_to": null
+          },
+          {
+            "pick": 19,
+            "team": "Oerlikon Gamblers",
+            "from_team": null,
+            "player": "Michael Brandsegg-Nygard",
+            "traded_to": null
+          },
+          {
+            "pick": 20,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Anton Silayev",
+            "traded_to": null
+          },
+          {
+            "pick": 21,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Mikhail Yegorov",
+            "traded_to": null
+          },
+          {
+            "pick": 22,
+            "team": "Slithering Goons",
+            "from_team": null,
+            "player": "Teddy Stiga",
+            "traded_to": null
+          },
+          {
+            "pick": 23,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Eemil Vinni",
+            "traded_to": null
+          },
+          {
+            "pick": 24,
+            "team": "Drunken Monkeys",
+            "from_team": "Illiniois Ice Cracker",
+            "player": "Trevor Conelly",
+            "traded_to": null
+          }
+        ]
+      }
+    },
+    "2025": {
+      "year": "2025",
+      "entry_draft": {
+        "round_1": [
+          {
+            "pick": 1,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Matthew Schaefer",
+            "traded_to": null
+          },
+          {
+            "pick": 2,
+            "team": "Pittsburg Walruses",
+            "from_team": null,
+            "player": "Michael Misa",
+            "traded_to": null
+          },
+          {
+            "pick": 3,
+            "team": "Eastside Grizzlies",
+            "from_team": null,
+            "player": "James Hagens",
+            "traded_to": null
+          },
+          {
+            "pick": 4,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Caleb Desnoyers",
+            "traded_to": null
+          },
+          {
+            "pick": 5,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Jackson Smith",
+            "traded_to": null
+          },
+          {
+            "pick": 6,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Porter Martone",
+            "traded_to": null
+          },
+          {
+            "pick": 7,
+            "team": "Stonemere Flyers",
+            "from_team": null,
+            "player": "Anton Frondell",
+            "traded_to": null
+          },
+          {
+            "pick": 8,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Pyotr Andreyanov",
+            "traded_to": null
+          },
+          {
+            "pick": 9,
+            "team": "Oerlikon Gamblers",
+            "from_team": null,
+            "player": "Brady Martin",
+            "traded_to": null
+          },
+          {
+            "pick": 10,
+            "team": "Illinois Ice Crackers",
+            "from_team": null,
+            "player": "Radim Mrtka",
+            "traded_to": null
+          },
+          {
+            "pick": 11,
+            "team": "Slithering Goons",
+            "from_team": null,
+            "player": "Victor Eklund",
+            "traded_to": null
+          },
+          {
+            "pick": 12,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Kashawn Aitchison",
+            "traded_to": null
+          }
+        ],
+        "round_2": [
+          {
+            "pick": 13,
+            "team": "Drunken Monkeys",
+            "from_team": null,
+            "player": "Lynden Lakovic",
+            "traded_to": null
+          },
+          {
+            "pick": 14,
+            "team": "Pittsburg Walruses",
+            "from_team": null,
+            "player": "Jake O\u2019Brien",
+            "traded_to": null
+          },
+          {
+            "pick": 16,
+            "team": "Eastside Grizzlies",
+            "from_team": null,
+            "player": "Carter Bear",
+            "traded_to": null
+          },
+          {
+            "pick": 15,
+            "team": "T\u00e4uffelen Phantoms",
+            "from_team": null,
+            "player": "Joshua Ravensbergen",
+            "traded_to": null
+          },
+          {
+            "pick": 17,
+            "team": "Galaxy Squad",
+            "from_team": null,
+            "player": "Justin Carbonneau",
+            "traded_to": null
+          },
+          {
+            "pick": 18,
+            "team": "Lyss Falcons",
+            "from_team": null,
+            "player": "Roger McQueen",
+            "traded_to": null
+          },
+          {
+            "pick": 19,
+            "team": "Pittsburg Walruses",
+            "from_team": "Stonemer Flyers",
+            "player": "Cole Reschny",
+            "traded_to": null
+          },
+          {
+            "pick": 20,
+            "team": "D\u00f6rfli Snipers",
+            "from_team": null,
+            "player": "Semyon Frolov",
+            "traded_to": null
+          },
+          {
+            "pick": 21,
+            "team": "Oerlikon Gamblers",
+            "from_team": null,
+            "player": "Benjamin Kindel",
+            "traded_to": null
+          },
+          {
+            "pick": 22,
+            "team": "Illinois Ice Crackers",
+            "from_team": null,
+            "player": "Bill Zonnon",
+            "traded_to": null
+          },
+          {
+            "pick": 23,
+            "team": "Slithering Goons",
+            "from_team": null,
+            "player": "Cullen Potter",
+            "traded_to": null
+          },
+          {
+            "pick": 24,
+            "team": "Winnipeg Bulldozers",
+            "from_team": null,
+            "player": "Jack Ivankovic",
+            "traded_to": null
+          }
+        ]
+      }
+    }
+  },
+  "prospects": {
+    "D\u00f6rfl Snipers": [
+      {
+        "player": "Mackie Samoskevich",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "Spencer Knight",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "L. Cooley",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "T, Lenonen",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "Emil Vinni",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Pyotr Andreyanov",
+        "rights_expire": "2030"
+      }
+    ],
+    "Drunken Monkeys": [
+      {
+        "player": "F. Lysell",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "S. Nemec",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "I. Miroshnichenko",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "F. Nazar",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "J. Snuggerud",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "W. Smith",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "B. Yager",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "A. Sandin-Pellika",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "Trevor Connelly",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Lynden Lakovic",
+        "rights_expire": "2028"
+      }
+    ],
+    "Illinois Ice Cracker": [
+      {
+        "player": "T. Boucher",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "I. Rosen",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "Bill Zonnon",
+        "rights_expire": "2028"
+      }
+    ],
+    "Lyss Falcons": [
+      {
+        "player": "C. Sillinger",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "M. Coronato",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "L. Bichsel",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "Roger Mcqueen",
+        "rights_expire": "2028"
+      }
+    ],
+    "Oerlikon Gamblers": [
+      {
+        "player": "S. Edvinsson",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "C. Luzius",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "R. Mcgroarty",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "Michael Brandsegg-Nygard",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Benjamin Kindel",
+        "rights_expire": "2028"
+      }
+    ],
+    "Pittsburgh Walruses": [
+      {
+        "player": "Z. Bolduc",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "I. Howard",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "C. Geekie",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "R. Leonhard",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "Q. Musty",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "G. Perreault",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "A. Cristall",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "Zayne Parekh",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Cole Eiserman",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Michael Misa",
+        "rights_expire": "2028"
+      },
+      {
+        "player": "Jake O'Brien",
+        "rights_expire": "2028"
+      },
+      {
+        "player": "Cole Reschny",
+        "rights_expire": "2028"
+      }
+    ],
+    "Stonemer Flyers": [
+      {
+        "player": "A. R\u00e4ty",
+        "rights_expire": "2024"
+      }
+    ],
+    "T\u00e4uffelen Phantoms": [
+      {
+        "player": "F. Svechkov",
+        "rights_expire": "2024"
+      },
+      {
+        "player": "J. Lekkerim\u00e4kki",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "M. Savoie",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "Jett Luchanko",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Caleb Desnoyers",
+        "rights_expire": "2028"
+      }
+    ],
+    "Eastside Grizzlies": [
+      {
+        "player": "B. Lambert",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "C. Gauthier",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "D. Reinbacher",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "Berkley Catton",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Konsta Helenius",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Aaron Kiviharju",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Carter Bear",
+        "rights_expire": "2028"
+      }
+    ],
+    "Galaxy Squad": [
+      {
+        "player": "M. H\u00e4velid",
+        "rights_expire": "2025"
+      },
+      {
+        "player": "A. Fantilli",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "C. Barlow",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "Justin Carbonneau",
+        "rights_expire": "2028"
+      }
+    ],
+    "Slithering Goons": [
+      {
+        "player": "O. Moore",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "D. Simashev",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "M. Guljajev",
+        "rights_expire": "2026"
+      },
+      {
+        "player": "Teddy Stiga",
+        "rights_expire": "2027"
+      },
+      {
+        "player": "Cullen Potter",
+        "rights_expire": "2028"
+      }
+    ]
+  }
+}

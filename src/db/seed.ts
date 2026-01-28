@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import { members, seasons, franchisePlayers } from './schema';
+import { members, seasons, franchisePlayers, draftPicks } from './schema';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -39,6 +39,27 @@ interface LeagueData {
   franchise_players?: FranchisePlayerData[];
 }
 
+interface DraftPickData {
+  pick: number;
+  team: string;
+  from_team: string | null;
+  player: string;
+  traded_to: string | null;
+}
+
+interface DraftData {
+  drafts: {
+    [year: string]: {
+      year: string;
+      entry_draft: {
+        round_1: DraftPickData[];
+        round_2: DraftPickData[];
+      };
+    };
+  };
+  prospects: Record<string, { player: string; rights_expire: string }[]>;
+}
+
 // Extract the final result from playoff data
 function getFinalResult(playoffs: PlayoffMatchup[] | null, championTeam: string, runnerUpTeam: string): string | null {
   if (!playoffs || playoffs.length === 0) return null;
@@ -68,8 +89,33 @@ function getFinalResult(playoffs: PlayoffMatchup[] | null, championTeam: string,
 // Normalize team names - map old names to current names
 // These are teams that were renamed by their owners
 const TEAM_NAME_NORMALIZATION: Record<string, string> = {
-  'Eastside Grizzlys': 'Eastside Grizzlies', // Spelling typo
-  'Elfenau Gamblers': 'Oerlikon Gamblers',   // Sven renamed his team
+  // Spelling corrections
+  'Eastside Grizzlys': 'Eastside Grizzlies',
+  'Eastside Grizzly': 'Eastside Grizzlies',
+  'Grizzlies': 'Eastside Grizzlies',
+  'Elfenau Gamblers': 'Oerlikon Gamblers',
+  'Elfenau Gambles': 'Oerlikon Gamblers',
+  'Gamblers': 'Oerlikon Gamblers',
+  'Illinois Icecrackers': 'Illinois Ice Cracker',
+  'Illinois Ice Crackers': 'Illinois Ice Cracker',
+  'Ice-Crackers': 'Illinois Ice Cracker',
+  'Illinois Crackheads': 'Illinois Ice Cracker',
+  'Illiois Ice Crackers': 'Illinois Ice Cracker',
+  'Illiniois Ice Cracker': 'Illinois Ice Cracker',
+  'Dörfl Snipers': 'Dörfli Snipers',
+  'Snipers': 'Dörfli Snipers',
+  'Stonemer Flyers': 'Stonemere Flyers',
+  'Stonemery Flyers': 'Stonemere Flyers',
+  'Flyers': 'Stonemere Flyers',
+  'Pittsburg Walruses': 'Pittsburgh Walruses',
+  'Walruses': 'Pittsburgh Walruses',
+  // Short name abbreviations used in newer drafts
+  'Goons': 'Slithering Goons',
+  'Monkeys': 'Drunken Monkeys',
+  'Falcons': 'Lyss Falcons',
+  'Phantoms': 'Täuffelen Phantoms',
+  'Bulldozer': 'Winnipeg Bulldozers',
+  'Bulldozers': 'Winnipeg Bulldozers',
 };
 
 // Track former names for teams that were renamed
@@ -160,6 +206,7 @@ async function seed() {
 
   // Clear existing data
   console.log('Clearing existing data...');
+  await db.delete(draftPicks);
   await db.delete(franchisePlayers);
   await db.delete(seasons);
   await db.delete(members);
@@ -244,6 +291,65 @@ async function seed() {
       console.log(`  Added: ${fp.player} ${jersey} (${fp.team}) - ${fp.years} years`);
     }
     console.log(`  Total franchise players: ${leagueData.franchise_players.length}`);
+  }
+
+  // Insert draft picks
+  const draftDataPath = path.join(__dirname, '../../scripts/draft_data.json');
+  if (fs.existsSync(draftDataPath)) {
+    console.log('Inserting draft picks...');
+    const draftData: DraftData = JSON.parse(fs.readFileSync(draftDataPath, 'utf-8'));
+
+    let totalPicks = 0;
+    for (const [year, draft] of Object.entries(draftData.drafts)) {
+      // Process round 1
+      for (const pick of draft.entry_draft.round_1) {
+        const teamName = normalizeTeamName(pick.team);
+        const fromTeamName = pick.from_team ? normalizeTeamName(pick.from_team) : null;
+        const tradedToName = pick.traded_to ? normalizeTeamName(pick.traded_to) : null;
+
+        await db.insert(draftPicks).values({
+          year,
+          round: 1,
+          pick: pick.pick,
+          teamId: memberIdMap.get(teamName) || null,
+          teamName: pick.team,
+          fromTeamId: fromTeamName ? memberIdMap.get(fromTeamName) || null : null,
+          fromTeamName: pick.from_team,
+          playerName: pick.player,
+          tradedToTeamId: tradedToName ? memberIdMap.get(tradedToName) || null : null,
+          tradedToTeamName: pick.traded_to,
+        });
+        totalPicks++;
+      }
+
+      // Process round 2
+      for (const pick of draft.entry_draft.round_2) {
+        const teamName = normalizeTeamName(pick.team);
+        const fromTeamName = pick.from_team ? normalizeTeamName(pick.from_team) : null;
+        const tradedToName = pick.traded_to ? normalizeTeamName(pick.traded_to) : null;
+
+        await db.insert(draftPicks).values({
+          year,
+          round: 2,
+          pick: pick.pick,
+          teamId: memberIdMap.get(teamName) || null,
+          teamName: pick.team,
+          fromTeamId: fromTeamName ? memberIdMap.get(fromTeamName) || null : null,
+          fromTeamName: pick.from_team,
+          playerName: pick.player,
+          tradedToTeamId: tradedToName ? memberIdMap.get(tradedToName) || null : null,
+          tradedToTeamName: pick.traded_to,
+        });
+        totalPicks++;
+      }
+
+      const r1 = draft.entry_draft.round_1.length;
+      const r2 = draft.entry_draft.round_2.length;
+      console.log(`  Added ${year} draft: ${r1} R1 picks, ${r2} R2 picks`);
+    }
+    console.log(`  Total draft picks: ${totalPicks}`);
+  } else {
+    console.log('No draft data file found, skipping draft picks...');
   }
 
   console.log('Seed complete!');

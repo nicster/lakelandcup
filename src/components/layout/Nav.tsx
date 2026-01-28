@@ -12,7 +12,7 @@ const navItems = [
   { href: '/hall-of-fame', label: 'Hall of Fame' },
   { href: '/history', label: 'History' },
   { href: '/rules', label: 'Rules' },
-  { href: '/drafts', label: 'Drafts', disabled: true },
+  { href: '/drafts', label: 'Drafts' },
   { href: '/trades', label: 'Trades', disabled: true },
   { href: '/members', label: 'Members', disabled: true },
 ];
