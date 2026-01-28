@@ -46,10 +46,10 @@ Before every season each player has 2 prospect draft picks to use on players fro
 
 The 4 teams not participating in the Playoffs are included in the lottery-draft for the first 4 picks. Chances to win the first overall pick:
 
-- **9th place:** 50% chance
-- **10th place:** 25% chance
-- **11th place:** 15% chance
-- **12th place:** 10% chance
+- **12th place:** 50% chance
+- **11th place:** 25% chance
+- **10th place:** 15% chance
+- **9th place:** 10% chance
 
 The draft lottery is performed by the commissioner ahead of the draft by running the chances through a self-programmed algorithm. Results are communicated to every GM (Livestream, WhatsApp, etc.)
 
