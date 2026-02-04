@@ -165,10 +165,20 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                 {/* Team name & trade info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-lake-ice font-medium truncate">{pick.teamName}</span>
+                    {pick.teamId ? (
+                      <Link href={`/teams/${pick.teamId}`} className="text-lake-ice font-medium truncate hover:text-lake-gold transition-colors">
+                        {pick.teamName}
+                      </Link>
+                    ) : (
+                      <span className="text-lake-ice font-medium truncate">{pick.teamName}</span>
+                    )}
                     {pick.fromTeamName && (
                       <span className="text-lake-ice/40 text-sm truncate">
-                        (from {pick.fromTeamName})
+                        (from {pick.fromTeamId ? (
+                          <Link href={`/teams/${pick.fromTeamId}`} className="hover:text-lake-gold transition-colors">
+                            {pick.fromTeamName}
+                          </Link>
+                        ) : pick.fromTeamName})
                       </span>
                     )}
                   </div>
@@ -180,7 +190,13 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                   {pick.tradedToTeamName && (
                     <>
                       <ArrowRightIcon className="w-4 h-4 text-lake-ice/40" />
-                      <span className="text-lake-ice/60 text-sm">{pick.tradedToTeamName}</span>
+                      {pick.tradedToTeamId ? (
+                        <Link href={`/teams/${pick.tradedToTeamId}`} className="text-lake-ice/60 text-sm hover:text-lake-gold transition-colors">
+                          {pick.tradedToTeamName}
+                        </Link>
+                      ) : (
+                        <span className="text-lake-ice/60 text-sm">{pick.tradedToTeamName}</span>
+                      )}
                     </>
                   )}
                 </div>
@@ -229,10 +245,20 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                 {/* Team name & trade info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-lake-ice font-medium truncate">{pick.teamName}</span>
+                    {pick.teamId ? (
+                      <Link href={`/teams/${pick.teamId}`} className="text-lake-ice font-medium truncate hover:text-lake-gold transition-colors">
+                        {pick.teamName}
+                      </Link>
+                    ) : (
+                      <span className="text-lake-ice font-medium truncate">{pick.teamName}</span>
+                    )}
                     {pick.fromTeamName && (
                       <span className="text-lake-ice/40 text-sm truncate">
-                        (from {pick.fromTeamName})
+                        (from {pick.fromTeamId ? (
+                          <Link href={`/teams/${pick.fromTeamId}`} className="hover:text-lake-gold transition-colors">
+                            {pick.fromTeamName}
+                          </Link>
+                        ) : pick.fromTeamName})
                       </span>
                     )}
                   </div>
@@ -244,7 +270,13 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                   {pick.tradedToTeamName && (
                     <>
                       <ArrowRightIcon className="w-4 h-4 text-lake-ice/40" />
-                      <span className="text-lake-ice/60 text-sm">{pick.tradedToTeamName}</span>
+                      {pick.tradedToTeamId ? (
+                        <Link href={`/teams/${pick.tradedToTeamId}`} className="text-lake-ice/60 text-sm hover:text-lake-gold transition-colors">
+                          {pick.tradedToTeamName}
+                        </Link>
+                      ) : (
+                        <span className="text-lake-ice/60 text-sm">{pick.tradedToTeamName}</span>
+                      )}
                     </>
                   )}
                 </div>
