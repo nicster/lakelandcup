@@ -73,6 +73,26 @@ export const franchisePlayers = pgTable('franchise_players', {
   teamColors: text('team_colors'),           // JSON array of hex colors
 });
 
+// Lottery results
+export const lotteryResults = pgTable('lottery_results', {
+  id: serial('id').primaryKey(),
+  year: text('year').notNull().unique(),     // "2025" (draft year)
+  // Teams entering lottery (by standing position)
+  team9thId: integer('team_9th_id').references(() => members.id),
+  team10thId: integer('team_10th_id').references(() => members.id),
+  team11thId: integer('team_11th_id').references(() => members.id),
+  team12thId: integer('team_12th_id').references(() => members.id),
+  // Results (team IDs in pick order)
+  pick1TeamId: integer('pick_1_team_id').references(() => members.id),
+  pick2TeamId: integer('pick_2_team_id').references(() => members.id),
+  pick3TeamId: integer('pick_3_team_id').references(() => members.id),
+  pick4TeamId: integer('pick_4_team_id').references(() => members.id),
+  // Metadata
+  isPublished: boolean('is_published').default(false),
+  runAt: timestamp('run_at').defaultNow(),
+  publishedAt: timestamp('published_at'),
+});
+
 // Type exports for use in application
 export type Member = typeof members.$inferSelect;
 export type NewMember = typeof members.$inferInsert;
@@ -86,3 +106,5 @@ export type DraftPick = typeof draftPicks.$inferSelect;
 export type NewDraftPick = typeof draftPicks.$inferInsert;
 export type Prospect = typeof prospects.$inferSelect;
 export type NewProspect = typeof prospects.$inferInsert;
+export type LotteryResult = typeof lotteryResults.$inferSelect;
+export type NewLotteryResult = typeof lotteryResults.$inferInsert;

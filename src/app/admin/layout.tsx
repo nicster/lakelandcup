@@ -7,7 +7,8 @@ const navItems = [
   { href: '/admin', label: 'Dashboard', icon: 'home' },
   { href: '/admin/seasons', label: 'Seasons', icon: 'trophy' },
   { href: '/admin/trades', label: 'Trades', icon: 'arrows' },
-  { href: '/admin/lottery', label: 'Draft Lottery', icon: 'dice' },
+  { href: '/admin/lottery', label: 'Run Lottery', icon: 'dice' },
+  { href: '/admin/lottery/results', label: 'Lottery Results', icon: 'list' },
 ];
 
 function NavIcon({ name, className = '' }: { name: string; className?: string }) {
@@ -38,6 +39,13 @@ function NavIcon({ name, className = '' }: { name: string; className?: string })
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25"
+      />
+    ),
+    list: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
       />
     ),
     logout: (
