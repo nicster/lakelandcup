@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { db, members, seasons, franchisePlayers, draftPicks } from '@/lib/db';
-import { eq, or, desc, gte } from 'drizzle-orm';
+import { eq, or, desc } from 'drizzle-orm';
 import { Rafters } from '@/components/league/Rafters';
 
 // Force dynamic rendering to fetch fresh data on each request

@@ -103,7 +103,7 @@ export default function ProtectionSearchPage() {
       {/* Results */}
       {hasSearched && results.length === 0 && !isLoading && (
         <div className="text-center py-12 text-lake-ice/50">
-          No players found matching "{query}"
+          No players found matching &ldquo;{query}&rdquo;
         </div>
       )}
 
