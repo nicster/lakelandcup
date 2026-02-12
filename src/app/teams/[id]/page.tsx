@@ -112,6 +112,14 @@ const KNOWN_GOALIES = new Set([
   'Carter George',
   'Michael Hrabal',
   'Sergei Ivanov',
+  'Sebastian Cossa',
+  'Ilya Nabokov',
+  'Mikhail Yegorov',
+  'Joshua Ravensbergen',
+  'Jack Ivankovic',
+  'M. Hrabal',
+  'T. Augustine',
+  'A. Gajan',
 ]);
 
 function isGoalie(playerName: string, position: string | null): boolean {
