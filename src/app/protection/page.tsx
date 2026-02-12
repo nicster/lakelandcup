@@ -32,17 +32,53 @@ export default function ProtectionSearchPage() {
   const [results, setResults] = useState<ProtectionResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [showingRecent, setShowingRecent] = useState(true);
 
   const debouncedQuery = useDebounce(query, 300);
 
+  // Load recent protected prospects on mount
+  useEffect(() => {
+    async function loadRecent() {
+      setIsLoading(true);
+      try {
+        const response = await fetch('/api/protection/search?recent=true');
+        if (response.ok) {
+          const data = await response.json();
+          setResults(data);
+        }
+      } catch (error) {
+        console.error('Failed to load recent prospects:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadRecent();
+  }, []);
+
   const searchPlayers = useCallback(async (searchQuery: string) => {
     if (searchQuery.length < 2) {
-      setResults([]);
-      setHasSearched(false);
+      // When clearing search, reload recent prospects
+      if (searchQuery.length === 0 && hasSearched) {
+        setIsLoading(true);
+        try {
+          const response = await fetch('/api/protection/search?recent=true');
+          if (response.ok) {
+            const data = await response.json();
+            setResults(data);
+            setShowingRecent(true);
+          }
+        } catch (error) {
+          console.error('Failed to load recent prospects:', error);
+        } finally {
+          setIsLoading(false);
+          setHasSearched(false);
+        }
+      }
       return;
     }
 
     setIsLoading(true);
+    setShowingRecent(false);
     try {
       const response = await fetch(`/api/protection/search?q=${encodeURIComponent(searchQuery)}`);
       if (response.ok) {
@@ -55,7 +91,7 @@ export default function ProtectionSearchPage() {
       setIsLoading(false);
       setHasSearched(true);
     }
-  }, []);
+  }, [hasSearched]);
 
   useEffect(() => {
     searchPlayers(debouncedQuery);
@@ -109,6 +145,11 @@ export default function ProtectionSearchPage() {
 
       {results.length > 0 && (
         <div className="space-y-3">
+          {showingRecent && (
+            <h2 className="text-lg font-semibold text-lake-ice/70 mb-4">
+              Recently Drafted Prospects
+            </h2>
+          )}
           {results.map((player, index) => (
             <div
               key={`${player.playerName}-${player.draftYear}-${index}`}

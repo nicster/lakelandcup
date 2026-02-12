@@ -40,22 +40,55 @@ function calculateProtectionExpiry(draftYear: string, isGoaliePlayer: boolean): 
   return year + (isGoaliePlayer ? 5 : 3);
 }
 
+function mapPickToResult(pick: typeof draftPicks.$inferSelect, currentYear: number) {
+  const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
+  const protectionExpires = calculateProtectionExpiry(pick.year, isGoaliePlayer);
+
+  return {
+    playerName: pick.playerName,
+    teamId: pick.teamId,
+    teamName: pick.teamName,
+    draftYear: pick.year,
+    round: pick.round,
+    pick: pick.pick,
+    position: isGoaliePlayer ? 'G' : null,
+    protectionExpires: protectionExpires.toString(),
+    isProtected: protectionExpires >= currentYear,
+  };
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get('q');
-
-  if (!query || query.length < 2) {
-    return NextResponse.json([]);
-  }
+  const recent = searchParams.get('recent');
 
   try {
     const currentYear = new Date().getFullYear();
 
-    // Fetch all draft picks for fuzzy search
+    // Fetch all draft picks
     const allPicks = await db
       .select()
       .from(draftPicks)
-      .orderBy(desc(draftPicks.year));
+      .orderBy(desc(draftPicks.year), draftPicks.round, draftPicks.pick);
+
+    // If requesting recent protected prospects (for initial page load)
+    if (recent === 'true') {
+      const recentProtected = allPicks
+        .filter(pick => {
+          const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
+          const expiryYear = calculateProtectionExpiry(pick.year, isGoaliePlayer);
+          return expiryYear >= currentYear;
+        })
+        .slice(0, 20)
+        .map(pick => mapPickToResult(pick, currentYear));
+
+      return NextResponse.json(recentProtected);
+    }
+
+    // For search, require at least 2 characters
+    if (!query || query.length < 2) {
+      return NextResponse.json([]);
+    }
 
     // Set up Fuse.js for fuzzy matching
     const fuse = new Fuse(allPicks, {
@@ -68,22 +101,9 @@ export async function GET(request: NextRequest) {
     // Perform fuzzy search
     const searchResults = fuse.search(query, { limit: 20 });
 
-    const mappedResults = searchResults.map(({ item: pick }) => {
-      const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
-      const protectionExpires = calculateProtectionExpiry(pick.year, isGoaliePlayer);
-
-      return {
-        playerName: pick.playerName,
-        teamId: pick.teamId,
-        teamName: pick.teamName,
-        draftYear: pick.year,
-        round: pick.round,
-        pick: pick.pick,
-        position: isGoaliePlayer ? 'G' : null,
-        protectionExpires: protectionExpires.toString(),
-        isProtected: protectionExpires >= currentYear,
-      };
-    });
+    const mappedResults = searchResults.map(({ item: pick }) =>
+      mapPickToResult(pick, currentYear)
+    );
 
     return NextResponse.json(mappedResults);
   } catch (error) {
