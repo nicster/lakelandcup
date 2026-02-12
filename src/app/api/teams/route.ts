@@ -23,26 +23,22 @@ export async function GET(request: NextRequest) {
   const activeOnly = searchParams.get('active') === 'true';
 
   try {
-    let query = db
-      .select({
-        id: members.id,
-        name: members.name,
-        logo: members.logo,
-      })
-      .from(members);
+    const baseQuery = {
+      id: members.id,
+      name: members.name,
+      logo: members.logo,
+    };
 
-    if (activeOnly) {
-      query = db
-        .select({
-          id: members.id,
-          name: members.name,
-          logo: members.logo,
-        })
-        .from(members)
-        .where(inArray(members.name, ACTIVE_TEAM_NAMES));
-    }
-
-    const teams = await query.orderBy(asc(members.name));
+    const teams = activeOnly
+      ? await db
+          .select(baseQuery)
+          .from(members)
+          .where(inArray(members.name, ACTIVE_TEAM_NAMES))
+          .orderBy(asc(members.name))
+      : await db
+          .select(baseQuery)
+          .from(members)
+          .orderBy(asc(members.name));
 
     return NextResponse.json(teams);
   } catch (error) {

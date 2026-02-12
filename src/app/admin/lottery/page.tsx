@@ -200,7 +200,7 @@ export default function AdminLotteryPage() {
           text: publish ? 'Lottery results published!' : 'Lottery results saved as draft.',
         });
         // Add the year to existing years
-        setExistingYears(prev => new Set([...prev, draftYear]));
+        setExistingYears(prev => new Set([...Array.from(prev), draftYear]));
       } else {
         const error = await response.json();
         setSaveMessage({ type: 'error', text: error.message || 'Failed to save results.' });

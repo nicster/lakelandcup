@@ -78,7 +78,7 @@ export default function LotteryPage() {
         // Final reveal: 2nd and 1st together
         setCurrentReveal(2); // Show anticipation for both
         setTimeout(() => {
-          setRevealedPicks(prev => new Set([...prev, 2, 1]));
+          setRevealedPicks(prev => new Set([...Array.from(prev), 2, 1]));
           setCurrentReveal(null);
           setIsRevealing(false);
         }, 2500);
@@ -90,7 +90,7 @@ export default function LotteryPage() {
 
       // Show anticipation for 2.5s, then reveal
       setTimeout(() => {
-        setRevealedPicks(prev => new Set([...prev, pickToReveal]));
+        setRevealedPicks(prev => new Set([...Array.from(prev), pickToReveal]));
         revealIndex++;
         // Pause before next reveal
         setTimeout(revealNext, 1500);
