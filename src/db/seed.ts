@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import { members, seasons, franchisePlayers, draftPicks } from './schema';
+import { members, seasons, franchisePlayers, draftPicks, prospects } from './schema';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -206,6 +206,7 @@ async function seed() {
 
   // Clear existing data
   console.log('Clearing existing data...');
+  await db.delete(prospects);
   await db.delete(draftPicks);
   await db.delete(franchisePlayers);
   await db.delete(seasons);
@@ -348,8 +349,31 @@ async function seed() {
       console.log(`  Added ${year} draft: ${r1} R1 picks, ${r2} R2 picks`);
     }
     console.log(`  Total draft picks: ${totalPicks}`);
+
+    // Insert prospects from the same draft data file
+    if (draftData.prospects && Object.keys(draftData.prospects).length > 0) {
+      console.log('Inserting prospects...');
+      let totalProspects = 0;
+
+      for (const [teamName, players] of Object.entries(draftData.prospects)) {
+        const normalizedTeamName = normalizeTeamName(teamName);
+        const teamId = memberIdMap.get(normalizedTeamName) || null;
+
+        for (const player of players as { player: string; rights_expire: string }[]) {
+          await db.insert(prospects).values({
+            playerName: player.player,
+            teamId,
+            teamName: teamName,
+            rightsExpire: player.rights_expire,
+          });
+          totalProspects++;
+        }
+      }
+
+      console.log(`  Total prospects: ${totalProspects}`);
+    }
   } else {
-    console.log('No draft data file found, skipping draft picks...');
+    console.log('No draft data file found, skipping draft picks and prospects...');
   }
 
   console.log('Seed complete!');

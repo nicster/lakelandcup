@@ -44,8 +44,18 @@ export const draftPicks = pgTable('draft_picks', {
   fromTeamId: integer('from_team_id').references(() => members.id),
   fromTeamName: text('from_team_name'),       // Original team if pick was traded
   playerName: text('player_name').notNull(),  // Player selected
+  position: text('position'),                  // Player position: "G" for goalie, "F", "D"
   tradedToTeamId: integer('traded_to_team_id').references(() => members.id),
   tradedToTeamName: text('traded_to_team_name'), // If player was traded after draft
+});
+
+// Protected prospects (rookies with rights held by teams)
+export const prospects = pgTable('prospects', {
+  id: serial('id').primaryKey(),
+  playerName: text('player_name').notNull(),
+  teamId: integer('team_id').references(() => members.id),
+  teamName: text('team_name').notNull(),      // Original team name from data
+  rightsExpire: text('rights_expire').notNull(), // Year rights expire: "2025"
 });
 
 // Franchise players (10+ consecutive years with same team)
@@ -74,3 +84,5 @@ export type FranchisePlayer = typeof franchisePlayers.$inferSelect;
 export type NewFranchisePlayer = typeof franchisePlayers.$inferInsert;
 export type DraftPick = typeof draftPicks.$inferSelect;
 export type NewDraftPick = typeof draftPicks.$inferInsert;
+export type Prospect = typeof prospects.$inferSelect;
+export type NewProspect = typeof prospects.$inferInsert;

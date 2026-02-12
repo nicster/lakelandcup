@@ -13,6 +13,7 @@ const navItems = [
   { href: '/history', label: 'History' },
   { href: '/rules', label: 'Rules' },
   { href: '/drafts', label: 'Drafts' },
+  { href: '/protection', label: 'Protection' },
   { href: '/trades', label: 'Trades', disabled: true },
   { href: '/members', label: 'Members', disabled: true },
 ];

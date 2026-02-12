@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { db, members, seasons, franchisePlayers } from '@/lib/db';
-import { eq, or, desc } from 'drizzle-orm';
+import { db, members, seasons, franchisePlayers, draftPicks } from '@/lib/db';
+import { eq, or, desc, gte } from 'drizzle-orm';
 import { Rafters } from '@/components/league/Rafters';
 
 // Force dynamic rendering to fetch fresh data on each request
@@ -99,6 +99,68 @@ async function getTeamFranchisePlayers(teamId: number, teamName: string) {
   }
 }
 
+// Known goalies - goalies get 5 years protection instead of 3
+const KNOWN_GOALIES = new Set([
+  'Jake Oettinger',
+  'Spencer Knight',
+  'Yaroslav Askarov',
+  'Devon Levi',
+  'Jesper Wallstedt',
+  'Dustin Wolf',
+  'Thomas Milic',
+  'Trey Augustine',
+  'Carter George',
+  'Michael Hrabal',
+  'Sergei Ivanov',
+]);
+
+function isGoalie(playerName: string, position: string | null): boolean {
+  if (position === 'G') return true;
+  return KNOWN_GOALIES.has(playerName);
+}
+
+function calculateProtectionExpiry(draftYear: string, isGoaliePlayer: boolean): number {
+  const year = parseInt(draftYear, 10);
+  return year + (isGoaliePlayer ? 5 : 3);
+}
+
+async function getTeamProspects(teamId: number) {
+  try {
+    const currentYear = new Date().getFullYear();
+
+    const results = await db
+      .select()
+      .from(draftPicks)
+      .where(eq(draftPicks.teamId, teamId))
+      .orderBy(desc(draftPicks.year), draftPicks.round, draftPicks.pick);
+
+    // Filter to only protected prospects and calculate expiry
+    // Skaters: 3 years, Goalies: 5 years
+    const protectedProspects = results
+      .filter(pick => {
+        const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
+        const expiryYear = calculateProtectionExpiry(pick.year, isGoaliePlayer);
+        return expiryYear >= currentYear;
+      })
+      .map(pick => {
+        const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
+        return {
+          id: pick.id,
+          playerName: pick.playerName,
+          draftYear: pick.year,
+          round: pick.round,
+          pick: pick.pick,
+          isGoalie: isGoaliePlayer,
+          protectionExpires: calculateProtectionExpiry(pick.year, isGoaliePlayer).toString(),
+        };
+      });
+
+    return protectedProspects;
+  } catch {
+    return [];
+  }
+}
+
 export default async function TeamPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const teamId = parseInt(id, 10);
@@ -113,9 +175,10 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
     notFound();
   }
 
-  const [{ championships, runnerUps }, franchisePlayerData] = await Promise.all([
+  const [{ championships, runnerUps }, franchisePlayerData, teamProspects] = await Promise.all([
     getTeamAchievements(teamId),
     getTeamFranchisePlayers(teamId, team.name),
+    getTeamProspects(teamId),
   ]);
 
   return (
@@ -234,10 +297,51 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
         </div>
       )}
 
-      {/* Prospects Section (placeholder for later) */}
+      {/* Prospects Section */}
       <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-8">
-        <h2 className="text-2xl font-bold text-lake-ice mb-6">Prospects</h2>
-        <p className="text-lake-ice/50 text-center py-8">Coming soon...</p>
+        <h2 className="text-2xl font-bold text-lake-ice mb-6">Protected Prospects</h2>
+
+        {teamProspects.length === 0 ? (
+          <p className="text-lake-ice/50 text-center py-8">No protected prospects</p>
+        ) : (
+          <div className="space-y-2">
+            {teamProspects.map((prospect) => {
+              const currentYear = new Date().getFullYear();
+              const expiryYear = parseInt(prospect.protectionExpires, 10);
+              const isExpiringSoon = expiryYear === currentYear;
+
+              return (
+                <div
+                  key={prospect.id}
+                  className={`flex items-center justify-between p-3 rounded-lg ${
+                    isExpiringSoon
+                      ? 'bg-yellow-500/10 border border-yellow-500/30'
+                      : 'bg-lake-blue-light/10'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-lake-ice font-medium">
+                      {prospect.playerName}
+                    </span>
+                    {prospect.isGoalie && (
+                      <span className="px-1.5 py-0.5 text-xs font-medium bg-purple-500/20 text-purple-300 rounded">
+                        G
+                      </span>
+                    )}
+                    <span className="text-lake-ice/40 text-sm">
+                      {prospect.draftYear} R{prospect.round}
+                    </span>
+                  </div>
+                  <span className={`text-sm ${
+                    isExpiringSoon ? 'text-yellow-400' : 'text-lake-ice/60'
+                  }`}>
+                    Until {prospect.protectionExpires}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
