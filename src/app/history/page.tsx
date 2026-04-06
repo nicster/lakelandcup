@@ -42,9 +42,8 @@ const teamTimelines: Record<string, { seasons: string[]; formerNames?: string[] 
   'Pittsburgh Walruses': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
   'Täuffelen Phantoms': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
   'Lyss Falcons': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
-  'Oerlikon Gamblers': { seasons: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Elfenau Gamblers'] },
+  'Oerlikon Gamblers': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Bern City Rangers', 'Elfenau Gamblers'] },
   // Defunct teams
-  'Bern City Rangers': { seasons: ['2013-14', '2014-15', '2015-16'] },
   'Boston Bumblebees': { seasons: ['2013-14', '2014-15'] },
   'Biel-Bienne Trouts': { seasons: ['2012-13', '2013-14'] },
   'Biel Sumo Hookers': { seasons: ['2013-14', '2014-15'] },
@@ -53,7 +52,6 @@ const teamTimelines: Record<string, { seasons: string[]; formerNames?: string[] 
   'Warm Wool Socks': { seasons: ['2014-15', '2015-16'] },
   'Old Boys Bears': { seasons: ['2015-16'] },
   'Felztown Tigers': { seasons: ['2015-16'] },
-  'Elfenau Gamblers': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20'] },
   // Pre-season only teams
   'Schlieren Flyers': { seasons: ['2012-13'] },
   "Rock'n'Rollas": { seasons: ['2012-13'] },
@@ -63,8 +61,8 @@ const teamTimelines: Record<string, { seasons: string[]; formerNames?: string[] 
   'Mountain Lions': { seasons: ['2012-13'] },
 };
 
-// The Original 4 - teams active since 2013-14 and still active today
-const original4 = ['Stonemere Flyers', 'Drunken Monkeys', 'Slithering Goons', 'Illinois Ice Cracker'];
+// The Original 5 - teams active since 2013-14 and still active today
+const original5 = ['Stonemere Flyers', 'Drunken Monkeys', 'Slithering Goons', 'Illinois Ice Cracker', 'Oerlikon Gamblers'];
 
 // Current teams (active in 2024-25)
 const currentTeams = Object.entries(teamTimelines)
@@ -126,7 +124,7 @@ export default async function HistoryPage() {
         </div>
       </div>
 
-      {/* The Original 4 - Badge Style */}
+      {/* The Original 5 - Badge Style */}
       <div className="flex justify-center mb-10">
         <div className="relative w-80 h-80">
           {/* Outer ring */}
@@ -137,12 +135,12 @@ export default async function HistoryPage() {
 
           {/* Top text */}
           <div className="absolute top-7 left-0 right-0 text-center z-10">
-            <span className="text-lake-gold font-bold text-xs tracking-[0.2em] uppercase">The Original</span>
+            <span className="text-lake-gold font-bold text-xs tracking-[0.2em] uppercase">The Original 5</span>
           </div>
 
           {/* Center number */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-lake-gold/20 text-8xl font-bold">4</span>
+            <span className="text-lake-gold/20 text-8xl font-bold">5</span>
           </div>
 
           {/* Bottom text */}
@@ -150,10 +148,10 @@ export default async function HistoryPage() {
             <span className="text-lake-gold/70 text-[10px] tracking-[0.15em] uppercase">Est. 2013</span>
           </div>
 
-          {/* Logos in 2x2 grid - slightly spread */}
+          {/* Logos in flex layout */}
           <div className="absolute inset-0 flex items-center justify-center z-20">
-            <div className="grid grid-cols-2 gap-[3.25rem]">
-              {original4.map(teamName => {
+            <div className="flex flex-wrap justify-center gap-4 w-52">
+              {original5.map(teamName => {
                 const member = memberMap.get(teamName);
                 return (
                   <Link
@@ -166,8 +164,8 @@ export default async function HistoryPage() {
                       <Image
                         src={`/images/teams/${member.logo}`}
                         alt={`${teamName} logo`}
-                        width={72}
-                        height={72}
+                        width={56}
+                        height={56}
                         className="rounded-full border-2 border-lake-gold/40 group-hover:border-lake-gold group-hover:scale-110 transition-all shadow-lg bg-lake-blue-dark"
                       />
                     )}
@@ -232,7 +230,7 @@ export default async function HistoryPage() {
         <div className="space-y-1">
           {currentTeams.map(teamName => {
             const member = memberMap.get(teamName);
-            const isOriginal4 = original4.includes(teamName);
+            const isOriginal5 = original5.includes(teamName);
             const timeline = teamTimelines[teamName];
 
             return (
@@ -266,7 +264,7 @@ export default async function HistoryPage() {
                         key={season}
                         className={`flex-1 mx-px rounded-sm ${
                           isActive
-                            ? isOriginal4
+                            ? isOriginal5
                               ? 'bg-lake-gold/60'
                               : 'bg-lake-blue-light/60'
                             : 'bg-lake-blue/20'
@@ -364,7 +362,7 @@ export default async function HistoryPage() {
           <div className="text-lake-ice/60 text-sm">Former Teams</div>
         </div>
         <div className="bg-lake-blue/20 rounded-lg border border-lake-blue-light/20 p-4">
-          <div className="text-2xl font-bold text-lake-gold">4</div>
+          <div className="text-2xl font-bold text-lake-gold">5</div>
           <div className="text-lake-ice/60 text-sm">Original Franchises</div>
         </div>
       </div>
