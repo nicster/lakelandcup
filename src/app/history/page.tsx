@@ -19,30 +19,30 @@ const eras = [
   { name: 'Pre-Season', start: '2012-13', end: '2012-13', color: 'bg-lake-ice/10', description: 'Trial season' },
   { name: 'Founding Era', start: '2013-14', end: '2014-15', color: 'bg-amber-500/10', description: 'League established' },
   { name: 'Expansion', start: '2015-16', end: '2016-17', color: 'bg-green-500/10', description: '10 → 12 teams' },
-  { name: 'Modern Era', start: '2017-18', end: '2024-25', color: 'bg-lake-blue-light/10', description: 'Stable 12-team league' },
+  { name: 'Modern Era', start: '2017-18', end: '2025-26', color: 'bg-lake-blue-light/10', description: 'Stable 12-team league' },
 ];
 
 // All seasons in order
 const allSeasons = [
   '2012-13', '2013-14', '2014-15', '2015-16', '2016-17',
   '2017-18', '2018-19', '2019-20', '2020-21', '2021-22',
-  '2022-23', '2023-24', '2024-25'
+  '2022-23', '2023-24', '2024-25', '2025-26'
 ];
 
 // Team timeline data (which seasons each team was active)
 const teamTimelines: Record<string, { seasons: string[]; formerNames?: string[] }> = {
-  'Stonemere Flyers': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'], formerNames: ['Schlieren Flyers'] },
-  'Drunken Monkeys': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'], formerNames: ['Fighting Monkeys'] },
-  'Slithering Goons': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'], formerNames: ['Spinning Doctors'] },
-  'Illinois Ice Cracker': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'] },
-  'Galaxy Squad': { seasons: ['2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'] },
-  'Winnipeg Bulldozers': { seasons: ['2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'] },
-  'Dörfli Snipers': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'] },
-  'Eastside Grizzlies': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'], formerNames: ['Eastside Grizzlys'] },
-  'Pittsburgh Walruses': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'] },
-  'Täuffelen Phantoms': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'] },
-  'Lyss Falcons': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25'] },
-  'Oerlikon Gamblers': { seasons: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25'], formerNames: ['Elfenau Gamblers'] },
+  'Stonemere Flyers': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Schlieren Flyers'] },
+  'Drunken Monkeys': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Fighting Monkeys'] },
+  'Slithering Goons': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Spinning Doctors'] },
+  'Illinois Ice Cracker': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
+  'Galaxy Squad': { seasons: ['2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
+  'Winnipeg Bulldozers': { seasons: ['2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
+  'Dörfli Snipers': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
+  'Eastside Grizzlies': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Eastside Grizzlys'] },
+  'Pittsburgh Walruses': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
+  'Täuffelen Phantoms': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
+  'Lyss Falcons': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
+  'Oerlikon Gamblers': { seasons: ['2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Elfenau Gamblers'] },
   // Defunct teams
   'Bern City Rangers': { seasons: ['2013-14', '2014-15', '2015-16'] },
   'Boston Bumblebees': { seasons: ['2013-14', '2014-15'] },
@@ -68,7 +68,7 @@ const original4 = ['Stonemere Flyers', 'Drunken Monkeys', 'Slithering Goons', 'I
 
 // Current teams (active in 2024-25)
 const currentTeams = Object.entries(teamTimelines)
-  .filter(([, data]) => data.seasons.includes('2024-25'))
+  .filter(([, data]) => data.seasons.includes('2025-26'))
   .map(([name]) => name)
   .sort((a, b) => {
     // Sort by first season (oldest first), then by name
@@ -121,7 +121,7 @@ export default async function HistoryPage() {
         <div>
           <h1 className="text-2xl font-bold text-lake-ice">League History</h1>
           <p className="text-lake-ice/60 text-sm">
-            12 seasons of fantasy hockey glory
+            13 seasons of fantasy hockey glory
           </p>
         </div>
       </div>
@@ -352,7 +352,7 @@ export default async function HistoryPage() {
       {/* Stats Summary */}
       <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
         <div className="bg-lake-blue/20 rounded-lg border border-lake-blue-light/20 p-4">
-          <div className="text-2xl font-bold text-lake-gold">13</div>
+          <div className="text-2xl font-bold text-lake-gold">14</div>
           <div className="text-lake-ice/60 text-sm">Seasons</div>
         </div>
         <div className="bg-lake-blue/20 rounded-lg border border-lake-blue-light/20 p-4">
