@@ -148,32 +148,38 @@ export default async function HistoryPage() {
             <span className="text-lake-gold/70 text-[10px] tracking-[0.15em] uppercase">Est. 2013</span>
           </div>
 
-          {/* Logos in flex layout */}
-          <div className="absolute inset-0 flex items-center justify-center z-20">
-            <div className="flex flex-wrap justify-center gap-4 w-52">
-              {original5.map(teamName => {
-                const member = memberMap.get(teamName);
-                return (
-                  <Link
-                    key={teamName}
-                    href={member ? `/teams/${member.id}` : '#'}
-                    className="group"
-                    title={teamName}
-                  >
-                    {member?.logo && (
-                      <Image
-                        src={`/images/teams/${member.logo}`}
-                        alt={`${teamName} logo`}
-                        width={56}
-                        height={56}
-                        className="rounded-full border-2 border-lake-gold/40 group-hover:border-lake-gold group-hover:scale-110 transition-all shadow-lg bg-lake-blue-dark"
-                      />
-                    )}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
+          {/* Logos in pentagon arrangement */}
+          {original5.map((teamName, i) => {
+            const member = memberMap.get(teamName);
+            // Pentagon positions: top-left, top-center (higher), top-right, bottom-left, bottom-right
+            const positions = [
+              { top: '46%', left: '26%' },
+              { top: '26.5%', left: '50%' },
+              { top: '46%', left: '74%' },
+              { top: '70.5%', left: '33%' },
+              { top: '70.5%', left: '67%' },
+            ];
+            const pos = positions[i];
+            return (
+              <Link
+                key={teamName}
+                href={member ? `/teams/${member.id}` : '#'}
+                className="group absolute z-20 -translate-x-1/2 -translate-y-1/2"
+                style={{ top: pos.top, left: pos.left }}
+                title={teamName}
+              >
+                {member?.logo && (
+                  <Image
+                    src={`/images/teams/${member.logo}`}
+                    alt={`${teamName} logo`}
+                    width={60}
+                    height={60}
+                    className="rounded-full border-2 border-lake-gold/40 group-hover:border-lake-gold group-hover:scale-110 transition-all shadow-lg bg-lake-blue-dark"
+                  />
+                )}
+              </Link>
+            );
+          })}
         </div>
       </div>
 
