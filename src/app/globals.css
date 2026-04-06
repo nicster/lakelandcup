@@ -62,3 +62,30 @@ body {
 .fade-in-2 { animation-delay: 0.3s; }
 .fade-in-3 { animation-delay: 0.5s; }
 .fade-in-4 { animation-delay: 0.7s; }
+
+/* Confetti */
+@keyframes confetti-fall {
+  0%   { transform: translateY(-20px) rotate(0deg) scaleX(1); opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(600deg) scaleX(-1); opacity: 0; }
+}
+@keyframes confetti-sway {
+  0%, 100% { margin-left: 0px; }
+  25%       { margin-left: 18px; }
+  75%       { margin-left: -18px; }
+}
+.confetti-piece {
+  position: fixed;
+  top: -12px;
+  pointer-events: none;
+  animation: confetti-fall linear infinite, confetti-sway ease-in-out infinite;
+}
+
+/* Champion glow pulse */
+@keyframes champion-glow {
+  0%, 100% { box-shadow: 0 0 12px 2px rgba(201, 162, 39, 0.4); }
+  50%       { box-shadow: 0 0 28px 8px rgba(201, 162, 39, 0.75); }
+}
+.champion-glow {
+  animation: champion-glow 2.2s ease-in-out infinite;
+}
