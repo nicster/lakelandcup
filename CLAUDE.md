@@ -135,3 +135,26 @@ ssh nas 'sudo docker exec lakelandcup-db psql -U lakelandcup -c "\dt"'
 # Restart containers
 ssh nas 'sudo docker restart lakelandcup'
 ```
+
+## Design Context
+
+(Full version in `.impeccable.md` at the project root. Summarized for quick reference.)
+
+**Audience**: 12 GMs of the Lakeland Cup dynasty league (founded 2013) + the occasional casual visitor a GM shares a link with. Read-mostly site; commissioner uses a password-gated admin area for writes.
+
+**Tone**: Hallowed, lived-in, gold-leaf. Small private trophy room — reverent, weighty, clubhouse-confident. Hockey-native vocabulary throughout. Restraint signals authority.
+
+**Aesthetic**: Dark navy + gold + ice palette, OKLCH-authored with `<alpha-value>`. Editorial page headers (gold eyebrow + bold h1 + short gold rule). Feature-variant panels on the most-important block per page only. AAA accessibility via `lake-ice-muted` body text + global `:focus-visible` + reduced-motion + skip link.
+
+**Anti-references**: ESPN / The Athletic photo-hero sports sites; Yahoo / ESPN Fantasy dense form-and-table UI; crypto-dashboard cyan-on-dark; generic Tailwind starter templates.
+
+**Distinctive elements to preserve**: Original 5 pentagon badge, Rafters jersey wall, custom hockey iconography (`LakeCupIcon`, `FaceOffIcon`, `PuckIcon`, `CrossedSticksIcon`, `WhistleIcon`), date-as-spine trade ledger, lottery-anticipation reveal, composite `champion-aura`.
+
+**Design principles**:
+1. Restraint signals authority. One logo, one trophy, one date.
+2. The data is the story; decoration earns its place.
+3. Hockey-native, not template-native.
+4. Hierarchy via weight, not chrome.
+5. AAA accessibility is the floor.
+
+**Banned defaults** (training-data monoculture): Inter, DM Sans, Plus Jakarta, Instrument *, Fraunces, Space Grotesk, IBM Plex (any), Crimson, Cormorant, Playfair, etc. If picking new fonts, reach further. The system stack is the current placeholder — any replacement must NOT come from that list.
