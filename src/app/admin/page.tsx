@@ -9,6 +9,13 @@ const adminSections = [
     status: 'active',
   },
   {
+    title: 'Drafts',
+    description: 'Record picks, players, and pick trades by draft year',
+    href: '/admin/drafts',
+    icon: 'clipboard',
+    status: 'active',
+  },
+  {
     title: 'Trades',
     description: 'Record pick movements and trades between teams',
     href: '/admin/trades',
@@ -45,6 +52,13 @@ function SectionIcon({ name, className = '' }: { name: string; className?: strin
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25"
+      />
+    ),
+    clipboard: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2zM9 7h6"
       />
     ),
   };

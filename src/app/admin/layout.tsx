@@ -6,6 +6,7 @@ import { destroySession } from '@/lib/auth';
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: 'home' },
   { href: '/admin/seasons', label: 'Seasons', icon: 'trophy' },
+  { href: '/admin/drafts', label: 'Drafts', icon: 'clipboard' },
   { href: '/admin/trades', label: 'Trades', icon: 'arrows' },
   { href: '/admin/lottery', label: 'Run Lottery', icon: 'dice' },
   { href: '/admin/lottery/results', label: 'Lottery Results', icon: 'list' },
@@ -46,6 +47,13 @@ function NavIcon({ name, className = '' }: { name: string; className?: string })
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+      />
+    ),
+    clipboard: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2zM9 7h6"
       />
     ),
     logout: (
