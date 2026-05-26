@@ -10,10 +10,10 @@ const adminSections = [
   },
   {
     title: 'Trades',
-    description: 'Record and track player trades between teams',
+    description: 'Record pick movements and trades between teams',
     href: '/admin/trades',
     icon: 'arrows',
-    status: 'coming-soon',
+    status: 'active',
   },
   {
     title: 'Draft Lottery',

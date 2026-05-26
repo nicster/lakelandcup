@@ -10,6 +10,7 @@ export const members = pgTable('members', {
   colors: text('colors'),                 // JSON array of hex colors: ["#1e3a5f", "#ffffff", "#c4a962"]
   email: text('email'),
   isCommissioner: boolean('is_commissioner').default(false),
+  isActive: boolean('is_active').default(true),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
@@ -73,6 +74,45 @@ export const franchisePlayers = pgTable('franchise_players', {
   teamColors: text('team_colors'),           // JSON array of hex colors
 });
 
+// Trades — header row per trade. A trade can involve 2+ teams; participants
+// are derived from the trade_assets rows. Conditions and "better/lesser of"
+// language are stored per asset so multi-party complexity is captured.
+export const trades = pgTable('trades', {
+  id: serial('id').primaryKey(),
+  name: text('name'),                    // Optional nickname: "Vasylevsky Trade"
+  tradeDate: text('trade_date').notNull(), // "2024-11-08"
+  season: text('season'),                  // Optional context: "2024-25"
+  notes: text('notes'),                    // Free-form commentary
+  createdAt: timestamp('created_at').defaultNow(),
+});
+
+// Trade assets — one row per item that changes hands. Each row is a single
+// directional transfer (from_team → to_team). A trade has many rows.
+// asset_kind drives which fields are filled:
+//   'pick' → pickYear + pickRound (and optionally pickOriginalTeamId)
+//   'player' → playerName
+//   'other' → description (e.g. "future considerations", "better of two 2nd-round picks")
+export const tradeAssets = pgTable('trade_assets', {
+  id: serial('id').primaryKey(),
+  tradeId: integer('trade_id')
+    .notNull()
+    .references(() => trades.id, { onDelete: 'cascade' }),
+  fromTeamId: integer('from_team_id').notNull().references(() => members.id),
+  toTeamId: integer('to_team_id').notNull().references(() => members.id),
+  assetKind: text('asset_kind').notNull(), // 'pick' | 'player' | 'other'
+  // Pick-specific
+  pickYear: text('pick_year'),             // "2026"
+  pickRound: integer('pick_round'),        // 1 or 2
+  pickOriginalTeamId: integer('pick_original_team_id').references(() => members.id),
+  // Player-specific
+  playerName: text('player_name'),
+  // Fallback / sophisticated descriptions
+  description: text('description'),        // "better of two 2nd-round picks"
+  // Conditional language (rendered distinctively in the UI)
+  condition: text('condition'),            // "if Goons win 2025 championship → becomes a 1st-round pick"
+  sortOrder: integer('sort_order').default(0),
+});
+
 // Lottery results
 export const lotteryResults = pgTable('lottery_results', {
   id: serial('id').primaryKey(),
@@ -108,3 +148,7 @@ export type Prospect = typeof prospects.$inferSelect;
 export type NewProspect = typeof prospects.$inferInsert;
 export type LotteryResult = typeof lotteryResults.$inferSelect;
 export type NewLotteryResult = typeof lotteryResults.$inferInsert;
+export type Trade = typeof trades.$inferSelect;
+export type NewTrade = typeof trades.$inferInsert;
+export type TradeAsset = typeof tradeAssets.$inferSelect;
+export type NewTradeAsset = typeof tradeAssets.$inferInsert;

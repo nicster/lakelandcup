@@ -14,7 +14,7 @@ const navItems = [
   { href: '/rules', label: 'Rules' },
   { href: '/drafts', label: 'Drafts' },
   { href: '/protection', label: 'Protection' },
-  { href: '/trades', label: 'Trades', disabled: true },
+  { href: '/trades', label: 'Trades' },
   { href: '/members', label: 'Members', disabled: true },
 ];
 
