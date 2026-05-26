@@ -38,7 +38,7 @@ async function getSeasons() {
       .orderBy(desc(seasons.year));
 
     return results;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     // Database not yet initialized
     return [];
   }
@@ -73,10 +73,10 @@ export default async function HallOfFamePage() {
           {seasonData.map((season, index) => (
             <div
               key={season.id}
-              className={`rounded-lg border p-6 transition-colors ${
+              className={`rounded-lg p-6 transition-colors ${
                 index === 0
-                  ? 'bg-gradient-to-b from-lake-blue/45 to-lake-blue/20 border-lake-gold/40 shadow-lg shadow-lake-blue-darkest/40 hover:from-lake-blue/55'
-                  : 'bg-lake-blue/30 border-lake-blue-light/20 hover:bg-lake-blue/40'
+                  ? 'panel-feature hover:from-lake-blue/55'
+                  : 'border bg-lake-blue/30 border-lake-blue-light/20 hover:bg-lake-blue/40'
               }`}
             >
               {/* Season Header */}

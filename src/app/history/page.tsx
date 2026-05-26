@@ -84,7 +84,7 @@ async function getMembers() {
   try {
     const results = await db.select().from(members);
     return results;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return [];
   }
 }
@@ -103,19 +103,10 @@ export default async function HistoryPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
-      {/* Page Header */}
-      <header className="mb-10">
-        <p className="text-[clamp(0.7rem,0.65rem+0.2vw,0.85rem)] uppercase tracking-[0.25em] text-lake-gold mb-3">Franchise Timeline</p>
-        <h1 className="text-[clamp(1.875rem,1.4rem+1.5vw,2.5rem)] font-bold text-lake-ice tracking-tight leading-tight">League History</h1>
-        <p className="text-[clamp(1rem,0.92rem+0.25vw,1.125rem)] text-lake-ice-muted mt-2 max-w-xl">
-          Thirteen seasons of fantasy hockey glory.
-        </p>
-        <div className="w-12 h-0.5 bg-lake-gold mt-6" />
-      </header>
-
-      {/* The Original 5 - Badge Style */}
-      <div className="flex justify-center mb-10">
-        <div className="relative w-80 h-80">
+      {/* Hero — Original 5 badge leads the page; title below */}
+      <header className="flex flex-col items-center text-center mb-12">
+        <div className="flex justify-center mb-8">
+          <div className="relative w-80 h-80">
           {/* Outer ring */}
           <div className="absolute inset-0 rounded-full bg-gradient-to-b from-lake-blue-dark to-lake-blue border-4 border-lake-gold/60 shadow-xl" />
 
@@ -169,12 +160,31 @@ export default async function HistoryPage() {
               </Link>
             );
           })}
+          </div>
         </div>
-      </div>
+        <p className="text-[clamp(0.7rem,0.65rem+0.2vw,0.85rem)] uppercase tracking-[0.25em] text-lake-gold mb-3">Franchise Timeline</p>
+        <h1 className="text-[clamp(1.875rem,1.4rem+1.5vw,2.5rem)] font-bold text-lake-ice tracking-tight leading-tight">League History</h1>
+        <p className="text-[clamp(1rem,0.92rem+0.25vw,1.125rem)] text-lake-ice-muted mt-2 max-w-xl">
+          Thirteen seasons of fantasy hockey glory.
+        </p>
+      </header>
 
       {/* Team Timeline Chart — feature panel (main content of this page) */}
-      <div className="bg-gradient-to-b from-lake-blue/40 to-lake-blue/15 rounded-xl border border-lake-gold/30 shadow-lg shadow-lake-blue-darkest/40 p-4 md:p-8 mb-8">
-        <h2 className="text-lg font-semibold text-lake-ice mb-6">Active Franchises</h2>
+      <div className="panel-feature p-4 md:p-8 mb-8">
+        <h2 className="text-lg font-semibold text-lake-ice mb-4">Active Franchises</h2>
+
+        {/* Era legend — above the chart so colors are explained before use */}
+        <div className="mb-6 pb-4 border-b border-lake-blue-light/10 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          {eras.map(era => (
+            <div key={era.name} className="flex items-start gap-2">
+              <span className={`mt-0.5 w-3 h-3 rounded-sm flex-shrink-0 ${era.swatch}`} />
+              <div className="min-w-0">
+                <p className="text-lake-ice font-medium leading-tight">{era.name}</p>
+                <p className="text-lake-ice-muted leading-tight">{era.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* Era Row - aligned with seasons (hides label column on mobile) */}
         <div className="flex mb-4">
@@ -272,18 +282,6 @@ export default async function HistoryPage() {
           })}
         </div>
 
-        {/* Era legend */}
-        <div className="mt-8 pt-4 border-t border-lake-blue-light/10 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-          {eras.map(era => (
-            <div key={era.name} className="flex items-start gap-2">
-              <span className={`mt-0.5 w-3 h-3 rounded-sm flex-shrink-0 ${era.swatch}`} />
-              <div className="min-w-0">
-                <p className="text-lake-ice font-medium leading-tight">{era.name}</p>
-                <p className="text-lake-ice-muted leading-tight">{era.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Defunct Teams */}

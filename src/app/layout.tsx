@@ -31,6 +31,11 @@ export default function RootLayout({
         <main id="main" className="flex-1 ice-texture">
           {children}
         </main>
+        <footer className="border-t border-lake-blue-light/20 bg-lake-blue-dark/40">
+          <div className="max-w-6xl mx-auto px-4 py-6 text-center text-xs uppercase tracking-[0.2em] text-lake-ice-muted">
+            Lakeland Cup · Twelve-team dynasty league · Founded 2013
+          </div>
+        </footer>
       </body>
     </html>
   );

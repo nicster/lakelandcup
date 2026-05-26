@@ -25,7 +25,7 @@ async function getLatestChampion() {
       .limit(1);
 
     return result[0] || null;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return null;
   }
 }
@@ -43,7 +43,7 @@ async function getCurrentYearLottery() {
       .limit(1);
 
     return result[0] || null;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return null;
   }
 }
@@ -67,7 +67,7 @@ export default async function Home() {
           priority
         />
         <p className="text-lake-ice-muted text-base tracking-widest uppercase mb-10">
-          Est. 2013
+          Twelve-team dynasty league · Est. 2013
         </p>
 
         {/* Current Year Lottery */}
@@ -86,8 +86,8 @@ export default async function Home() {
         {/* Defending Champion */}
         {latestChampion?.champion && (
           <>
-            <Confetti />
-            <div className="champion-reveal pt-10 border-t border-lake-blue-light/20">
+            <Confetti occasionId={latestChampion.year} />
+            <div className="pt-10 border-t border-lake-blue-light/20">
               <p className="text-base text-lake-gold uppercase tracking-[0.25em] mb-1">
                 {latestChampion.year} Champions
               </p>
@@ -103,7 +103,7 @@ export default async function Home() {
                       alt={`${latestChampion.champion.name} logo`}
                       width={80}
                       height={80}
-                      className="rounded-full border-2 border-lake-gold relative z-10"
+                      className="rounded-full relative z-10"
                     />
                   </span>
                 )}

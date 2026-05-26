@@ -18,14 +18,23 @@ interface Piece {
   borderRadius: string;
 }
 
-export default function Confetti() {
+interface ConfettiProps {
+  /** Unique key (e.g. championship year) — confetti fires once per key, then
+   *  stays quiet on revisits until the key changes (i.e. a new champion). */
+  occasionId: string;
+}
+
+export default function Confetti({ occasionId }: ConfettiProps) {
   const [pieces, setPieces] = useState<Piece[]>([]);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    // Fire only once per session — repeat visits shouldn't keep raining confetti.
-    if (sessionStorage.getItem('lakelandcup:champion-confetti-seen')) return;
-    sessionStorage.setItem('lakelandcup:champion-confetti-seen', '1');
+    // Fire once per occasion. Switching from session- to localStorage means
+    // the user gets a new celebration when a new champion is crowned, even
+    // months later — but doesn't get confetti on every refresh.
+    const storageKey = `lakelandcup:champion-celebrated:${occasionId}`;
+    if (localStorage.getItem(storageKey)) return;
+    localStorage.setItem(storageKey, '1');
 
     const rand = (min: number, max: number) => Math.random() * (max - min) + min;
     setPieces(
@@ -41,7 +50,7 @@ export default function Confetti() {
         borderRadius: Math.random() > 0.5 ? '50%' : '2px',
       }))
     );
-  }, []);
+  }, [occasionId]);
 
   if (pieces.length === 0) return null;
 

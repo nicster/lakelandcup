@@ -198,7 +198,7 @@ async function getRules() {
       .orderBy(asc(rules.sortOrder));
 
     return results.length > 0 ? results : null;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return null;
   }
 }

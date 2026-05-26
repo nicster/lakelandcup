@@ -36,7 +36,7 @@ async function getTeam(id: number) {
       .limit(1);
 
     return team[0] || null;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return null;
   }
 }
@@ -62,7 +62,7 @@ async function getTeamAchievements(teamId: number) {
     const runnerUps = results.filter(s => s.runnerUpId === teamId);
 
     return { championships, runnerUps };
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return { championships: [], runnerUps: [] };
   }
 }
@@ -90,7 +90,7 @@ async function getTeamFranchisePlayers(teamId: number, teamName: string) {
       seasonEnd: fp.seasonEnd || null,
       teamColors: fp.teamColors ? JSON.parse(fp.teamColors) : null,
     }));
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return [];
   }
 }
@@ -160,7 +160,7 @@ async function getTeamProspects(teamId: number) {
       });
 
     return protectedProspects;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return [];
   }
 }
@@ -253,7 +253,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
       <div
         className={`rounded-xl p-6 md:p-10 mb-8 ${
           championships.length > 0 || runnerUps.length > 0
-            ? 'bg-gradient-to-b from-lake-blue/40 to-lake-blue/15 border border-lake-gold/30 shadow-lg shadow-lake-blue-darkest/40'
+            ? 'panel-feature'
             : 'bg-lake-blue/30 border border-lake-blue-light/20'
         }`}
       >

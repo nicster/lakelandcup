@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Shared panel treatment for the most important block on each page. Use this
+   to promote ONE panel per view — not every card. Default cards stay on
+   `bg-lake-blue/30 border border-lake-blue-light/20`. */
+@layer components {
+  .panel-feature {
+    @apply rounded-xl border border-lake-gold/30 shadow-lg shadow-lake-blue-darkest/40
+           bg-gradient-to-b from-lake-blue/40 to-lake-blue/15;
+  }
+}
+
 /* Background/foreground match Tailwind tokens `lake.blue-darkest` / `lake.ice`.
    --focus-ring tracks `lake.gold`. Keep these in sync with `tailwind.config.ts`. */
 :root {

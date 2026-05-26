@@ -31,7 +31,7 @@ async function getDraftPicks(year: string) {
       .orderBy(asc(draftPicks.round), asc(draftPicks.pick));
 
     return picks;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return [];
   }
 }
@@ -46,7 +46,7 @@ async function getTeamLogos() {
       }
     }
     return logoMap;
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return new Map<number, string>();
   }
 }
@@ -65,7 +65,7 @@ async function getAdjacentYears(year: string) {
       prev: currentIndex > 0 ? years[currentIndex - 1] : null,
       next: currentIndex < years.length - 1 ? years[currentIndex + 1] : null,
     };
-  } catch {
+  } catch (err) { console.error("DB query failed:", err);
     return { prev: null, next: null };
   }
 }

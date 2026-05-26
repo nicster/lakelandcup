@@ -135,6 +135,11 @@ export default function ProtectionSearchPage() {
             <div className="w-5 h-5 border-2 border-lake-gold/30 border-t-lake-gold rounded-full animate-spin" />
           </div>
         )}
+        {query.length > 0 && query.length < 2 && (
+          <p className="mt-2 text-sm text-lake-ice-muted" aria-live="polite">
+            Keep typing — search needs at least 2 characters.
+          </p>
+        )}
       </div>
 
       {/* Results */}
