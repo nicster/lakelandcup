@@ -100,29 +100,30 @@ export default function ProtectionSearchPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 py-12">
       {/* Page Header */}
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <svg className="w-8 h-8 text-lake-gold" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
-          </svg>
-          <h1 className="text-3xl font-bold text-lake-ice">Protection Search</h1>
-        </div>
-        <p className="text-lake-ice/60">
-          Search for any drafted player to check their protection status
+      <header className="mb-10">
+        <p className="text-[clamp(0.7rem,0.65rem+0.2vw,0.85rem)] uppercase tracking-[0.25em] text-lake-gold mb-3">Player Lookup</p>
+        <h1 className="text-[clamp(1.875rem,1.4rem+1.5vw,2.5rem)] font-bold text-lake-ice tracking-tight leading-tight">Protection Search</h1>
+        <p className="text-[clamp(1rem,0.92rem+0.25vw,1.125rem)] text-lake-ice-muted mt-2 max-w-xl">
+          Check any drafted player to see who holds their rights and when protection expires.
         </p>
-      </div>
+        <div className="w-12 h-0.5 bg-lake-gold mt-6" />
+      </header>
 
       {/* Search Input */}
       <div className="relative mb-8">
+        <label htmlFor="player-search" className="sr-only">
+          Player name
+        </label>
         <input
+          id="player-search"
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Enter player name..."
-          className="w-full px-4 py-3 pl-12 bg-lake-blue/30 border border-lake-blue-light/30 rounded-lg text-lake-ice placeholder-lake-ice/40 focus:outline-none focus:border-lake-gold/50 focus:ring-1 focus:ring-lake-gold/30"
+          className="w-full px-4 py-3 pl-12 bg-lake-blue/30 border border-lake-blue-light/30 rounded-lg text-lake-ice placeholder-lake-ice/60 focus:outline-none focus:border-lake-gold/50 focus:ring-1 focus:ring-lake-gold/30"
         />
-        <svg
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-lake-ice/40"
+        <svg aria-hidden="true"
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-lake-ice-muted"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -138,7 +139,7 @@ export default function ProtectionSearchPage() {
 
       {/* Results */}
       {hasSearched && results.length === 0 && !isLoading && (
-        <div className="text-center py-12 text-lake-ice/50">
+        <div className="text-center py-12 text-lake-ice-muted">
           No players found matching &ldquo;{query}&rdquo;
         </div>
       )}
@@ -155,8 +156,8 @@ export default function ProtectionSearchPage() {
               key={`${player.playerName}-${player.draftYear}-${index}`}
               className={`p-4 rounded-lg border ${
                 player.isProtected
-                  ? 'bg-green-500/10 border-green-500/30'
-                  : 'bg-red-500/10 border-red-500/30'
+                  ? 'bg-lake-success/10 border-lake-success/30'
+                  : 'bg-lake-error/10 border-lake-error/30'
               }`}
             >
               <div className="flex items-start justify-between gap-4">
@@ -166,12 +167,12 @@ export default function ProtectionSearchPage() {
                       {player.playerName}
                     </h3>
                     {player.position === 'G' && (
-                      <span className="px-1.5 py-0.5 text-xs font-medium bg-purple-500/20 text-purple-300 rounded">
+                      <span className="px-1.5 py-0.5 text-xs font-medium bg-lake-goalie/20 text-lake-goalie rounded">
                         G
                       </span>
                     )}
                   </div>
-                  <p className="text-lake-ice/60 text-sm">
+                  <p className="text-lake-ice-muted text-sm">
                     {player.draftYear} Draft · Round {player.round}, Pick {player.pick}
                   </p>
                   <Link
@@ -185,14 +186,14 @@ export default function ProtectionSearchPage() {
                   <span
                     className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
                       player.isProtected
-                        ? 'bg-green-500/20 text-green-400'
-                        : 'bg-red-500/20 text-red-400'
+                        ? 'bg-lake-success/20 text-lake-success'
+                        : 'bg-lake-error/20 text-lake-error'
                     }`}
                   >
                     {player.isProtected ? 'Protected' : 'Expired'}
                   </span>
                   <p className={`text-sm mt-1 ${
-                    player.isProtected ? 'text-green-400/70' : 'text-red-400/70'
+                    player.isProtected ? 'text-lake-success/80' : 'text-lake-error/80'
                   }`}>
                     {player.isProtected
                       ? `Until ${player.protectionExpires}`

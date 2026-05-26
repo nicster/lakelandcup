@@ -1,5 +1,7 @@
 'use client';
 
+import { lake, contrast } from '@/lib/colors';
+
 const CURRENT_SEASON = '2024-25';
 
 interface RetiredJerseyProps {
@@ -21,10 +23,10 @@ export function RetiredJersey({
   const isActive = !seasonEnd || seasonEnd === CURRENT_SEASON;
   const displaySeasonEnd = isActive ? '' : seasonEnd?.split('-')[0];
 
-  // Use team colors or fallback to defaults
-  const primaryColor = teamColors?.[0] || '#1e3a5f';
-  const secondaryColor = teamColors?.[1] || '#ffffff';
-  const accentColor = teamColors?.[2] || '#c4a962';
+  // Use team colors or fallback to brand defaults
+  const primaryColor = teamColors?.[0] || lake.blue;
+  const secondaryColor = teamColors?.[1] || lake.ice;
+  const accentColor = teamColors?.[2] || lake.gold;
 
   // Determine if a color is dark (for text contrast)
   const isDark = (color: string) => {
@@ -53,15 +55,15 @@ export function RetiredJersey({
     const contrast1 = Math.abs(bgBrightness - c1Brightness);
     const contrast2 = Math.abs(bgBrightness - c2Brightness);
 
-    // If neither color has good contrast, return white or black
+    // If neither candidate has sufficient contrast, fall back to light/dark.
     if (contrast1 < 60 && contrast2 < 60) {
-      return isDark(bgColor) ? '#ffffff' : '#000000';
+      return isDark(bgColor) ? contrast.light : contrast.dark;
     }
 
     return contrast1 > contrast2 ? color1 : color2;
   };
 
-  const textColor = isDark(primaryColor) ? secondaryColor : '#1a1a1a';
+  const textColor = isDark(primaryColor) ? secondaryColor : contrast.textDark;
   const numberColor = getContrastColor(primaryColor, secondaryColor, accentColor);
 
   // Get last name for jersey back

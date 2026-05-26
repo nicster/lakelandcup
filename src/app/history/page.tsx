@@ -2,24 +2,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { db, members } from '@/lib/db';
 
-// Force dynamic rendering to fetch fresh data on each request
-export const dynamic = 'force-dynamic';
+// Revalidate hourly — franchise history changes at most a few times a year.
+export const revalidate = 3600;
 
-// History icon component
-function HistoryIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  );
-}
-
-// Era definitions
+// Era definitions. `color` tints the era row in the timeline; `swatch` is the
+// brighter version used in the legend below the chart. Both must be full
+// class names so Tailwind's JIT can pick them up at build time.
 const eras = [
-  { name: 'Pre-Season', start: '2012-13', end: '2012-13', color: 'bg-lake-ice/10', description: 'Trial season' },
-  { name: 'Founding Era', start: '2013-14', end: '2014-15', color: 'bg-amber-500/10', description: 'League established' },
-  { name: 'Expansion', start: '2015-16', end: '2016-17', color: 'bg-green-500/10', description: '10 → 12 teams' },
-  { name: 'Modern Era', start: '2017-18', end: '2025-26', color: 'bg-lake-blue-light/10', description: 'Stable 12-team league' },
+  { name: 'Pre-Season',   start: '2012-13', end: '2012-13', color: 'bg-lake-ice/10',         swatch: 'bg-lake-ice/50',         description: 'Trial season' },
+  { name: 'Founding Era', start: '2013-14', end: '2014-15', color: 'bg-lake-gold/10',        swatch: 'bg-lake-gold/60',        description: 'League established' },
+  { name: 'Expansion',    start: '2015-16', end: '2016-17', color: 'bg-lake-success/10',     swatch: 'bg-lake-success/60',     description: '10 → 12 teams' },
+  { name: 'Modern Era',   start: '2017-18', end: '2025-26', color: 'bg-lake-blue-light/10',  swatch: 'bg-lake-blue-light/60',  description: 'Stable 12-team league' },
 ];
 
 // All seasons in order
@@ -112,17 +105,14 @@ export default async function HistoryPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       {/* Page Header */}
-      <div className="flex items-center gap-4 mb-10">
-        <div className="flex-shrink-0 w-14 h-14 rounded-full bg-lake-blue-light/30 flex items-center justify-center">
-          <HistoryIcon className="w-7 h-7 text-lake-gold" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-lake-ice">League History</h1>
-          <p className="text-lake-ice/60 text-sm">
-            13 seasons of fantasy hockey glory
-          </p>
-        </div>
-      </div>
+      <header className="mb-10">
+        <p className="text-[clamp(0.7rem,0.65rem+0.2vw,0.85rem)] uppercase tracking-[0.25em] text-lake-gold mb-3">Franchise Timeline</p>
+        <h1 className="text-[clamp(1.875rem,1.4rem+1.5vw,2.5rem)] font-bold text-lake-ice tracking-tight leading-tight">League History</h1>
+        <p className="text-[clamp(1rem,0.92rem+0.25vw,1.125rem)] text-lake-ice-muted mt-2 max-w-xl">
+          Thirteen seasons of fantasy hockey glory.
+        </p>
+        <div className="w-12 h-0.5 bg-lake-gold mt-6" />
+      </header>
 
       {/* The Original 5 - Badge Style */}
       <div className="flex justify-center mb-10">
@@ -166,7 +156,7 @@ export default async function HistoryPage() {
                 href={member ? `/teams/${member.id}` : '#'}
                 className="group absolute z-20 -translate-x-1/2 -translate-y-1/2"
                 style={{ top: pos.top, left: pos.left }}
-                title={teamName}
+                aria-label={teamName}
               >
                 {member?.logo && (
                   <Image
@@ -183,13 +173,13 @@ export default async function HistoryPage() {
         </div>
       </div>
 
-      {/* Team Timeline Chart */}
-      <div className="bg-lake-blue/20 rounded-lg border border-lake-blue-light/20 p-6 mb-8">
+      {/* Team Timeline Chart — feature panel (main content of this page) */}
+      <div className="bg-gradient-to-b from-lake-blue/40 to-lake-blue/15 rounded-xl border border-lake-gold/30 shadow-lg shadow-lake-blue-darkest/40 p-4 md:p-8 mb-8">
         <h2 className="text-lg font-semibold text-lake-ice mb-6">Active Franchises</h2>
 
-        {/* Era Row - aligned with seasons */}
+        {/* Era Row - aligned with seasons (hides label column on mobile) */}
         <div className="flex mb-4">
-          <div className="w-48 flex-shrink-0 text-lake-ice/50 text-xs font-medium pr-4">Era</div>
+          <div className="hidden md:block md:w-48 flex-shrink-0 text-lake-ice-muted text-xs font-medium pr-4">Era</div>
           <div className="flex-1 flex">
             {allSeasons.map(season => {
               const era = eras.find(e => {
@@ -204,7 +194,6 @@ export default async function HistoryPage() {
                 <div
                   key={season}
                   className={`flex-1 h-8 flex items-center justify-center mx-px rounded-sm ${era?.color || 'bg-lake-blue/20'} border-l ${isEraStart ? 'border-lake-ice/20' : 'border-transparent'}`}
-                  title={era ? `${era.name}: ${era.description}` : ''}
                 >
                   {isEraStart && (
                     <span className="text-lake-ice/70 text-[10px] font-medium truncate px-1">
@@ -219,12 +208,12 @@ export default async function HistoryPage() {
 
         {/* Season Headers */}
         <div className="flex mb-2">
-          <div className="w-48 flex-shrink-0"></div>
+          <div className="hidden md:block md:w-48 flex-shrink-0"></div>
           <div className="flex-1 flex">
             {allSeasons.map(season => (
               <div
                 key={season}
-                className="flex-1 text-center text-lake-ice/40 text-xs font-mono"
+                className="flex-1 text-center text-lake-ice-muted text-[10px] md:text-xs font-mono"
               >
                 {season.split('-')[0].slice(2)}
               </div>
@@ -232,17 +221,17 @@ export default async function HistoryPage() {
           </div>
         </div>
 
-        {/* Team Rows */}
-        <div className="space-y-1">
+        {/* Team Rows — stacked on mobile, side-by-side on md+ */}
+        <div className="space-y-3 md:space-y-1">
           {currentTeams.map(teamName => {
             const member = memberMap.get(teamName);
             const isOriginal5 = original5.includes(teamName);
             const timeline = teamTimelines[teamName];
 
             return (
-              <div key={teamName} className="flex items-center">
+              <div key={teamName} className="flex flex-col md:flex-row md:items-center">
                 {/* Team Name */}
-                <div className="w-48 flex-shrink-0 flex items-center gap-2 pr-4">
+                <div className="flex items-center gap-2 mb-1 md:mb-0 md:w-48 md:flex-shrink-0 md:pr-4">
                   {member?.logo && (
                     <Image
                       src={`/images/teams/${member.logo}`}
@@ -261,7 +250,7 @@ export default async function HistoryPage() {
                 </div>
 
                 {/* Timeline Bar */}
-                <div className="flex-1 flex h-6">
+                <div className="flex flex-1 h-6">
                   {allSeasons.map(season => {
                     const isActive = timeline.seasons.includes(season);
 
@@ -275,7 +264,6 @@ export default async function HistoryPage() {
                               : 'bg-lake-blue-light/60'
                             : 'bg-lake-blue/20'
                         }`}
-                        title={isActive ? `${teamName} - ${season}` : ''}
                       />
                     );
                   })}
@@ -284,20 +272,33 @@ export default async function HistoryPage() {
             );
           })}
         </div>
+
+        {/* Era legend */}
+        <div className="mt-8 pt-4 border-t border-lake-blue-light/10 grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          {eras.map(era => (
+            <div key={era.name} className="flex items-start gap-2">
+              <span className={`mt-0.5 w-3 h-3 rounded-sm flex-shrink-0 ${era.swatch}`} />
+              <div className="min-w-0">
+                <p className="text-lake-ice font-medium leading-tight">{era.name}</p>
+                <p className="text-lake-ice-muted leading-tight">{era.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Defunct Teams */}
-      <div className="bg-lake-blue/10 rounded-lg border border-lake-blue-light/10 p-6">
-        <h2 className="text-lg font-semibold text-lake-ice/60 mb-6">Former Franchises</h2>
+      <div className="bg-lake-blue/10 rounded-lg border border-lake-blue-light/10 p-4 md:p-6">
+        <h2 className="text-lg font-semibold text-lake-ice-muted mb-6">Former Franchises</h2>
 
         {/* Season Headers */}
         <div className="flex mb-2">
-          <div className="w-48 flex-shrink-0"></div>
+          <div className="hidden md:block md:w-48 flex-shrink-0"></div>
           <div className="flex-1 flex">
             {allSeasons.map(season => (
               <div
                 key={season}
-                className="flex-1 text-center text-lake-ice/30 text-xs font-mono"
+                className="flex-1 text-center text-lake-ice-muted text-[10px] md:text-xs font-mono"
               >
                 {season.split('-')[0].slice(2)}
               </div>
@@ -305,16 +306,16 @@ export default async function HistoryPage() {
           </div>
         </div>
 
-        {/* Team Rows */}
-        <div className="space-y-1">
+        {/* Team Rows — stacked on mobile, side-by-side on md+ */}
+        <div className="space-y-3 md:space-y-1">
           {defunctTeams.map(teamName => {
             const member = memberMap.get(teamName);
             const timeline = teamTimelines[teamName];
 
             return (
-              <div key={teamName} className="flex items-center opacity-60">
+              <div key={teamName} className="flex flex-col md:flex-row md:items-center opacity-60">
                 {/* Team Name */}
-                <div className="w-48 flex-shrink-0 flex items-center gap-2 pr-4">
+                <div className="flex items-center gap-2 mb-1 md:mb-0 md:w-48 md:flex-shrink-0 md:pr-4">
                   {member?.logo && (
                     <Image
                       src={`/images/teams/${member.logo}`}
@@ -324,13 +325,13 @@ export default async function HistoryPage() {
                       className="rounded-full flex-shrink-0 grayscale"
                     />
                   )}
-                  <span className="text-lake-ice/60 text-sm truncate">
+                  <span className="text-lake-ice-muted text-sm truncate">
                     {teamName}
                   </span>
                 </div>
 
                 {/* Timeline Bar */}
-                <div className="flex-1 flex h-5">
+                <div className="flex flex-1 h-5">
                   {allSeasons.map(season => {
                     const isActive = timeline.seasons.includes(season);
 
@@ -342,7 +343,6 @@ export default async function HistoryPage() {
                             ? 'bg-lake-ice/30'
                             : 'bg-lake-blue/10'
                         }`}
-                        title={isActive ? `${teamName} - ${season}` : ''}
                       />
                     );
                   })}
@@ -353,25 +353,6 @@ export default async function HistoryPage() {
         </div>
       </div>
 
-      {/* Stats Summary */}
-      <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-        <div className="bg-lake-blue/20 rounded-lg border border-lake-blue-light/20 p-4">
-          <div className="text-2xl font-bold text-lake-gold">14</div>
-          <div className="text-lake-ice/60 text-sm">Seasons</div>
-        </div>
-        <div className="bg-lake-blue/20 rounded-lg border border-lake-blue-light/20 p-4">
-          <div className="text-2xl font-bold text-lake-gold">12</div>
-          <div className="text-lake-ice/60 text-sm">Current Teams</div>
-        </div>
-        <div className="bg-lake-blue/20 rounded-lg border border-lake-blue-light/20 p-4">
-          <div className="text-2xl font-bold text-lake-gold">{defunctTeams.length}</div>
-          <div className="text-lake-ice/60 text-sm">Former Teams</div>
-        </div>
-        <div className="bg-lake-blue/20 rounded-lg border border-lake-blue-light/20 p-4">
-          <div className="text-2xl font-bold text-lake-gold">5</div>
-          <div className="text-lake-ice/60 text-sm">Original Franchises</div>
-        </div>
-      </div>
     </div>
   );
 }

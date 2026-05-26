@@ -50,7 +50,7 @@ function SectionIcon({ name, className = '' }: { name: string; className?: strin
   };
 
   return (
-    <svg
+    <svg aria-hidden="true"
       className={className}
       fill="none"
       viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-lake-ice">Admin Dashboard</h1>
-        <p className="text-lake-ice/60 mt-1">
+        <p className="text-lake-ice-muted mt-1">
           Manage league data and run commissioner tasks
         </p>
       </div>
@@ -76,15 +76,15 @@ export default function AdminDashboard() {
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-4">
-          <p className="text-lake-ice/50 text-sm">Total Seasons</p>
+          <p className="text-lake-ice-muted text-sm">Total Seasons</p>
           <p className="text-2xl font-bold text-lake-ice">9</p>
         </div>
         <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-4">
-          <p className="text-lake-ice/50 text-sm">Active Teams</p>
+          <p className="text-lake-ice-muted text-sm">Active Teams</p>
           <p className="text-2xl font-bold text-lake-ice">12</p>
         </div>
         <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-4">
-          <p className="text-lake-ice/50 text-sm">Draft Picks Recorded</p>
+          <p className="text-lake-ice-muted text-sm">Draft Picks Recorded</p>
           <p className="text-2xl font-bold text-lake-ice">216</p>
         </div>
       </div>
@@ -111,12 +111,12 @@ export default function AdminDashboard() {
                     {section.title}
                   </h3>
                   {section.status === 'coming-soon' && (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-lake-blue-light/30 text-lake-ice/50">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-lake-blue-light/30 text-lake-ice-muted">
                       Coming Soon
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-lake-ice/60 mt-1">
+                <p className="text-sm text-lake-ice-muted mt-1">
                   {section.description}
                 </p>
               </div>

@@ -58,7 +58,7 @@ function NavIcon({ name, className = '' }: { name: string; className?: string })
   };
 
   return (
-    <svg
+    <svg aria-hidden="true"
       className={className}
       fill="none"
       viewBox="0 0 24 24"
@@ -88,7 +88,7 @@ export default function AdminLayout({
         {/* Admin Header */}
         <div className="p-4 border-b border-lake-blue-light/20">
           <h2 className="font-semibold text-lake-gold">Admin Panel</h2>
-          <p className="text-xs text-lake-ice/50 mt-0.5">Commissioner Access</p>
+          <p className="text-xs text-lake-ice-muted mt-0.5">Commissioner Access</p>
         </div>
 
         {/* Navigation */}
@@ -113,7 +113,7 @@ export default function AdminLayout({
           <form action={logout}>
             <button
               type="submit"
-              className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-lake-ice/50 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+              className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-lake-ice-muted hover:text-lake-error hover:bg-lake-error/10 transition-colors"
             >
               <NavIcon name="logout" className="w-5 h-5" />
               Sign Out

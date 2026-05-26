@@ -1,12 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { lake } from '@/lib/colors';
 
-const COLORS = [
-  '#F5C800', // Lyss Falcons yellow
-  '#1565C0', // Lyss Falcons blue
-  '#ffffff',  // white
-];
+// Celebratory palette — defending champion's accent colors plus a neutral.
+const COLORS = [lake.goldBright, lake.blue, lake.ice];
 
 interface Piece {
   id: number;
@@ -24,6 +22,11 @@ export default function Confetti() {
   const [pieces, setPieces] = useState<Piece[]>([]);
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Fire only once per session — repeat visits shouldn't keep raining confetti.
+    if (sessionStorage.getItem('lakelandcup:champion-confetti-seen')) return;
+    sessionStorage.setItem('lakelandcup:champion-confetti-seen', '1');
+
     const rand = (min: number, max: number) => Math.random() * (max - min) + min;
     setPieces(
       Array.from({ length: 72 }, (_, i) => ({

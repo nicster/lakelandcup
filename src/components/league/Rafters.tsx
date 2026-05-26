@@ -34,7 +34,7 @@ export function Rafters({ franchisePlayers, showTeamHeaders = true }: RaftersPro
   );
 
   return (
-    <div className="relative">
+    <div className="cq-rafters relative">
       {/* Arena ceiling/rafters background */}
       <div className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 rounded-lg">
         {/* Rafter beams */}
@@ -57,7 +57,7 @@ export function Rafters({ franchisePlayers, showTeamHeaders = true }: RaftersPro
         <div className="absolute top-0 left-1/4 w-1/2 h-32 bg-gradient-to-b from-yellow-500/10 to-transparent blur-2xl" />
 
         {/* Content */}
-        <div className="relative p-6 md:p-8">
+        <div className="cq-rafters-content relative p-4 md:p-8">
           {/* Teams and their retired jerseys */}
           <div className="space-y-10">
             {sortedTeams.map(([teamName, players]) => (
@@ -66,15 +66,15 @@ export function Rafters({ franchisePlayers, showTeamHeaders = true }: RaftersPro
                 {showTeamHeaders && (
                   <div className="flex items-center gap-4 mb-6">
                     <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent" />
-                    <h3 className="text-gray-300 text-sm font-semibold uppercase tracking-widest whitespace-nowrap">
+                    <h3 className="text-lake-silver text-sm font-semibold uppercase tracking-widest whitespace-nowrap">
                       {teamName}
                     </h3>
                     <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent" />
                   </div>
                 )}
 
-                {/* Jerseys row */}
-                <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+                {/* Jerseys row — gap responds to container width, not viewport */}
+                <div className="cq-rafters-jerseys flex flex-wrap justify-center">
                   {players
                     .sort((a, b) => b.years - a.years)
                     .map((player) => (

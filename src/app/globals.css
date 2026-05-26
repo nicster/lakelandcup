@@ -2,9 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Background/foreground match Tailwind tokens `lake.blue-darkest` / `lake.ice`.
+   --focus-ring tracks `lake.gold`. Keep these in sync with `tailwind.config.ts`. */
 :root {
   --background: #0f1419;
   --foreground: #e8f4f8;
+  --focus-ring: oklch(72.80% 0.1380 89.73);
+}
+
+/* Global focus ring — only when keyboard navigating. Form elements that set
+   their own `focus:ring-*` (more specific) keep their existing treatment. */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 body {
@@ -81,11 +92,68 @@ body {
   animation: confetti-fall linear infinite, confetti-sway ease-in-out infinite;
 }
 
-/* Champion glow pulse */
-@keyframes champion-glow {
-  0%, 100% { box-shadow: 0 0 12px 2px rgba(201, 162, 39, 0.4); }
-  50%       { box-shadow: 0 0 28px 8px rgba(201, 162, 39, 0.75); }
+/* Champion aura — composite-only pulsing glow rendered via pseudo-element.
+   Animates opacity + transform: scale (both compositor-handled), avoiding the
+   continuous paint that box-shadow animation would force. */
+.champion-aura::after {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.55) 30%, rgba(201, 162, 39, 0) 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: champion-aura-pulse 2.2s ease-in-out infinite;
 }
-.champion-glow {
-  animation: champion-glow 2.2s ease-in-out infinite;
+@keyframes champion-aura-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.08); }
+}
+
+/* One-shot entrance for the defending-champion block. */
+@keyframes champion-reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.champion-reveal {
+  animation: champion-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Container-query scope for the Rafters jersey wall: the jersey gap adapts to
+   the container's width rather than the viewport, so the wall renders well in
+   any parent (full-width page, narrow sidebar, dialog, etc.). */
+.cq-rafters {
+  container-type: inline-size;
+  container-name: rafters;
+}
+.cq-rafters-jerseys { gap: 1rem; }
+@container rafters (min-width: 480px) {
+  .cq-rafters-jerseys { gap: 1.5rem; }
+}
+@container rafters (min-width: 720px) {
+  .cq-rafters-jerseys { gap: 2rem; }
+}
+
+/* Lottery anticipation: slower, gentler breathing than animate-pulse — reads
+   as a real draw machine instead of a generic Tailwind pulse. */
+@keyframes lottery-anticipation {
+  0%, 100% { transform: scale(1);    opacity: 0.88; }
+  50%      { transform: scale(1.018); opacity: 1; }
+}
+.lottery-anticipation {
+  animation: lottery-anticipation 1.6s ease-in-out infinite;
+}
+
+/* Respect reduced motion preferences. Disable decorative loops + entrance
+   animations; leave .animate-spin alone since spinners convey loading state. */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer,
+  .puck-drop,
+  .champion-aura::after,
+  .champion-reveal,
+  .confetti-piece,
+  .animate-pulse,
+  .lottery-anticipation {
+    animation: none !important;
+  }
 }

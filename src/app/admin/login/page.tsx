@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { verifyPassword, createSession, isAuthenticated } from '@/lib/auth';
 
@@ -32,32 +33,19 @@ export default async function AdminLoginPage({
       <div className="w-full max-w-sm">
         <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-8">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-lake-blue-light/30 flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-lake-gold"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                />
-              </svg>
-            </div>
-            <h1 className="text-xl font-bold text-lake-ice">Commissioner Login</h1>
-            <p className="text-lake-ice/60 text-sm mt-1">
-              Enter password to access admin area
+          <header className="text-center mb-8">
+            <p className="text-xs uppercase tracking-[0.25em] text-lake-gold mb-3">Restricted</p>
+            <h1 className="text-2xl font-bold text-lake-ice tracking-tight">Commissioner Login</h1>
+            <p className="text-lake-ice-muted text-sm mt-2">
+              Enter password to access admin area.
             </p>
-          </div>
+            <div className="w-10 h-0.5 bg-lake-gold mx-auto mt-5" />
+          </header>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-3 rounded-lg bg-red-500/20 border border-red-500/30">
-              <p className="text-red-300 text-sm text-center">
+            <div className="mb-6 p-3 rounded-lg bg-lake-error/20 border border-lake-error/30">
+              <p className="text-lake-error text-sm text-center">
                 Invalid password. Please try again.
               </p>
             </div>
@@ -78,7 +66,7 @@ export default async function AdminLoginPage({
                 name="password"
                 required
                 autoFocus
-                className="w-full px-4 py-3 rounded-lg bg-lake-blue-dark/50 border border-lake-blue-light/30 text-lake-ice placeholder-lake-ice/40 focus:outline-none focus:border-lake-gold/50 focus:ring-1 focus:ring-lake-gold/50 transition-colors"
+                className="w-full px-4 py-3 rounded-lg bg-lake-blue-dark/50 border border-lake-blue-light/30 text-lake-ice placeholder-lake-ice/60 focus:outline-none focus:border-lake-gold/50 focus:ring-1 focus:ring-lake-gold/50 transition-colors"
                 placeholder="Enter commissioner password"
               />
             </div>
@@ -94,12 +82,12 @@ export default async function AdminLoginPage({
 
         {/* Back link */}
         <div className="text-center mt-6">
-          <a
+          <Link
             href="/"
-            className="text-lake-ice/50 hover:text-lake-ice text-sm transition-colors"
+            className="text-lake-ice-muted hover:text-lake-ice text-sm transition-colors"
           >
             &larr; Back to Lakeland Cup
-          </a>
+          </Link>
         </div>
       </div>
     </div>

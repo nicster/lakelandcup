@@ -3,18 +3,10 @@ import Link from 'next/link';
 import { db, seasons, members } from '@/lib/db';
 import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
+import { LakeCupIcon } from '@/components/icons/HockeyIcons';
 
-// Force dynamic rendering to fetch fresh data on each request
-export const dynamic = 'force-dynamic';
-
-// Trophy icon component
-function TrophyIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
-    </svg>
-  );
-}
+// Revalidate hourly — champions update at most once per season.
+export const revalidate = 3600;
 
 async function getSeasons() {
   try {
@@ -59,24 +51,21 @@ export default async function HallOfFamePage() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
       {/* Page Header */}
-      <div className="flex items-center gap-4 mb-10">
-        <div className="flex-shrink-0 w-14 h-14 rounded-full bg-lake-gold/20 flex items-center justify-center">
-          <TrophyIcon className="w-7 h-7 text-lake-gold" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-lake-ice">Hall of Fame</h1>
-          <p className="text-lake-ice/60 text-sm">
-            Celebrating the champions of the Lakeland Cup
-          </p>
-        </div>
-      </div>
+      <header className="mb-10">
+        <p className="text-[clamp(0.7rem,0.65rem+0.2vw,0.85rem)] uppercase tracking-[0.25em] text-lake-gold mb-3">Champions</p>
+        <h1 className="text-[clamp(1.875rem,1.4rem+1.5vw,2.5rem)] font-bold text-lake-ice tracking-tight leading-tight">Hall of Fame</h1>
+        <p className="text-[clamp(1rem,0.92rem+0.25vw,1.125rem)] text-lake-ice-muted mt-2 max-w-xl">
+          Celebrating the champions of the Lakeland Cup.
+        </p>
+        <div className="w-12 h-0.5 bg-lake-gold mt-6" />
+      </header>
 
       {/* Champions List */}
       {seasonData.length === 0 ? (
         <div className="text-center py-16 bg-lake-blue/20 rounded-lg border border-lake-blue-light/20">
-          <TrophyIcon className="w-12 h-12 text-lake-ice/30 mx-auto mb-4" />
-          <p className="text-lake-ice/50 mb-2">No seasons recorded yet</p>
-          <p className="text-lake-ice/30 text-sm">
+          <LakeCupIcon className="w-12 h-12 text-lake-ice-muted mx-auto mb-4" />
+          <p className="text-lake-ice-muted mb-2">No seasons recorded yet</p>
+          <p className="text-lake-ice-muted text-sm">
             Check back once the commissioner adds historical data.
           </p>
         </div>
@@ -85,7 +74,11 @@ export default async function HallOfFamePage() {
           {seasonData.map((season, index) => (
             <div
               key={season.id}
-              className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-6 hover:bg-lake-blue/40 transition-colors"
+              className={`rounded-lg border p-6 transition-colors ${
+                index === 0
+                  ? 'bg-gradient-to-b from-lake-blue/45 to-lake-blue/20 border-lake-gold/40 shadow-lg shadow-lake-blue-darkest/40 hover:from-lake-blue/55'
+                  : 'bg-lake-blue/30 border-lake-blue-light/20 hover:bg-lake-blue/40'
+              }`}
             >
               {/* Season Header */}
               <div className="flex items-center gap-3 mb-4">
@@ -98,7 +91,7 @@ export default async function HallOfFamePage() {
                   </span>
                 )}
                 {season.notes && (
-                  <span className="text-lake-ice/40 text-sm ml-auto">
+                  <span className="text-lake-ice-muted text-sm ml-auto">
                     {season.notes}
                   </span>
                 )}
@@ -122,7 +115,7 @@ export default async function HallOfFamePage() {
                       />
                     )}
                     <div className="min-w-0 flex items-center gap-2">
-                      <TrophyIcon className="w-4 h-4 text-lake-gold flex-shrink-0" />
+                      <LakeCupIcon className="w-4 h-4 text-lake-gold flex-shrink-0" />
                       <p className="text-lake-ice font-semibold truncate">
                         {season.champion.name}
                       </p>
@@ -137,7 +130,7 @@ export default async function HallOfFamePage() {
                       {season.finalResult}
                     </span>
                   ) : (
-                    <span className="text-lake-ice/30 font-medium text-sm">vs</span>
+                    <span className="text-lake-ice-muted font-medium text-sm">vs</span>
                   )}
                 </div>
 

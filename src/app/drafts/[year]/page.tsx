@@ -4,11 +4,11 @@ import { notFound } from 'next/navigation';
 import { db, draftPicks, members } from '@/lib/db';
 import { eq, asc } from 'drizzle-orm';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 function ChevronLeftIcon({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
     </svg>
   );
@@ -16,7 +16,7 @@ function ChevronLeftIcon({ className = '' }: { className?: string }) {
 
 function ArrowRightIcon({ className = '' }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
     </svg>
   );
@@ -92,7 +92,7 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
       <div className="flex items-center justify-between mb-8">
         <Link
           href="/drafts"
-          className="flex items-center gap-2 text-lake-ice/60 hover:text-lake-gold transition-colors"
+          className="flex items-center gap-2 text-lake-ice-muted hover:text-lake-gold transition-colors"
         >
           <ChevronLeftIcon className="w-4 h-4" />
           <span>All Drafts</span>
@@ -102,7 +102,7 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
           {adjacentYears.prev && (
             <Link
               href={`/drafts/${adjacentYears.prev}`}
-              className="text-lake-ice/60 hover:text-lake-gold transition-colors"
+              className="text-lake-ice-muted hover:text-lake-gold transition-colors"
             >
               ← {adjacentYears.prev}
             </Link>
@@ -110,7 +110,7 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
           {adjacentYears.next && (
             <Link
               href={`/drafts/${adjacentYears.next}`}
-              className="text-lake-ice/60 hover:text-lake-gold transition-colors"
+              className="text-lake-ice-muted hover:text-lake-gold transition-colors"
             >
               {adjacentYears.next} →
             </Link>
@@ -121,7 +121,7 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
       {/* Header */}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-bold text-lake-gold mb-2">{year} Draft</h1>
-        <p className="text-lake-ice/60">
+        <p className="text-lake-ice-muted">
           {picks.length} prospects selected
         </p>
       </div>
@@ -157,7 +157,7 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                     />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-lake-blue-light/20 flex items-center justify-center">
-                      <span className="text-lake-ice/30 text-xs">?</span>
+                      <span className="text-lake-ice-muted text-xs">?</span>
                     </div>
                   )}
                 </div>
@@ -173,7 +173,7 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                       <span className="text-lake-ice font-medium truncate">{pick.teamName}</span>
                     )}
                     {pick.fromTeamName && (
-                      <span className="text-lake-ice/40 text-sm truncate">
+                      <span className="text-lake-ice-muted text-sm truncate">
                         (from {pick.fromTeamId ? (
                           <Link href={`/teams/${pick.fromTeamId}`} className="hover:text-lake-gold transition-colors">
                             {pick.fromTeamName}
@@ -189,13 +189,13 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                   <span className="text-lake-ice font-semibold">{pick.playerName}</span>
                   {pick.tradedToTeamName && (
                     <>
-                      <ArrowRightIcon className="w-4 h-4 text-lake-ice/40" />
+                      <ArrowRightIcon className="w-4 h-4 text-lake-ice-muted" />
                       {pick.tradedToTeamId ? (
-                        <Link href={`/teams/${pick.tradedToTeamId}`} className="text-lake-ice/60 text-sm hover:text-lake-gold transition-colors">
+                        <Link href={`/teams/${pick.tradedToTeamId}`} className="text-lake-ice-muted text-sm hover:text-lake-gold transition-colors">
                           {pick.tradedToTeamName}
                         </Link>
                       ) : (
-                        <span className="text-lake-ice/60 text-sm">{pick.tradedToTeamName}</span>
+                        <span className="text-lake-ice-muted text-sm">{pick.tradedToTeamName}</span>
                       )}
                     </>
                   )}
@@ -237,7 +237,7 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                     />
                   ) : (
                     <div className="w-10 h-10 rounded-full bg-lake-blue-light/20 flex items-center justify-center">
-                      <span className="text-lake-ice/30 text-xs">?</span>
+                      <span className="text-lake-ice-muted text-xs">?</span>
                     </div>
                   )}
                 </div>
@@ -253,7 +253,7 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                       <span className="text-lake-ice font-medium truncate">{pick.teamName}</span>
                     )}
                     {pick.fromTeamName && (
-                      <span className="text-lake-ice/40 text-sm truncate">
+                      <span className="text-lake-ice-muted text-sm truncate">
                         (from {pick.fromTeamId ? (
                           <Link href={`/teams/${pick.fromTeamId}`} className="hover:text-lake-gold transition-colors">
                             {pick.fromTeamName}
@@ -269,13 +269,13 @@ export default async function DraftYearPage({ params }: { params: Promise<{ year
                   <span className="text-lake-ice font-semibold">{pick.playerName}</span>
                   {pick.tradedToTeamName && (
                     <>
-                      <ArrowRightIcon className="w-4 h-4 text-lake-ice/40" />
+                      <ArrowRightIcon className="w-4 h-4 text-lake-ice-muted" />
                       {pick.tradedToTeamId ? (
-                        <Link href={`/teams/${pick.tradedToTeamId}`} className="text-lake-ice/60 text-sm hover:text-lake-gold transition-colors">
+                        <Link href={`/teams/${pick.tradedToTeamId}`} className="text-lake-ice-muted text-sm hover:text-lake-gold transition-colors">
                           {pick.tradedToTeamName}
                         </Link>
                       ) : (
-                        <span className="text-lake-ice/60 text-sm">{pick.tradedToTeamName}</span>
+                        <span className="text-lake-ice-muted text-sm">{pick.tradedToTeamName}</span>
                       )}
                     </>
                   )}

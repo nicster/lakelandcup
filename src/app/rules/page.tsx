@@ -1,8 +1,8 @@
 import { db, rules } from '@/lib/db';
 import { asc } from 'drizzle-orm';
 
-// Force dynamic rendering to fetch fresh data on each request
-export const dynamic = 'force-dynamic';
+// Revalidate hourly — rules change rarely.
+export const revalidate = 3600;
 
 // Default rules content (from 2023 revised manual)
 const defaultRules = [
@@ -135,15 +135,6 @@ Teams not participating in the playoffs have the right to claim **maximally one 
   },
 ];
 
-// Book icon component
-function BookIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-    </svg>
-  );
-}
-
 // Simple markdown-like renderer
 function RenderContent({ content }: { content: string }) {
   const lines = content.split('\n');
@@ -218,64 +209,68 @@ export default async function RulesPage() {
   const rulesData = dbRules || defaultRules.map((r, i) => ({ ...r, id: i, sortOrder: i, updatedAt: null }));
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-5xl mx-auto px-4 py-12">
       {/* Page Header */}
-      <div className="flex items-center gap-4 mb-10">
-        <div className="flex-shrink-0 w-14 h-14 rounded-full bg-lake-blue-light/30 flex items-center justify-center">
-          <BookIcon className="w-7 h-7 text-lake-gold" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-lake-ice">League Manual</h1>
-          <p className="text-lake-ice/60 text-sm">
-            Official rules and regulations of the Lakeland Cup
-          </p>
-        </div>
-      </div>
-
-      {/* Table of Contents */}
-      <nav className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-6 mb-8">
-        <h2 className="text-sm font-semibold text-lake-ice/50 uppercase tracking-wider mb-4">
-          Contents
-        </h2>
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {rulesData.map((rule) => (
-            <li key={rule.section}>
-              <a
-                href={`#${rule.section}`}
-                className="text-lake-ice/70 hover:text-lake-gold transition-colors text-sm"
-              >
-                {rule.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      {/* Rules Sections */}
-      <div className="space-y-12">
-        {rulesData.map((rule) => (
-          <section
-            key={rule.section}
-            id={rule.section}
-            className="scroll-mt-20"
-          >
-            <h2 className="text-xl font-bold text-lake-gold mb-4 pb-2 border-b border-lake-blue-light/20">
-              {rule.title}
-            </h2>
-            <div className="prose-lake">
-              <RenderContent content={rule.content} />
-            </div>
-          </section>
-        ))}
-      </div>
-
-      {/* Footer note */}
-      <div className="mt-12 pt-8 border-t border-lake-blue-light/20 text-center">
-        <p className="text-lake-ice/40 text-sm">
-          Originally published September 19, 2016. Revised September 30, 2023.
-          <br />
-          Contact the commissioner for rule clarifications or amendments.
+      <header className="mb-10">
+        <p className="text-[clamp(0.7rem,0.65rem+0.2vw,0.85rem)] uppercase tracking-[0.25em] text-lake-gold mb-3">Official Manual</p>
+        <h1 className="text-[clamp(1.875rem,1.4rem+1.5vw,2.5rem)] font-bold text-lake-ice tracking-tight leading-tight">Rules &amp; Regulations</h1>
+        <p className="text-[clamp(1rem,0.92rem+0.25vw,1.125rem)] text-lake-ice-muted mt-2 max-w-xl">
+          The governing document of the Lakeland Cup dynasty.
         </p>
+        <div className="w-12 h-0.5 bg-lake-gold mt-6" />
+      </header>
+
+      <div className="lg:grid lg:grid-cols-[200px_minmax(0,1fr)] lg:gap-12">
+        {/* Table of Contents — inline above on mobile, sticky sidebar on lg+ */}
+        <nav
+          aria-label="Rules table of contents"
+          className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-6 mb-8 lg:mb-0 lg:bg-transparent lg:border-0 lg:p-0 lg:sticky lg:top-24 lg:self-start"
+        >
+          <h2 className="text-sm font-semibold text-lake-ice-muted uppercase tracking-wider mb-4">
+            Contents
+          </h2>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-2">
+            {rulesData.map((rule) => (
+              <li key={rule.section}>
+                <a
+                  href={`#${rule.section}`}
+                  className="text-lake-ice/70 hover:text-lake-gold transition-colors text-sm block py-0.5"
+                >
+                  {rule.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div>
+          {/* Rules Sections */}
+          <div className="space-y-12">
+            {rulesData.map((rule) => (
+              <section
+                key={rule.section}
+                id={rule.section}
+                className="scroll-mt-24"
+              >
+                <h2 className="text-xl font-bold text-lake-gold mb-4 pb-2 border-b border-lake-blue-light/20">
+                  {rule.title}
+                </h2>
+                <div className="prose-lake">
+                  <RenderContent content={rule.content} />
+                </div>
+              </section>
+            ))}
+          </div>
+
+          {/* Footer note */}
+          <div className="mt-12 pt-8 border-t border-lake-blue-light/20 text-center">
+            <p className="text-lake-ice-muted text-sm">
+              Originally published September 19, 2016. Revised September 30, 2023.
+              <br />
+              Contact the commissioner for rule clarifications or amendments.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

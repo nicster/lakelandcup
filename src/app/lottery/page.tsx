@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FaceOffIcon, CrossedSticksIcon } from '@/components/icons/HockeyIcons';
 
 interface Team {
   id: number;
@@ -132,13 +133,9 @@ export default function LotteryPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="text-center">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-lake-blue-light/20 flex items-center justify-center">
-            <svg className="w-10 h-10 text-lake-ice/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-          </div>
+          <CrossedSticksIcon className="w-16 h-16 text-lake-ice/20 mx-auto mb-6" />
           <h1 className="text-2xl font-bold text-lake-ice mb-2">No Lottery Results</h1>
-          <p className="text-lake-ice/60">
+          <p className="text-lake-ice-muted">
             The draft lottery results have not been published yet.
           </p>
         </div>
@@ -151,12 +148,10 @@ export default function LotteryPage() {
       {/* Header */}
       <div className="text-center mb-10">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <svg className="w-10 h-10 text-lake-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-2.25-1.313M21 7.5v2.25m0-2.25l-2.25 1.313M3 7.5l2.25-1.313M3 7.5l2.25 1.313M3 7.5v2.25m9 3l2.25-1.313M12 12.75l-2.25-1.313M12 12.75V15m0 6.75l2.25-1.313M12 21.75V19.5m0 2.25l-2.25-1.313m0-16.875L12 2.25l2.25 1.313M21 14.25v2.25l-2.25 1.313m-13.5 0L3 16.5v-2.25" />
-          </svg>
+          <FaceOffIcon className="w-10 h-10 text-lake-gold" />
           <h1 className="text-3xl font-bold text-lake-ice">{lotteryData.year} Draft Lottery</h1>
         </div>
-        <p className="text-lake-ice/60">
+        <p className="text-lake-ice-muted">
           Determining picks 1-4 for non-playoff teams
         </p>
       </div>
@@ -171,7 +166,7 @@ export default function LotteryPage() {
               <div key={standing} className="text-center p-4 bg-lake-blue-dark/30 rounded-lg">
                 <span className="text-lake-gold font-semibold">{standing} Place</span>
                 <p className="text-lake-ice mt-1">{team?.name || 'TBD'}</p>
-                <p className="text-lake-ice/50 text-sm">{LOTTERY_ODDS[standing]}% odds</p>
+                <p className="text-lake-ice-muted text-sm">{LOTTERY_ODDS[standing]}% odds</p>
               </div>
             );
           })}
@@ -198,7 +193,7 @@ export default function LotteryPage() {
               setRevealedPicks(new Set([1, 2, 3, 4]));
               setHasWatched(true);
             }}
-            className="text-lake-ice/50 hover:text-lake-ice text-sm underline"
+            className="text-lake-ice-muted hover:text-lake-ice text-sm underline"
           >
             Skip to results
           </button>
@@ -229,13 +224,13 @@ export default function LotteryPage() {
                     pickNum === 1
                       ? 'md:col-span-2 border-lake-gold bg-lake-gold/10'
                       : 'border-lake-blue-light/30 bg-lake-blue-dark/30'
-                  } ${isCurrentlyRevealing ? 'animate-pulse' : ''}`}
+                  } ${isCurrentlyRevealing ? 'lottery-anticipation' : ''}`}
                 >
                   <div className="p-6">
                     <div className="text-center">
                       <span
                         className={`text-sm font-medium ${
-                          pickNum === 1 ? 'text-lake-gold' : 'text-lake-ice/50'
+                          pickNum === 1 ? 'text-lake-gold' : 'text-lake-ice-muted'
                         }`}
                       >
                         {getPickLabel(pickNum)}
@@ -274,7 +269,7 @@ export default function LotteryPage() {
                             {team.name}
                           </Link>
                           {standing && (
-                            <p className="text-lake-ice/50 text-sm mt-1">
+                            <p className="text-lake-ice-muted text-sm mt-1">
                               Finished {standing} ({LOTTERY_ODDS[standing]}% odds)
                             </p>
                           )}
@@ -301,7 +296,7 @@ export default function LotteryPage() {
                   setHasWatched(false);
                   setRevealedPicks(new Set());
                 }}
-                className="text-lake-ice/50 hover:text-lake-ice text-sm"
+                className="text-lake-ice-muted hover:text-lake-ice text-sm"
               >
                 Watch again
               </button>
@@ -338,6 +333,12 @@ export default function LotteryPage() {
         }
         .animate-reveal {
           animation: reveal 0.5s ease-out forwards;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-lottery-spin,
+          .animate-reveal {
+            animation: none;
+          }
         }
       `}</style>
     </div>

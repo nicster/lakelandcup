@@ -123,7 +123,7 @@ export default function LotteryResultsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-lake-ice">Lottery Results</h1>
-          <p className="text-lake-ice/60 mt-1">
+          <p className="text-lake-ice-muted mt-1">
             Manage saved and published lottery results
           </p>
         </div>
@@ -140,8 +140,8 @@ export default function LotteryResultsPage() {
         <div
           className={`mb-6 p-4 rounded-lg ${
             message.type === 'success'
-              ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-              : 'bg-red-500/20 text-red-400 border border-red-500/30'
+              ? 'bg-lake-success/20 text-lake-success border border-lake-success/30'
+              : 'bg-lake-error/20 text-lake-error border border-lake-error/30'
           }`}
         >
           {message.text}
@@ -151,7 +151,7 @@ export default function LotteryResultsPage() {
       {/* Results List */}
       {results.length === 0 ? (
         <div className="bg-lake-blue/30 rounded-lg border border-lake-blue-light/20 p-12 text-center">
-          <p className="text-lake-ice/50 mb-4">No lottery results saved yet.</p>
+          <p className="text-lake-ice-muted mb-4">No lottery results saved yet.</p>
           <Link
             href="/admin/lottery"
             className="text-lake-gold hover:text-lake-gold/80"
@@ -166,7 +166,7 @@ export default function LotteryResultsPage() {
               key={result.year}
               className={`bg-lake-blue/30 rounded-lg border p-6 ${
                 result.isPublished
-                  ? 'border-green-500/30'
+                  ? 'border-lake-success/30'
                   : 'border-lake-blue-light/20'
               }`}
             >
@@ -180,8 +180,8 @@ export default function LotteryResultsPage() {
                     <span
                       className={`px-2 py-0.5 text-xs font-medium rounded-full ${
                         result.isPublished
-                          ? 'bg-green-500/20 text-green-400'
-                          : 'bg-yellow-500/20 text-yellow-400'
+                          ? 'bg-lake-success/20 text-lake-success'
+                          : 'bg-lake-warning/20 text-lake-warning'
                       }`}
                     >
                       {result.isPublished ? 'Published' : 'Draft'}
@@ -199,7 +199,7 @@ export default function LotteryResultsPage() {
                             : 'bg-lake-blue-dark/30'
                         }`}
                       >
-                        <span className="text-lake-ice/50 text-xs">
+                        <span className="text-lake-ice-muted text-xs">
                           Pick {pick.pick}
                         </span>
                         <p
@@ -209,7 +209,7 @@ export default function LotteryResultsPage() {
                         >
                           {pick.team?.name || 'Unknown'}
                         </p>
-                        <span className="text-lake-ice/40 text-xs">
+                        <span className="text-lake-ice-muted text-xs">
                           {pick.standing}
                         </span>
                       </div>
@@ -217,7 +217,7 @@ export default function LotteryResultsPage() {
                   </div>
 
                   {/* Timestamps */}
-                  <div className="text-lake-ice/40 text-sm">
+                  <div className="text-lake-ice-muted text-sm">
                     <span>Run: {formatDate(result.runAt)}</span>
                     {result.publishedAt && (
                       <span className="ml-4">
@@ -241,7 +241,7 @@ export default function LotteryResultsPage() {
                       <button
                         onClick={() => deleteResult(result.year)}
                         disabled={actionLoading === result.year}
-                        className="px-4 py-2 bg-red-500/20 text-red-400 font-medium rounded-lg hover:bg-red-500/30 transition-colors disabled:opacity-50 text-sm"
+                        className="px-4 py-2 bg-lake-error/20 text-lake-error font-medium rounded-lg hover:bg-lake-error/30 transition-colors disabled:opacity-50 text-sm"
                       >
                         {actionLoading === result.year ? 'Deleting...' : 'Delete'}
                       </button>

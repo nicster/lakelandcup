@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
 
 export const metadata: Metadata = {
   title: "Lakeland Cup - Fantasy Hockey League",
@@ -26,9 +20,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased min-h-screen flex flex-col`}>
+      <body className="antialiased min-h-screen flex flex-col">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:px-4 focus:py-2 focus:bg-lake-gold focus:text-lake-blue-dark focus:font-semibold focus:rounded-md focus:shadow-lg"
+        >
+          Skip to main content
+        </a>
         <Header />
-        <main className="flex-1 ice-texture">
+        <main id="main" className="flex-1 ice-texture">
           {children}
         </main>
       </body>

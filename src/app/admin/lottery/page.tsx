@@ -237,7 +237,7 @@ export default function AdminLotteryPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-lake-ice">Draft Lottery</h1>
-          <p className="text-lake-ice/60 mt-1">
+          <p className="text-lake-ice-muted mt-1">
             Run the weighted lottery for the top 4 draft picks
           </p>
         </div>
@@ -267,14 +267,14 @@ export default function AdminLotteryPage() {
             }
           }}
           className={`w-32 px-3 py-2 bg-lake-blue-dark/50 border rounded-lg text-lake-ice focus:outline-none focus:border-lake-gold/50 ${
-            yearAlreadyExists ? 'border-yellow-500/50' : 'border-lake-blue-light/30'
+            yearAlreadyExists ? 'border-lake-warning/50' : 'border-lake-blue-light/30'
           }`}
           placeholder="2025"
         />
         {yearAlreadyExists && (
-          <p className="mt-2 text-yellow-400 text-sm">
+          <p className="mt-2 text-lake-warning text-sm">
             A lottery for {draftYear} already exists.{' '}
-            <Link href="/admin/lottery/results" className="underline hover:text-yellow-300">
+            <Link href="/admin/lottery/results" className="underline hover:text-lake-warning/80">
               View results
             </Link>
           </p>
@@ -286,7 +286,7 @@ export default function AdminLotteryPage() {
         <h2 className="text-lg font-semibold text-lake-ice mb-4">
           Select Non-Playoff Teams
         </h2>
-        <p className="text-lake-ice/50 text-sm mb-6">
+        <p className="text-lake-ice-muted text-sm mb-6">
           Assign teams to their regular season finishing position
         </p>
 
@@ -315,7 +315,7 @@ export default function AdminLotteryPage() {
         </div>
 
         {allTeamsSelected && !uniqueTeamsSelected && (
-          <p className="mt-4 text-red-400 text-sm">
+          <p className="mt-4 text-lake-error text-sm">
             Please select 4 different teams.
           </p>
         )}
@@ -325,7 +325,7 @@ export default function AdminLotteryPage() {
       {allTeamsSelected && uniqueTeamsSelected && !isRunning && !isComplete && (
         <div className="text-center mb-8">
           {yearAlreadyExists ? (
-            <div className="text-yellow-400">
+            <div className="text-lake-warning">
               <p className="mb-2">Cannot run lottery - {draftYear} already has results.</p>
               <Link
                 href="/admin/lottery/results"
@@ -368,13 +368,13 @@ export default function AdminLotteryPage() {
                     pick === 1
                       ? 'md:col-span-2 border-lake-gold bg-lake-gold/10'
                       : 'border-lake-blue-light/30 bg-lake-blue-dark/30'
-                  } ${isCurrentlyRevealing ? 'animate-pulse' : ''}`}
+                  } ${isCurrentlyRevealing ? 'lottery-anticipation' : ''}`}
                 >
                   <div className="p-6">
                     <div className="text-center">
                       <span
                         className={`text-sm font-medium ${
-                          pick === 1 ? 'text-lake-gold' : 'text-lake-ice/50'
+                          pick === 1 ? 'text-lake-gold' : 'text-lake-ice-muted'
                         }`}
                       >
                         {getPickLabel(pick)}
@@ -410,7 +410,7 @@ export default function AdminLotteryPage() {
                           >
                             {result.team.name}
                           </h3>
-                          <p className="text-lake-ice/50 text-sm mt-1">
+                          <p className="text-lake-ice-muted text-sm mt-1">
                             Finished {result.team.standing}th ({result.team.odds}% odds)
                           </p>
                         </div>
@@ -463,8 +463,8 @@ export default function AdminLotteryPage() {
             <div
               className={`mt-4 p-3 rounded-lg ${
                 saveMessage.type === 'success'
-                  ? 'bg-green-500/20 text-green-400'
-                  : 'bg-red-500/20 text-red-400'
+                  ? 'bg-lake-success/20 text-lake-success'
+                  : 'bg-lake-error/20 text-lake-error'
               }`}
             >
               {saveMessage.text}
