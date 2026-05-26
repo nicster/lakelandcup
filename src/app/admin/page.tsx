@@ -20,7 +20,7 @@ const adminSections = [
     description: 'Run the annual draft lottery for non-playoff teams',
     href: '/admin/lottery',
     icon: 'dice',
-    status: 'coming-soon',
+    status: 'active',
   },
 ];
 
