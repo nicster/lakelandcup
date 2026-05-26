@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { db, draftPicks, members } from '@/lib/db';
 import { eq, asc } from 'drizzle-orm';
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 function ChevronLeftIcon({ className = '' }: { className?: string }) {
   return (

@@ -5,8 +5,7 @@ import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { LakeCupIcon } from '@/components/icons/HockeyIcons';
 
-// Revalidate hourly — champions update at most once per season.
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 async function getSeasons() {
   try {

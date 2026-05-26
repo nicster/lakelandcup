@@ -2,8 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { db, members } from '@/lib/db';
 
-// Revalidate hourly — franchise history changes at most a few times a year.
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 // Era definitions. `color` tints the era row in the timeline; `swatch` is the
 // brighter version used in the legend below the chart. Both must be full

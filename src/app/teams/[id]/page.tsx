@@ -6,8 +6,7 @@ import { eq, or, desc } from 'drizzle-orm';
 import { Rafters } from '@/components/league/Rafters';
 import { LakeCupIcon } from '@/components/icons/HockeyIcons';
 
-// Revalidate hourly — team rosters and prospects update infrequently.
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 // Trophy with medal-tier color
 function MedalTrophy({ place, className = '' }: { place: 1 | 2 | 3; className?: string }) {

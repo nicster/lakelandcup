@@ -1,8 +1,7 @@
 import { db, rules } from '@/lib/db';
 import { asc } from 'drizzle-orm';
 
-// Revalidate hourly — rules change rarely.
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 // Default rules content (from 2023 revised manual)
 const defaultRules = [

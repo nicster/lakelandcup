@@ -5,8 +5,7 @@ import { desc, eq, and } from 'drizzle-orm';
 import Confetti from '@/components/Confetti';
 import { FaceOffIcon } from '@/components/icons/HockeyIcons';
 
-// Revalidate hourly — champion and current-year lottery banner change rarely.
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 async function getLatestChampion() {
   try {

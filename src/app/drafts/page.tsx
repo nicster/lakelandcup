@@ -3,7 +3,7 @@ import { db, draftPicks } from '@/lib/db';
 import { desc, sql } from 'drizzle-orm';
 import { PuckIcon } from '@/components/icons/HockeyIcons';
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 async function getDraftYears() {
   try {
