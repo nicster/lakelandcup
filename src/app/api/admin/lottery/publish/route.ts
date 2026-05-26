@@ -15,13 +15,16 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { year } = await request.json();
+    const body = await request.json();
+    const { year } = body;
+    // Default to publish=true for backwards compatibility; pass `publish: false`
+    // to unpublish (hide from the public /lottery page).
+    const publish = body.publish === undefined ? true : Boolean(body.publish);
 
     if (!year) {
       return NextResponse.json({ error: 'Year is required' }, { status: 400 });
     }
 
-    // Check if result exists
     const existing = await db
       .select()
       .from(lotteryResults)
@@ -32,22 +35,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Lottery result not found' }, { status: 404 });
     }
 
-    if (existing[0].isPublished) {
-      return NextResponse.json({ error: 'Already published' }, { status: 400 });
+    if (existing[0].isPublished === publish) {
+      return NextResponse.json(
+        { error: publish ? 'Already published' : 'Already hidden' },
+        { status: 400 },
+      );
     }
 
-    // Publish the result
     await db
       .update(lotteryResults)
       .set({
-        isPublished: true,
-        publishedAt: new Date(),
+        isPublished: publish,
+        publishedAt: publish ? new Date() : null,
       })
       .where(eq(lotteryResults.year, year));
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Failed to publish lottery:', error);
-    return NextResponse.json({ error: 'Failed to publish' }, { status: 500 });
+    console.error('Failed to update lottery publish state:', error);
+    return NextResponse.json({ error: 'Failed to update' }, { status: 500 });
   }
 }

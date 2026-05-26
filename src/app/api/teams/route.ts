@@ -40,7 +40,12 @@ export async function GET(request: NextRequest) {
           .from(members)
           .orderBy(asc(members.name));
 
-    return NextResponse.json(teams);
+    // Derive `isActive` from the canonical name list (not the DB column,
+    // which isn't a reliable source of truth across all environments).
+    const activeSet = new Set(ACTIVE_TEAM_NAMES);
+    return NextResponse.json(
+      teams.map((t) => ({ ...t, isActive: activeSet.has(t.name) }))
+    );
   } catch (error) {
     console.error('Failed to fetch teams:', error);
     return NextResponse.json({ error: 'Failed to fetch teams' }, { status: 500 });

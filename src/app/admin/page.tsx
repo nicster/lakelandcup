@@ -3,10 +3,10 @@ import Link from 'next/link';
 const adminSections = [
   {
     title: 'Seasons',
-    description: 'Manage championship history and season records',
+    description: 'Record champion, runner-up, and final score by year',
     href: '/admin/seasons',
     icon: 'trophy',
-    status: 'coming-soon',
+    status: 'active',
   },
   {
     title: 'Trades',

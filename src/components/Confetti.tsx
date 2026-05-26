@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { lake } from '@/lib/colors';
 
-// Celebratory palette — defending champion's accent colors plus a neutral.
-const COLORS = [lake.goldBright, lake.blue, lake.ice];
+// Fallback palette when the champion has no recorded team colors —
+// brand gold + navy + ice. Tinted, never pure.
+const FALLBACK_COLORS = [lake.goldBright, lake.blue, lake.ice];
 
 interface Piece {
   id: number;
@@ -22,9 +23,12 @@ interface ConfettiProps {
   /** Unique key (e.g. championship year) — confetti fires once per key, then
    *  stays quiet on revisits until the key changes (i.e. a new champion). */
   occasionId: string;
+  /** Team colors for the falling pieces. Falls back to brand palette if
+   *  empty or missing. */
+  colors?: string[];
 }
 
-export default function Confetti({ occasionId }: ConfettiProps) {
+export default function Confetti({ occasionId, colors }: ConfettiProps) {
   const [pieces, setPieces] = useState<Piece[]>([]);
 
   useEffect(() => {
@@ -36,6 +40,8 @@ export default function Confetti({ occasionId }: ConfettiProps) {
     if (localStorage.getItem(storageKey)) return;
     localStorage.setItem(storageKey, '1');
 
+    const palette = colors && colors.length > 0 ? colors : FALLBACK_COLORS;
+
     const rand = (min: number, max: number) => Math.random() * (max - min) + min;
     setPieces(
       Array.from({ length: 72 }, (_, i) => ({
@@ -43,14 +49,14 @@ export default function Confetti({ occasionId }: ConfettiProps) {
         left: `${rand(0, 100)}%`,
         width: `${rand(5, 10)}px`,
         height: `${rand(8, 16)}px`,
-        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        color: palette[Math.floor(Math.random() * palette.length)],
         fallDuration: `${rand(3.5, 6.5)}s`,
         swayDuration: `${rand(2, 4)}s`,
         delay: `${rand(0, 5)}s`,
         borderRadius: Math.random() > 0.5 ? '50%' : '2px',
       }))
     );
-  }, [occasionId]);
+  }, [occasionId, colors]);
 
   if (pieces.length === 0) return null;
 

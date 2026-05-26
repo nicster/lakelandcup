@@ -45,57 +45,35 @@ export default function LotteryResultsPage() {
     fetchResults();
   }, []);
 
-  const publishResult = async (year: string) => {
+  const setPublishState = async (year: string, publish: boolean) => {
     setActionLoading(year);
     setMessage(null);
     try {
       const response = await fetch('/api/admin/lottery/publish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ year }),
+        body: JSON.stringify({ year, publish }),
       });
       if (response.ok) {
-        setMessage({ type: 'success', text: `${year} lottery results published!` });
+        setMessage({
+          type: 'success',
+          text: publish
+            ? `${year} lottery results published.`
+            : `${year} lottery hidden from the public page.`,
+        });
         fetchResults();
       } else {
         const error = await response.json();
-        setMessage({ type: 'error', text: error.message || 'Failed to publish' });
+        setMessage({ type: 'error', text: error.error || 'Failed to update' });
       }
     } catch (error) {
-      console.error('Publish failed:', error);
-      setMessage({ type: 'error', text: 'Failed to publish results' });
+      console.error('Publish toggle failed:', error);
+      setMessage({ type: 'error', text: 'Failed to update' });
     } finally {
       setActionLoading(null);
     }
   };
 
-  const deleteResult = async (year: string) => {
-    if (!confirm(`Are you sure you want to delete the ${year} lottery draft?`)) {
-      return;
-    }
-
-    setActionLoading(year);
-    setMessage(null);
-    try {
-      const response = await fetch('/api/admin/lottery/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ year }),
-      });
-      if (response.ok) {
-        setMessage({ type: 'success', text: `${year} lottery draft deleted.` });
-        fetchResults();
-      } else {
-        const error = await response.json();
-        setMessage({ type: 'error', text: error.message || 'Failed to delete' });
-      }
-    } catch (error) {
-      console.error('Delete failed:', error);
-      setMessage({ type: 'error', text: 'Failed to delete draft' });
-    } finally {
-      setActionLoading(null);
-    }
-  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -228,32 +206,31 @@ export default function LotteryResultsPage() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col gap-2">
-                  {!result.isPublished && (
+                <div className="flex flex-col gap-2 min-w-[8.5rem]">
+                  {!result.isPublished ? (
+                    <button
+                      onClick={() => setPublishState(result.year, true)}
+                      disabled={actionLoading === result.year}
+                      className="px-4 py-2 bg-lake-gold text-lake-blue-dark font-medium rounded-lg hover:bg-lake-gold/90 transition-colors disabled:opacity-50 text-sm"
+                    >
+                      {actionLoading === result.year ? 'Publishing…' : 'Publish'}
+                    </button>
+                  ) : (
                     <>
-                      <button
-                        onClick={() => publishResult(result.year)}
-                        disabled={actionLoading === result.year}
-                        className="px-4 py-2 bg-lake-gold text-lake-blue-dark font-medium rounded-lg hover:bg-lake-gold/90 transition-colors disabled:opacity-50 text-sm"
+                      <Link
+                        href="/lottery"
+                        className="px-4 py-2 bg-lake-blue-light/20 text-lake-ice/70 font-medium rounded-lg hover:bg-lake-blue-light/30 transition-colors text-sm text-center"
                       >
-                        {actionLoading === result.year ? 'Publishing...' : 'Publish'}
-                      </button>
+                        View public
+                      </Link>
                       <button
-                        onClick={() => deleteResult(result.year)}
+                        onClick={() => setPublishState(result.year, false)}
                         disabled={actionLoading === result.year}
-                        className="px-4 py-2 bg-lake-error/20 text-lake-error font-medium rounded-lg hover:bg-lake-error/30 transition-colors disabled:opacity-50 text-sm"
+                        className="px-4 py-2 border border-lake-warning/40 text-lake-warning font-medium rounded-lg hover:bg-lake-warning/10 transition-colors disabled:opacity-50 text-sm"
                       >
-                        {actionLoading === result.year ? 'Deleting...' : 'Delete'}
+                        {actionLoading === result.year ? 'Hiding…' : 'Unpublish'}
                       </button>
                     </>
-                  )}
-                  {result.isPublished && (
-                    <Link
-                      href="/lottery"
-                      className="px-4 py-2 bg-lake-blue-light/20 text-lake-ice/70 font-medium rounded-lg hover:bg-lake-blue-light/30 transition-colors text-sm text-center"
-                    >
-                      View Public
-                    </Link>
                   )}
                 </div>
               </div>

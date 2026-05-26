@@ -17,6 +17,7 @@ async function getLatestChampion() {
           name: members.name,
           owner: members.owner,
           logo: members.logo,
+          colors: members.colors,
         },
       })
       .from(seasons)
@@ -28,6 +29,19 @@ async function getLatestChampion() {
   } catch (err) { console.error("DB query failed:", err);
     return null;
   }
+}
+
+function parseTeamColors(raw: string | null | undefined): string[] | undefined {
+  if (!raw) return undefined;
+  try {
+    const arr = JSON.parse(raw);
+    if (Array.isArray(arr) && arr.every((c) => typeof c === 'string')) {
+      return arr;
+    }
+  } catch {
+    /* malformed JSON — fall through to brand fallback */
+  }
+  return undefined;
 }
 
 async function getCurrentYearLottery() {
@@ -86,7 +100,10 @@ export default async function Home() {
         {/* Defending Champion */}
         {latestChampion?.champion && (
           <>
-            <Confetti occasionId={latestChampion.year} />
+            <Confetti
+              occasionId={latestChampion.year}
+              colors={parseTeamColors(latestChampion.champion.colors)}
+            />
             <div className="pt-10 border-t border-lake-blue-light/20">
               <p className="text-base text-lake-gold uppercase tracking-[0.25em] mb-1">
                 {latestChampion.year} Champions

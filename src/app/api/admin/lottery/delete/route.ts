@@ -21,7 +21,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Year is required' }, { status: 400 });
     }
 
-    // Check if result exists and is not published
     const existing = await db
       .select()
       .from(lotteryResults)
@@ -32,11 +31,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Lottery result not found' }, { status: 404 });
     }
 
-    if (existing[0].isPublished) {
-      return NextResponse.json({ error: 'Cannot delete published results' }, { status: 400 });
-    }
-
-    // Delete the draft
+    // Both drafts and published results can be deleted. The admin UI shows a
+    // stronger confirmation for published ones.
     await db
       .delete(lotteryResults)
       .where(eq(lotteryResults.year, year));
