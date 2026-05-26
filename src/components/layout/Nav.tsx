@@ -15,7 +15,6 @@ const navItems = [
   { href: '/drafts', label: 'Drafts' },
   { href: '/protection', label: 'Protection' },
   { href: '/trades', label: 'Trades' },
-  { href: '/members', label: 'Members', disabled: true },
 ];
 
 export default function Nav({ className = '', onItemClick }: NavProps) {
