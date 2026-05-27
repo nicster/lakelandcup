@@ -80,7 +80,7 @@ export default async function HallOfFamePage() {
               }`}
             >
               {/* Season Header */}
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-4">
                 <span className="text-lake-gold font-semibold text-lg">
                   {season.year}
                 </span>
@@ -90,14 +90,14 @@ export default async function HallOfFamePage() {
                   </span>
                 )}
                 {season.notes && (
-                  <span className="text-lake-ice-muted text-sm ml-auto">
+                  <span className="text-lake-ice-muted text-sm w-full sm:w-auto sm:ml-auto">
                     {season.notes}
                   </span>
                 )}
               </div>
 
-              {/* Matchup */}
-              <div className="flex items-center justify-center gap-4">
+              {/* Matchup — stacked on mobile, side-by-side on sm+ */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
                 {/* Champion */}
                 {season.champion && (
                   <Link

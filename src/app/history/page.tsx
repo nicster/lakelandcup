@@ -179,14 +179,15 @@ export default async function HistoryPage() {
           </div>
         </div>
 
-        {/* Season Headers */}
-        <div className="flex mb-2">
-          <div className="hidden md:block md:w-48 flex-shrink-0"></div>
+        {/* Season Headers — desktop only. On mobile each team gets its own
+            year axis below its bar so the labels stay adjacent to the data. */}
+        <div className="hidden md:flex mb-2">
+          <div className="md:w-48 flex-shrink-0"></div>
           <div className="flex-1 flex">
             {allSeasons.map(season => (
               <div
                 key={season}
-                className="flex-1 text-center text-lake-ice-muted text-[10px] md:text-xs font-mono"
+                className="flex-1 text-center text-lake-ice-muted text-xs font-mono"
               >
                 {season.split('-')[0].slice(2)}
               </div>
@@ -195,7 +196,7 @@ export default async function HistoryPage() {
         </div>
 
         {/* Team Rows — stacked on mobile, side-by-side on md+ */}
-        <div className="space-y-3 md:space-y-1">
+        <div className="space-y-4 md:space-y-1">
           {currentTeams.map(teamName => {
             const member = memberMap.get(teamName);
             const isOriginal5 = original5.includes(teamName);
@@ -222,24 +223,36 @@ export default async function HistoryPage() {
                   </Link>
                 </div>
 
-                {/* Timeline Bar */}
-                <div className="flex flex-1 h-6">
-                  {allSeasons.map(season => {
-                    const isActive = timeline.seasons.includes(season);
+                {/* Timeline bar + per-row year axis (mobile only) */}
+                <div className="flex flex-col flex-1">
+                  <div className="flex h-6">
+                    {allSeasons.map(season => {
+                      const isActive = timeline.seasons.includes(season);
 
-                    return (
+                      return (
+                        <div
+                          key={season}
+                          className={`flex-1 mx-px rounded-sm ${
+                            isActive
+                              ? isOriginal5
+                                ? 'bg-lake-gold/60'
+                                : 'bg-lake-blue-light/60'
+                              : 'bg-lake-blue/20'
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                  <div className="flex md:hidden mt-0.5">
+                    {allSeasons.map(season => (
                       <div
                         key={season}
-                        className={`flex-1 mx-px rounded-sm ${
-                          isActive
-                            ? isOriginal5
-                              ? 'bg-lake-gold/60'
-                              : 'bg-lake-blue-light/60'
-                            : 'bg-lake-blue/20'
-                        }`}
-                      />
-                    );
-                  })}
+                        className="flex-1 text-center text-lake-ice-muted/80 text-[9px] font-mono mx-px tabular-nums"
+                      >
+                        {season.split('-')[0].slice(2)}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             );
@@ -252,14 +265,14 @@ export default async function HistoryPage() {
       <div className="bg-lake-blue/10 rounded-lg border border-lake-blue-light/10 p-4 md:p-6">
         <h2 className="text-lg font-semibold text-lake-ice-muted mb-6">Former Franchises</h2>
 
-        {/* Season Headers */}
-        <div className="flex mb-2">
-          <div className="hidden md:block md:w-48 flex-shrink-0"></div>
+        {/* Season Headers — desktop only; mobile gets per-row labels. */}
+        <div className="hidden md:flex mb-2">
+          <div className="md:w-48 flex-shrink-0"></div>
           <div className="flex-1 flex">
             {allSeasons.map(season => (
               <div
                 key={season}
-                className="flex-1 text-center text-lake-ice-muted text-[10px] md:text-xs font-mono"
+                className="flex-1 text-center text-lake-ice-muted text-xs font-mono"
               >
                 {season.split('-')[0].slice(2)}
               </div>
@@ -268,7 +281,7 @@ export default async function HistoryPage() {
         </div>
 
         {/* Team Rows — stacked on mobile, side-by-side on md+ */}
-        <div className="space-y-3 md:space-y-1">
+        <div className="space-y-4 md:space-y-1">
           {defunctTeams.map(teamName => {
             const member = memberMap.get(teamName);
             const timeline = teamTimelines[teamName];
@@ -291,22 +304,34 @@ export default async function HistoryPage() {
                   </span>
                 </div>
 
-                {/* Timeline Bar */}
-                <div className="flex flex-1 h-5">
-                  {allSeasons.map(season => {
-                    const isActive = timeline.seasons.includes(season);
+                {/* Timeline bar + per-row year axis (mobile only) */}
+                <div className="flex flex-col flex-1">
+                  <div className="flex h-5">
+                    {allSeasons.map(season => {
+                      const isActive = timeline.seasons.includes(season);
 
-                    return (
+                      return (
+                        <div
+                          key={season}
+                          className={`flex-1 mx-px rounded-sm ${
+                            isActive
+                              ? 'bg-lake-ice/30'
+                              : 'bg-lake-blue/10'
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                  <div className="flex md:hidden mt-0.5">
+                    {allSeasons.map(season => (
                       <div
                         key={season}
-                        className={`flex-1 mx-px rounded-sm ${
-                          isActive
-                            ? 'bg-lake-ice/30'
-                            : 'bg-lake-blue/10'
-                        }`}
-                      />
-                    );
-                  })}
+                        className="flex-1 text-center text-lake-ice-muted/80 text-[9px] font-mono mx-px tabular-nums"
+                      >
+                        {season.split('-')[0].slice(2)}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             );
