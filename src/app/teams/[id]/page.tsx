@@ -195,9 +195,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
         <ol className="flex flex-wrap items-center gap-2">
           <li><Link href="/" className="hover:text-lake-gold transition-colors">Home</Link></li>
           <li aria-hidden="true">·</li>
-          <li><Link href="/hall-of-fame" className="hover:text-lake-gold transition-colors">Hall of Fame</Link></li>
-          <li aria-hidden="true">·</li>
-          <li><Link href="/history" className="hover:text-lake-gold transition-colors">History</Link></li>
+          <li><Link href="/teams" className="hover:text-lake-gold transition-colors">Teams</Link></li>
           <li aria-hidden="true">·</li>
           <li className="text-lake-ice" aria-current="page">{team.name}</li>
         </ol>

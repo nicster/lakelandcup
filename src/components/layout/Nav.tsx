@@ -9,6 +9,7 @@ interface NavProps {
 }
 
 const navItems = [
+  { href: '/teams', label: 'Teams' },
   { href: '/hall-of-fame', label: 'Hall of Fame' },
   { href: '/history', label: 'History' },
   { href: '/rules', label: 'Rules' },

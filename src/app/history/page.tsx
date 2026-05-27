@@ -1,6 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { db, members } from '@/lib/db';
+import {
+  TEAM_TIMELINES as teamTimelines,
+  ALL_SEASONS as allSeasons,
+  ORIGINAL_5 as original5,
+} from '@/lib/franchises';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,47 +19,6 @@ const eras = [
   { name: 'Modern Era',   start: '2017-18', end: '2025-26', color: 'bg-lake-blue-light/10',  swatch: 'bg-lake-blue-light/60',  description: 'Stable 12-team league' },
 ];
 
-// All seasons in order
-const allSeasons = [
-  '2012-13', '2013-14', '2014-15', '2015-16', '2016-17',
-  '2017-18', '2018-19', '2019-20', '2020-21', '2021-22',
-  '2022-23', '2023-24', '2024-25', '2025-26'
-];
-
-// Team timeline data (which seasons each team was active)
-const teamTimelines: Record<string, { seasons: string[]; formerNames?: string[] }> = {
-  'Stonemere Flyers': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Schlieren Flyers'] },
-  'Drunken Monkeys': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Fighting Monkeys'] },
-  'Slithering Goons': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Spinning Doctors'] },
-  'Illinois Ice Cracker': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
-  'Galaxy Squad': { seasons: ['2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
-  'Winnipeg Bulldozers': { seasons: ['2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
-  'Dörfli Snipers': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
-  'Eastside Grizzlies': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Eastside Grizzlys'] },
-  'Pittsburgh Walruses': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
-  'Täuffelen Phantoms': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
-  'Lyss Falcons': { seasons: ['2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'] },
-  'Oerlikon Gamblers': { seasons: ['2013-14', '2014-15', '2015-16', '2016-17', '2017-18', '2018-19', '2019-20', '2020-21', '2021-22', '2022-23', '2023-24', '2024-25', '2025-26'], formerNames: ['Bern City Rangers', 'Elfenau Gamblers'] },
-  // Defunct teams
-  'Boston Bumblebees': { seasons: ['2013-14', '2014-15'] },
-  'Biel-Bienne Trouts': { seasons: ['2012-13', '2013-14'] },
-  'Biel Sumo Hookers': { seasons: ['2013-14', '2014-15'] },
-  'Blackbears': { seasons: ['2013-14', '2014-15'], formerNames: ['UMaine Blackbears'] },
-  'Orange County Bluths': { seasons: ['2013-14', '2014-15'] },
-  'Warm Wool Socks': { seasons: ['2014-15', '2015-16'] },
-  'Old Boys Bears': { seasons: ['2015-16'] },
-  'Felztown Tigers': { seasons: ['2015-16'] },
-  // Pre-season only teams
-  'Schlieren Flyers': { seasons: ['2012-13'] },
-  "Rock'n'Rollas": { seasons: ['2012-13'] },
-  'Spinning Doctors': { seasons: ['2012-13'] },
-  'Fighting Monkeys': { seasons: ['2012-13'] },
-  'UMaine Blackbears': { seasons: ['2012-13'] },
-  'Mountain Lions': { seasons: ['2012-13'] },
-};
-
-// The Original 5 - teams active since 2013-14 and still active today
-const original5 = ['Stonemere Flyers', 'Drunken Monkeys', 'Slithering Goons', 'Illinois Ice Cracker', 'Oerlikon Gamblers'];
 
 // Current teams (active in 2024-25)
 const currentTeams = Object.entries(teamTimelines)
