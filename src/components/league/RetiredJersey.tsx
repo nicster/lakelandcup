@@ -1,8 +1,7 @@
 'use client';
 
 import { lake, contrast } from '@/lib/colors';
-
-const CURRENT_SEASON = '2024-25';
+import { CURRENT_SEASON } from '@/lib/season';
 
 interface RetiredJerseyProps {
   playerName: string;

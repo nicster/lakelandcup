@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, boolean, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, integer, boolean, timestamp, unique } from 'drizzle-orm/pg-core';
 
 // League members (teams)
 export const members = pgTable('members', {
@@ -113,6 +113,29 @@ export const tradeAssets = pgTable('trade_assets', {
   sortOrder: integer('sort_order').default(0),
 });
 
+// Per-season roster snapshots. One row per (player, team, season) — used to
+// detect franchise-player candidates (10+ consecutive seasons on one team)
+// and as the substrate for any future Yahoo-sync automation.
+export const rosterHistory = pgTable(
+  'roster_history',
+  {
+    id: serial('id').primaryKey(),
+    playerName: text('player_name').notNull(),
+    teamId: integer('team_id').notNull().references(() => members.id),
+    season: text('season').notNull(), // "2024-25"
+    jerseyNumber: text('jersey_number'), // Yahoo's `uniform_number`; nullable
+    position: text('position'), // Yahoo's primary/display position; nullable
+    createdAt: timestamp('created_at').defaultNow(),
+  },
+  (table) => ({
+    unq: unique('roster_history_player_team_season').on(
+      table.playerName,
+      table.teamId,
+      table.season,
+    ),
+  }),
+);
+
 // Lottery results
 export const lotteryResults = pgTable('lottery_results', {
   id: serial('id').primaryKey(),
@@ -152,3 +175,5 @@ export type Trade = typeof trades.$inferSelect;
 export type NewTrade = typeof trades.$inferInsert;
 export type TradeAsset = typeof tradeAssets.$inferSelect;
 export type NewTradeAsset = typeof tradeAssets.$inferInsert;
+export type RosterHistory = typeof rosterHistory.$inferSelect;
+export type NewRosterHistory = typeof rosterHistory.$inferInsert;

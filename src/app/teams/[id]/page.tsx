@@ -5,6 +5,7 @@ import { db, members, seasons, franchisePlayers, draftPicks } from '@/lib/db';
 import { eq, or, desc } from 'drizzle-orm';
 import { Rafters } from '@/components/league/Rafters';
 import { LakeCupIcon } from '@/components/icons/HockeyIcons';
+import { computeYears } from '@/lib/season';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,16 +81,18 @@ async function getTeamFranchisePlayers(teamId: number, teamName: string) {
       )
       .orderBy(desc(franchisePlayers.years));
 
-    return results.map((fp) => ({
-      player: fp.playerName,
-      team: fp.teamName,
-      jerseyNumber: fp.jerseyNumber,
-      position: fp.position || 'F',
-      years: fp.years,
-      seasonStart: fp.seasonStart || '',
-      seasonEnd: fp.seasonEnd || null,
-      teamColors: fp.teamColors ? JSON.parse(fp.teamColors) : null,
-    }));
+    return results
+      .map((fp) => ({
+        player: fp.playerName,
+        team: fp.teamName,
+        jerseyNumber: fp.jerseyNumber,
+        position: fp.position || 'F',
+        years: computeYears(fp.seasonStart, fp.seasonEnd),
+        seasonStart: fp.seasonStart || '',
+        seasonEnd: fp.seasonEnd || null,
+        teamColors: fp.teamColors ? JSON.parse(fp.teamColors) : null,
+      }))
+      .sort((a, b) => b.years - a.years);
   } catch (err) { console.error("DB query failed:", err);
     return [];
   }

@@ -9,6 +9,9 @@ const navItems = [
   { href: '/admin/seasons', label: 'Seasons', icon: 'trophy' },
   { href: '/admin/drafts', label: 'Drafts', icon: 'clipboard' },
   { href: '/admin/trades', label: 'Trades', icon: 'arrows' },
+  { href: '/admin/franchise-players', label: 'Rafters', icon: 'banner' },
+  { href: '/admin/rosters', label: 'Rosters', icon: 'list' },
+  { href: '/admin/rules', label: 'Rules', icon: 'book' },
   { href: '/admin/lottery', label: 'Run Lottery', icon: 'dice' },
   { href: '/admin/lottery/results', label: 'Lottery Results', icon: 'list' },
 ];
@@ -62,6 +65,20 @@ function NavIcon({ name, className = '' }: { name: string; className?: string })
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M9 12.75L11.25 15 15 9.75M21 12c0 5.25-4.5 9-9 9s-9-3.75-9-9c0-1.92.6-3.69 1.62-5.15.18-.26.36-.51.55-.74C6.64 4.27 9.16 3 12 3s5.36 1.27 6.83 3.11c.19.23.37.48.55.74A8.93 8.93 0 0121 12z"
+      />
+    ),
+    banner: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M3 3v18l4.5-3 4.5 3 4.5-3 4.5 3V3M7.5 7.5h9M7.5 12h9"
+      />
+    ),
+    book: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
       />
     ),
     logout: (
