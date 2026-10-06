@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
   try {
     const rows = await db.select().from(franchisePlayers).orderBy(asc(franchisePlayers.teamName), asc(franchisePlayers.playerName));
     // Recompute years on the fly. The stored value is captured at write time
-    // and goes stale for active banners (seasonEnd null) once CURRENT_SEASON
-    // bumps. The DB value remains for legacy readers; the API surfaces fresh.
+    // and goes stale for active banners (seasonEnd null) once the season
+    // rolls over. The DB value remains for legacy readers; the API surfaces fresh.
     const refreshed = rows.map((r) => ({
       ...r,
       years: computeYears(r.seasonStart, r.seasonEnd),

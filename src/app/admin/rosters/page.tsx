@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { CURRENT_SEASON } from '@/lib/season';
+import { getCurrentSeason } from '@/lib/season';
 import { LAKELAND_CUP_SEASONS } from '@/lib/yahoo-leagues';
 
 function isSeasonEndedClient(season: string): boolean {
@@ -37,7 +37,7 @@ interface RosterResponse {
 export default function AdminRostersPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [seasons, setSeasons] = useState<string[]>([]);
-  const [season, setSeason] = useState<string>(CURRENT_SEASON);
+  const [season, setSeason] = useState<string>(getCurrentSeason);
   const [rosters, setRosters] = useState<Record<number, string[]>>({});
   const [editingTeamId, setEditingTeamId] = useState<number | null>(null);
   const [editDraft, setEditDraft] = useState<string>('');
@@ -228,7 +228,7 @@ export default function AdminRostersPage() {
               {Array.from(
                 new Set([
                   ...Object.keys(LAKELAND_CUP_SEASONS),
-                  CURRENT_SEASON,
+                  getCurrentSeason(),
                   season,
                   ...seasons,
                 ]),

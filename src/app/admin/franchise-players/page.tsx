@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { CURRENT_SEASON, isCurrentRoster, seasonStartYear, seasonShortEnd, computeYears } from '@/lib/season';
+import { getCurrentSeason, isCurrentRoster, seasonStartYear, seasonShortEnd, computeYears } from '@/lib/season';
 
 interface Team {
   id: number;
@@ -48,7 +48,7 @@ function emptyDraft(): DraftState {
 }
 
 // Years derived from season range. seasonStart is required for the form;
-// seasonEnd null/blank means "still current" so we use CURRENT_SEASON.
+// seasonEnd null/blank means "still current" so we use the current season.
 interface Candidate {
   playerName: string;
   teamId: number;
@@ -188,7 +188,7 @@ export default function AdminFranchisePlayersPage() {
     setMessage(null);
     setSubmitting(true);
     try {
-      const years = computeYears(draft.seasonStart.trim(), draft.seasonEnd.trim(), CURRENT_SEASON);
+      const years = computeYears(draft.seasonStart.trim(), draft.seasonEnd.trim());
       const payload = {
         playerName: draft.playerName.trim(),
         jerseyNumber: draft.jerseyNumber.trim() || null,
@@ -513,7 +513,7 @@ export default function AdminFranchisePlayersPage() {
           </div>
 
           {(() => {
-            const years = computeYears(draft.seasonStart, draft.seasonEnd, CURRENT_SEASON);
+            const years = computeYears(draft.seasonStart, draft.seasonEnd);
             return (
               <div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -542,7 +542,7 @@ export default function AdminFranchisePlayersPage() {
                       pattern="\d{4}-\d{2}"
                       value={draft.seasonEnd}
                       onChange={(e) => setDraft({ ...draft, seasonEnd: e.target.value })}
-                      placeholder={`e.g. ${CURRENT_SEASON}`}
+                      placeholder={`e.g. ${getCurrentSeason()}`}
                       className="px-3 py-2 bg-lake-blue-dark/50 border border-lake-blue-light/30 rounded-md text-lake-ice placeholder-lake-ice/40 tabular-nums focus:outline-none focus:border-lake-gold/50 focus:ring-1 focus:ring-lake-gold/30"
                     />
                   </div>

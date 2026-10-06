@@ -1,7 +1,7 @@
 'use client';
 
 import { lake, contrast } from '@/lib/colors';
-import { CURRENT_SEASON } from '@/lib/season';
+import { getCurrentSeason } from '@/lib/season';
 
 interface RetiredJerseyProps {
   playerName: string;
@@ -19,7 +19,7 @@ export function RetiredJersey({
   teamColors,
 }: RetiredJerseyProps) {
   // If seasonEnd is the current season, treat as still active
-  const isActive = !seasonEnd || seasonEnd === CURRENT_SEASON;
+  const isActive = !seasonEnd || seasonEnd === getCurrentSeason();
   const displaySeasonEnd = isActive ? '' : seasonEnd?.split('-')[0];
 
   // Use team colors or fallback to brand defaults

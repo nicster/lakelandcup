@@ -148,7 +148,7 @@ export async function GET(request: NextRequest) {
     near.sort((a, b) => b.run - a.run || a.playerName.localeCompare(b.playerName));
 
     // Stale banners: a banner is "active" (no seasonEnd, or seasonEnd ===
-    // CURRENT_SEASON) but the player isn't on that team's most recently synced
+    // the current season) but the player isn't on that team's most recently synced
     // roster. Suggest closing at the player's last seen season.
     //
     // Index: latest synced season per team, and per (player, team) the
@@ -176,7 +176,7 @@ export async function GET(request: NextRequest) {
     const stale: StaleBanner[] = [];
     for (const b of alreadyBanner) {
       // Only flag banners with no explicit end. Any non-null seasonEnd —
-      // even CURRENT_SEASON — is a deliberate close by the commissioner;
+      // even the current season — is a deliberate close by the commissioner;
       // don't second-guess it here.
       if (b.seasonEnd) continue;
       // Need a teamId to look up roster history. Banners with null teamId
