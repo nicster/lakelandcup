@@ -2,47 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db, draftPicks } from '@/lib/db';
 import { desc } from 'drizzle-orm';
 import Fuse from 'fuse.js';
+import { isGoalie, getProtectionStatus } from '@/lib/protection';
 
-// Known goalies from our drafts - goalies get 5 years protection instead of 3
-// This list can be expanded or replaced with position data in the draft_picks table
-const KNOWN_GOALIES = new Set([
-  'Jake Oettinger',
-  'Spencer Knight',
-  'Yaroslav Askarov',
-  'Devon Levi',
-  'Jesper Wallstedt',
-  'Dustin Wolf',
-  'Thomas Milic',
-  'Trey Augustine',
-  'Carter George',
-  'Michael Hrabal',
-  'Sergei Ivanov',
-  'Sebastian Cossa',
-  'Ilya Nabokov',
-  'Mikhail Yegorov',
-  'Joshua Ravensbergen',
-  'Jack Ivankovic',
-  'M. Hrabal',
-  'T. Augustine',
-  'A. Gajan',
-]);
-
-function isGoalie(playerName: string, position: string | null): boolean {
-  // First check if position is explicitly set
-  if (position === 'G') return true;
-  // Fall back to known goalies list
-  return KNOWN_GOALIES.has(playerName);
-}
-
-function calculateProtectionExpiry(draftYear: string, isGoaliePlayer: boolean): number {
-  const year = parseInt(draftYear, 10);
-  // Goalies get 5 years, skaters get 3 years
-  return year + (isGoaliePlayer ? 5 : 3);
-}
-
-function mapPickToResult(pick: typeof draftPicks.$inferSelect, currentYear: number) {
-  const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
-  const protectionExpires = calculateProtectionExpiry(pick.year, isGoaliePlayer);
+function mapPickToResult(pick: typeof draftPicks.$inferSelect, now: Date) {
+  const goalie = isGoalie(pick.playerName, pick.position);
+  const { protectedThrough, isProtected } = getProtectionStatus(pick.year, goalie, now);
 
   return {
     playerName: pick.playerName,
@@ -51,9 +15,9 @@ function mapPickToResult(pick: typeof draftPicks.$inferSelect, currentYear: numb
     draftYear: pick.year,
     round: pick.round,
     pick: pick.pick,
-    position: isGoaliePlayer ? 'G' : null,
-    protectionExpires: protectionExpires.toString(),
-    isProtected: protectionExpires >= currentYear,
+    position: goalie ? 'G' : null,
+    protectedThrough,
+    isProtected,
   };
 }
 
@@ -63,7 +27,7 @@ export async function GET(request: NextRequest) {
   const recent = searchParams.get('recent');
 
   try {
-    const currentYear = new Date().getFullYear();
+    const now = new Date();
 
     // Fetch all draft picks
     const allPicks = await db
@@ -74,13 +38,9 @@ export async function GET(request: NextRequest) {
     // If requesting recent protected prospects (for initial page load)
     if (recent === 'true') {
       const recentProtected = allPicks
-        .filter(pick => {
-          const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
-          const expiryYear = calculateProtectionExpiry(pick.year, isGoaliePlayer);
-          return expiryYear >= currentYear;
-        })
-        .slice(0, 20)
-        .map(pick => mapPickToResult(pick, currentYear));
+        .map(pick => mapPickToResult(pick, now))
+        .filter(result => result.isProtected)
+        .slice(0, 20);
 
       return NextResponse.json(recentProtected);
     }
@@ -102,7 +62,7 @@ export async function GET(request: NextRequest) {
     const searchResults = fuse.search(query, { limit: 20 });
 
     const mappedResults = searchResults.map(({ item: pick }) =>
-      mapPickToResult(pick, currentYear)
+      mapPickToResult(pick, now)
     );
 
     return NextResponse.json(mappedResults);

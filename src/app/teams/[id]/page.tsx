@@ -6,6 +6,7 @@ import { eq, or, desc } from 'drizzle-orm';
 import { Rafters } from '@/components/league/Rafters';
 import { LakeCupIcon } from '@/components/icons/HockeyIcons';
 import { computeYears } from '@/lib/season';
+import { isGoalie, getProtectionStatus } from '@/lib/protection';
 
 export const dynamic = 'force-dynamic';
 
@@ -98,42 +99,9 @@ async function getTeamFranchisePlayers(teamId: number, teamName: string) {
   }
 }
 
-// Known goalies - goalies get 5 years protection instead of 3
-const KNOWN_GOALIES = new Set([
-  'Jake Oettinger',
-  'Spencer Knight',
-  'Yaroslav Askarov',
-  'Devon Levi',
-  'Jesper Wallstedt',
-  'Dustin Wolf',
-  'Thomas Milic',
-  'Trey Augustine',
-  'Carter George',
-  'Michael Hrabal',
-  'Sergei Ivanov',
-  'Sebastian Cossa',
-  'Ilya Nabokov',
-  'Mikhail Yegorov',
-  'Joshua Ravensbergen',
-  'Jack Ivankovic',
-  'M. Hrabal',
-  'T. Augustine',
-  'A. Gajan',
-]);
-
-function isGoalie(playerName: string, position: string | null): boolean {
-  if (position === 'G') return true;
-  return KNOWN_GOALIES.has(playerName);
-}
-
-function calculateProtectionExpiry(draftYear: string, isGoaliePlayer: boolean): number {
-  const year = parseInt(draftYear, 10);
-  return year + (isGoaliePlayer ? 5 : 3);
-}
-
 async function getTeamProspects(teamId: number) {
   try {
-    const currentYear = new Date().getFullYear();
+    const now = new Date();
 
     const results = await db
       .select()
@@ -141,26 +109,21 @@ async function getTeamProspects(teamId: number) {
       .where(eq(draftPicks.teamId, teamId))
       .orderBy(desc(draftPicks.year), draftPicks.round, draftPicks.pick);
 
-    // Filter to only protected prospects and calculate expiry
-    // Skaters: 3 years, Goalies: 5 years
+    // Only prospects whose rights haven't run out (3 seasons, goalies 5)
     const protectedProspects = results
-      .filter(pick => {
-        const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
-        const expiryYear = calculateProtectionExpiry(pick.year, isGoaliePlayer);
-        return expiryYear >= currentYear;
-      })
       .map(pick => {
-        const isGoaliePlayer = isGoalie(pick.playerName, pick.position);
+        const goalie = isGoalie(pick.playerName, pick.position);
         return {
           id: pick.id,
           playerName: pick.playerName,
           draftYear: pick.year,
           round: pick.round,
           pick: pick.pick,
-          isGoalie: isGoaliePlayer,
-          protectionExpires: calculateProtectionExpiry(pick.year, isGoaliePlayer).toString(),
+          isGoalie: goalie,
+          ...getProtectionStatus(pick.year, goalie, now),
         };
-      });
+      })
+      .filter(prospect => prospect.isProtected);
 
     return protectedProspects;
   } catch (err) { console.error("DB query failed:", err);
@@ -330,9 +293,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
         ) : (
           <div className="space-y-2">
             {teamProspects.map((prospect) => {
-              const currentYear = new Date().getFullYear();
-              const expiryYear = parseInt(prospect.protectionExpires, 10);
-              const isExpiringSoon = expiryYear === currentYear;
+              const isExpiringSoon = prospect.isFinalSeason;
 
               return (
                 <div
@@ -359,7 +320,7 @@ export default async function TeamPage({ params }: { params: Promise<{ id: strin
                   <span className={`text-sm ${
                     isExpiringSoon ? 'text-lake-warning' : 'text-lake-ice-muted'
                   }`}>
-                    Until {prospect.protectionExpires}
+                    Through {prospect.protectedThrough}
                   </span>
                 </div>
               );

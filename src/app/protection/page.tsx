@@ -11,7 +11,7 @@ interface ProtectionResult {
   round: number;
   pick: number;
   position: string | null;
-  protectionExpires: string;
+  protectedThrough: string;
   isProtected: boolean;
 }
 
@@ -201,8 +201,8 @@ export default function ProtectionSearchPage() {
                     player.isProtected ? 'text-lake-success/80' : 'text-lake-error/80'
                   }`}>
                     {player.isProtected
-                      ? `Until ${player.protectionExpires}`
-                      : `Expired ${player.protectionExpires}`}
+                      ? `Through ${player.protectedThrough}`
+                      : `Expired after ${player.protectedThrough}`}
                   </p>
                 </div>
               </div>
