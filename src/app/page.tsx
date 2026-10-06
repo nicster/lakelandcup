@@ -4,6 +4,7 @@ import { db, seasons, members, lotteryResults } from '@/lib/db';
 import { desc, eq, and } from 'drizzle-orm';
 import Confetti from '@/components/Confetti';
 import { FaceOffIcon } from '@/components/icons/HockeyIcons';
+import { currentSeasonStartYear } from '@/lib/season';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,14 +45,18 @@ function parseTeamColors(raw: string | null | undefined): string[] | undefined {
   return undefined;
 }
 
-async function getCurrentYearLottery() {
+// The lottery for draft year Y runs in the offseason before the season that
+// starts in Y, so the upcoming draft is always one past the current season's
+// start year. Once the season starts (1 Oct), that rolls to a year with no
+// published lottery yet and the link drops off the homepage.
+async function getUpcomingDraftLottery() {
   try {
-    const currentYear = new Date().getFullYear().toString();
+    const draftYear = String(currentSeasonStartYear() + 1);
     const result = await db
       .select({ year: lotteryResults.year })
       .from(lotteryResults)
       .where(and(
-        eq(lotteryResults.year, currentYear),
+        eq(lotteryResults.year, draftYear),
         eq(lotteryResults.isPublished, true)
       ))
       .limit(1);
@@ -65,7 +70,7 @@ async function getCurrentYearLottery() {
 export default async function Home() {
   const [latestChampion, currentLottery] = await Promise.all([
     getLatestChampion(),
-    getCurrentYearLottery(),
+    getUpcomingDraftLottery(),
   ]);
 
   return (
