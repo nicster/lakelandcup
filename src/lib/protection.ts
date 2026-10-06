@@ -9,6 +9,10 @@ import { currentSeasonStartYear, formatSeason } from '@/lib/season';
 // Example: Zach Benson, 2023 draft → protected 2023-24, 2024-25, 2025-26 →
 // unprotected once 2026-27 starts.
 
+// Player name the admin draft editor stores for picks not made yet (e.g. the
+// next draft's 24 placeholder picks). Not a real prospect, so never protected.
+export const PLACEHOLDER_PLAYER = 'TBD';
+
 const SKATER_SEASONS = 3;
 const GOALIE_SEASONS = 5;
 

@@ -2,11 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { db, members, seasons, franchisePlayers, draftPicks } from '@/lib/db';
-import { eq, or, desc } from 'drizzle-orm';
+import { eq, or, desc, and, ne } from 'drizzle-orm';
 import { Rafters } from '@/components/league/Rafters';
 import { LakeCupIcon } from '@/components/icons/HockeyIcons';
 import { computeYears } from '@/lib/season';
-import { isGoalie, getProtectionStatus } from '@/lib/protection';
+import { isGoalie, getProtectionStatus, PLACEHOLDER_PLAYER } from '@/lib/protection';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,7 +106,7 @@ async function getTeamProspects(teamId: number) {
     const results = await db
       .select()
       .from(draftPicks)
-      .where(eq(draftPicks.teamId, teamId))
+      .where(and(eq(draftPicks.teamId, teamId), ne(draftPicks.playerName, PLACEHOLDER_PLAYER)))
       .orderBy(desc(draftPicks.year), draftPicks.round, draftPicks.pick);
 
     // Only prospects whose rights haven't run out (3 seasons, goalies 5)

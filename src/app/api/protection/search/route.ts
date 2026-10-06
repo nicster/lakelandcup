@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, draftPicks } from '@/lib/db';
-import { desc } from 'drizzle-orm';
+import { desc, ne } from 'drizzle-orm';
 import Fuse from 'fuse.js';
-import { isGoalie, getProtectionStatus } from '@/lib/protection';
+import { isGoalie, getProtectionStatus, PLACEHOLDER_PLAYER } from '@/lib/protection';
 
 function mapPickToResult(pick: typeof draftPicks.$inferSelect, now: Date) {
   const goalie = isGoalie(pick.playerName, pick.position);
@@ -29,10 +29,11 @@ export async function GET(request: NextRequest) {
   try {
     const now = new Date();
 
-    // Fetch all draft picks
+    // Fetch all draft picks that have been made (skip TBD placeholders)
     const allPicks = await db
       .select()
       .from(draftPicks)
+      .where(ne(draftPicks.playerName, PLACEHOLDER_PLAYER))
       .orderBy(desc(draftPicks.year), draftPicks.round, draftPicks.pick);
 
     // If requesting recent protected prospects (for initial page load)
